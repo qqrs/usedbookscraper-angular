@@ -4,6 +4,22 @@
 
 (function() {
 
+  function BookScraperMaster() {
+    return {
+      shelves: null,    // array of shelf names
+      books: null,      // array of ISBN strings
+      editions: null,   // array of edition objects
+      listings: null,   // array of listing objects
+      sellers: null     // array of seller objects
+    };
+  }
+
+  BookScraperMaster.$inject = [
+  ];
+
+// =============================================================================
+
+
   function XisbnAPI($resource) {
     return $resource(
       "http://xisbn.worldcat.org/webservices/xid/isbn/:isbn",
@@ -94,6 +110,7 @@
 
   angular.module('myApp.services', ['ngResource'])
     .value('version', '0.1')
+    .factory('BookScraperMaster', BookScraperMaster)
     .factory('XisbnAPI', XisbnAPI)
     .factory('XisbnService', XisbnService)
     .factory('HalfAPI', HalfAPI);

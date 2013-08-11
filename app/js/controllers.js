@@ -4,7 +4,7 @@
 
 (function() {
 
-  function MyCtrl1($scope, XisbnService) {
+  function MyCtrl1($scope, BookScraperMaster, XisbnService) {
 
     $scope.altEditions = null;
     $scope.queryISBN =  '9780465067107';
@@ -25,18 +25,31 @@
       // split on comma, colon, pipe, or whitespace
       var isbns = isbnlist.split(/[,:|\s]+/);
 
-      $scope.altEditions = [];
+      var books = [];
+      var editions = [];
+
       angular.forEach(isbns, function(isbn) {
-        XisbnService.getEditions(isbn, function (editions) {
-            $scope.altEditions = $scope.altEditions.concat(editions);
+        var book = {isbn: isbn};
+        books.push(book);
+        XisbnService.getEditions(isbn, function (book_editions) {
+          book['editions'] = book_editions
+          angular.forEach(book_editions, function(ed) { ed.book = book } );
+          //editions = editions.concat(book_editions);
+          Array.prototype.push.apply(editions, book_editions);
+          console.log(BookScraperMaster);
         });
       });
+
+      BookScraperMaster.books = books;
+      BookScraperMaster.editions = editions;
+      $scope.altEditions = editions;
     };
 
   }
 
   MyCtrl1.$inject = [
     '$scope',
+    'BookScraperMaster',
     'XisbnService'
   ];
 

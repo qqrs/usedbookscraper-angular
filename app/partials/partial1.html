@@ -8,7 +8,7 @@
   <input type="submit">
 </form>
 <ul>
-  <li ng-repeat="ed in altEditions | orderBy:editionSortKey:true">
+  <li ng-repeat="ed in altEditions | orderBy:['book', editionSortKey]:true">
     {{ed.title}}
     - {{ed.author}}
     - {{ed.isbn}}
