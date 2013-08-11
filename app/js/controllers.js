@@ -22,10 +22,15 @@
     };
 
     $scope.submitISBNList = function submitISBNList(isbnlist) {
-      //var isbns = isbnlist.split(',:|\r\n ');
       // split on comma, colon, pipe, or whitespace
       var isbns = isbnlist.split(/[,:|\s]+/);
-      console.log(isbns);
+
+      $scope.altEditions = [];
+      angular.forEach(isbns, function(isbn) {
+        XisbnService.getEditions(isbn, function (editions) {
+            $scope.altEditions = $scope.altEditions.concat(editions);
+        });
+      });
     };
 
   }
