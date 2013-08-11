@@ -3,22 +3,23 @@
 <head>
   <meta charset="utf-8">
   <title>My AngularJS App</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <script src="//codeorigin.jquery.com/jquery-2.0.3.min.js"></script>
+  <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+  <!--<link href="//netdna.bootstrapcdn.com/bootswatch/2.3.2/journal/bootstrap.min.css" rel="stylesheet">-->
+  <!--<link href="//netdna.bootstrapcdn.com/bootswatch/2.3.2/readable/bootstrap.min.css" rel="stylesheet">-->
+  <!--<style>body { padding-top: 60px; } </style>-->
+  <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+
   <link rel="stylesheet" href="css/app.css"/>
-</head>
-<body>
-  <ul class="menu">
-    <li><a href="#/view1">view1</a></li>
-    <li><a href="#/view2">view2</a></li>
-  </ul>
-
-  <div ng-view></div>
-
-  <div>Angular seed app: v<span app-version></span></div>
 
   <!-- In production use:
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
   -->
-  <!--<script src="lib/angular/angular.js"></script>-->
   <script src="lib/angular-1.1.5/angular.js"></script>
   <script src="lib/angular-1.1.5/angular-resource.js"></script>
   <script src="js/app.js"></script>
@@ -26,5 +27,29 @@
   <script src="js/controllers.js"></script>
   <script src="js/filters.js"></script>
   <script src="js/directives.js"></script>
+
+</head>
+<body>
+  <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <a class="brand" href="#">usedbookscraper</a>
+        <ul class="nav">
+          <li class="active"><a href="#">Home</a></li>
+          <li><a href="#/view1">view1</a></li>
+          <li><a href="#/view2">view2</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div ng-view></div>
+
+    <div>Angular seed app: v<span app-version></span></div>
+
+  </div> <!-- /container -->
+
 </body>
 </html>
