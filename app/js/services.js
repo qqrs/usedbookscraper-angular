@@ -12,7 +12,7 @@
         callback: 'JSON_CALLBACK',
       },
       {
-        get_editions: {
+        getEditions: {
           method: 'JSONP',
           params: {
             method: 'getEditions',

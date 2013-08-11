@@ -1,1 +1,12 @@
 <p>This is the partial for view 1.</p>
+<form ng-submit="submitISBN()">
+  <input type="text" ng-model="queryISBN">
+  <input type="submit">
+</form>
+<ul>
+  <li ng-repeat="ed in altEditions">
+    {{ed.title}}
+    {{ed.author}}
+    {{ed.isbn[0]}}
+  </li>
+</ul>

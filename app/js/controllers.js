@@ -6,11 +6,19 @@
 
   function MyCtrl1($scope, XisbnService) {
 
-    XisbnService.get_editions(
-      {isbn: '9780465067107'},
-      function(data, status) { console.log(data); },
-      function(data, status) { console.log('Error: ' + status); }
-    );
+    $scope.altEditions = null;
+    $scope.queryISBN =  '9780465067107';
+
+    $scope.submitISBN = function submitISBN() {
+      XisbnService.getEditions(
+        {isbn: $scope.queryISBN},
+        function(data, status) { 
+          $scope.altEditions = data.list;
+          console.log(data); 
+        },
+        function(data, status) { console.log('Error: ' + status); }
+      );
+    };
 
   }
 
