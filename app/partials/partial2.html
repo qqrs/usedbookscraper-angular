@@ -3,3 +3,20 @@
   Showing of 'interpolate' filter:
   {{ 'Current version is v%VERSION%.' | interpolate }}
 </p>
+
+<form ng-submit="submitISBN(queryISBN)">
+  <input type="text" ng-model="queryISBN" autofocus>
+  <input type="submit">
+</form>
+
+<ul>
+  <li ng-repeat="listing in findItemsResponse.items">
+    <a href="{{listing.half_item_url}}">
+      <b>{{listing.seller}}</b>
+    </a><br>
+    {{listing.price | currency}} | 
+    {{listing.feedback_count}} |
+    {{listing.feedback_rating}}% <br>
+    {{listing.comments}}
+  </li>
+</ul>

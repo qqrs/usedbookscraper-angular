@@ -74,9 +74,28 @@
 
 // =============================================================================
 
+  function HalfAPI($resource) {
+    return $resource(
+      "http://cryptic-ridge-1093.herokuapp.com/api/half/find_items",
+      {
+        callback: 'JSON_CALLBACK',
+      },
+      {
+        findItems: { method: 'JSONP' }
+    });
+  }
+
+  HalfAPI.$inject = [
+    '$resource'
+  ];
+
+// =============================================================================
+
+
   angular.module('myApp.services', ['ngResource'])
     .value('version', '0.1')
     .factory('XisbnAPI', XisbnAPI)
-    .factory('XisbnService', XisbnService);
+    .factory('XisbnService', XisbnService)
+    .factory('HalfAPI', HalfAPI);
 
 })();

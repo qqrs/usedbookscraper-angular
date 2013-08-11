@@ -42,11 +42,25 @@
 
 // =============================================================================
 
-  function MyCtrl2() {
+  function MyCtrl2($scope, HalfAPI) {
+    $scope.queryISBN = '0465067107';
 
+    $scope.submitISBN = function submitISBN(isbn) {
+      HalfAPI.findItems(
+        {isbn: isbn, page: '1', condition: 'Good'},
+        function(data) { 
+          console.log(data); 
+          $scope.findItemsResponse = data;
+        },
+        // TODO: failure callback
+        function(data, status) { console.log('Error: ' + status); }
+      );
+    };
   }
 
   MyCtrl2.$inject = [
+    '$scope',
+    'HalfAPI'
   ];
 
   angular.module('myApp.controllers', ['ngResource'])
