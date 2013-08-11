@@ -28,11 +28,14 @@
   }
 
 
+  // filter unwanted editions and munge each edition object
   function mungeXisbnEditions(raw_editions) {
     var editions = [];
 
-    var counter = 0;
     angular.forEach(raw_editions, function(ed) {
+      // filter to English and book formats (BA=book BB=hardcover BC=paperback)
+      if (ed.lang === 'eng' && ed.form[0] && 
+          (ed.form[0] === 'BA' || ed.form[0] === 'BB' || ed.form[0] === 'BC')) {
         this.push({
           'isbn':     ed.isbn[0],
           'title':    ed.title,
@@ -41,8 +44,10 @@
           'ed':       ed.ed,
           'year':     ed.year
         });
+      }
     }, editions);
 
+    console.log(editions);
     return editions;
   }
 
