@@ -9,6 +9,7 @@
     $scope.altEditions = null;
     $scope.queryISBN =  '9780465067107';
     //$scope.queryISBN =  '0312241356';
+    $scope.queryISBNList =  '9780465067107, 0312241356';
     $scope.editionSortKey = function editionSortKey(ed) {
       return ed.year || '0000';
     };
@@ -23,6 +24,13 @@
         },
         function(data, status) { console.log('Error: ' + status); }
       );
+    };
+
+    $scope.submitISBNList = function submitISBNList(isbnlist) {
+      //var isbns = isbnlist.split(',:|\r\n ');
+      // split on comma, colon, pipe, or whitespace
+      var isbns = isbnlist.split(/[,:|\s]+/);
+      console.log(isbns);
     };
 
   }
