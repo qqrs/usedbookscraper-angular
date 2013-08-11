@@ -1,12 +1,15 @@
 <p>This is the partial for view 1.</p>
-<form ng-submit="submitISBN()">
+<form ng-submit="submitISBN(queryISBN)">
   <input type="text" ng-model="queryISBN" autofocus>
   <input type="submit">
 </form>
 <ul>
-  <li ng-repeat="ed in altEditions">
+  <li ng-repeat="ed in altEditions | orderBy:editionSortKey:true">
     {{ed.title}}
-    {{ed.author}}
-    {{ed.isbn}}
+    - {{ed.author}}
+    - {{ed.isbn}}
+    - {{ed.year}}
+    - {{ed.form}}
+    - {{ed.lang}}
   </li>
 </ul>

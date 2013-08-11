@@ -8,10 +8,15 @@
 
     $scope.altEditions = null;
     $scope.queryISBN =  '9780465067107';
+    //$scope.queryISBN =  '0312241356';
+    $scope.editionSortKey = function editionSortKey(ed) {
+      return ed.year || '0000';
+    };
 
-    $scope.submitISBN = function submitISBN() {
+
+    $scope.submitISBN = function submitISBN(isbn) {
       XisbnService.getEditions(
-        {isbn: $scope.queryISBN},
+        {isbn: isbn},
         function(data, status) { 
           $scope.altEditions = mungeXisbnEditions(data.list);
           console.log(data); 
@@ -23,21 +28,18 @@
   }
 
 
-  function mungeXisbnEditions(raw_editions)
-  {
+  function mungeXisbnEditions(raw_editions) {
     var editions = [];
 
     var counter = 0;
     angular.forEach(raw_editions, function(ed) {
-      if (counter++ % 2 == 0)
-        return;
         this.push({
           'isbn':     ed.isbn[0],
           'title':    ed.title,
           'author':   ed.author,
-          'language': ed.lang,
+          'lang':     ed.lang,
           'ed':       ed.ed,
-          'published_date': ed.year
+          'year':     ed.year
         });
     }, editions);
 
