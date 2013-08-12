@@ -3,12 +3,8 @@
   <textarea ng-model="queryISBNList" autofocus></textarea>
   <input type="submit">
 </form>
-<form ng-submit="submitISBN(queryISBN)">
-  <input type="text" ng-model="queryISBN" autofocus>
-  <input type="submit">
-</form>
 <ul>
-  <li ng-repeat="ed in altEditions | orderBy:['book', editionSortKey]:true">
+  <li ng-repeat="ed in editions | orderBy:['book', editionSortKey]:true">
     {{ed.title}}
     - {{ed.author}}
     - {{ed.isbn}}

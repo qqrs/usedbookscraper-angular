@@ -7,18 +7,9 @@
   function MyCtrl1($scope, BookScraperMaster, XisbnService) {
 
     $scope.altEditions = null;
-    $scope.queryISBN =  '9780465067107';
-    //$scope.queryISBN =  '0312241356';
     $scope.queryISBNList =  '9780465067107, 0312241356';
     $scope.editionSortKey = function editionSortKey(ed) {
       return ed.year || '0000';
-    };
-
-
-    $scope.submitISBN = function submitISBN(isbn) {
-      XisbnService.getEditions(isbn, function (editions) {
-          $scope.altEditions = editions;
-      });
     };
 
     $scope.submitISBNList = function submitISBNList(isbnlist) {
@@ -28,21 +19,20 @@
       var books = [];
       var editions = [];
 
+      BookScraperMaster.books = books;
+      BookScraperMaster.editions = editions;
+      $scope.editions = editions;
+
       angular.forEach(isbns, function(isbn) {
         var book = {isbn: isbn};
         books.push(book);
         XisbnService.getEditions(isbn, function (book_editions) {
           book['editions'] = book_editions
           angular.forEach(book_editions, function(ed) { ed.book = book } );
-          //editions = editions.concat(book_editions);
           Array.prototype.push.apply(editions, book_editions);
           console.log(BookScraperMaster);
         });
       });
-
-      BookScraperMaster.books = books;
-      BookScraperMaster.editions = editions;
-      $scope.altEditions = editions;
     };
 
   }
@@ -55,24 +45,41 @@
 
 // =============================================================================
 
-  function MyCtrl2($scope, HalfAPI) {
-    $scope.queryISBN = '0465067107';
+  function MyCtrl2($scope, BookScraperMaster, HalfAPI) {
+    var books = BookScraperMaster.books;
+    var editions = BookScraperMaster.editions;
+    var listings = [];
 
-    $scope.submitISBN = function submitISBN(isbn) {
-      HalfAPI.findItems(
-        {isbn: isbn, page: '1', condition: 'Good'},
-        function(data) { 
-          console.log(data); 
-          $scope.findItemsResponse = data;
-        },
-        // TODO: failure callback
-        function(data, status) { console.log('Error: ' + status); }
-      );
-    };
+    BookScraperMaster.listings = listings;
+    $scope.books = books;
+
+    angular.forEach(books, function (book) {
+      book['listings'] = [];
+      angular.forEach(book.editions, function (ed) {
+        ed['listings'] = [];
+        HalfAPI.findItems(
+          {isbn: ed.isbn, page: '1', condition: 'Good'},
+          function(response) { 
+            var ed_listings = response.items;
+            angular.forEach(ed_listings, function(el) { 
+              el['book'] = book; 
+              el['ed'] = ed;
+            });
+            Array.prototype.push.apply(listings, ed_listings);
+            Array.prototype.push.apply(book.listings, ed_listings);
+            Array.prototype.push.apply(ed.listings, ed_listings);
+            console.log(BookScraperMaster);
+          },
+          // TODO: failure callback
+          function(data) {}
+        );
+      });
+    });
   }
 
   MyCtrl2.$inject = [
     '$scope',
+    'BookScraperMaster',
     'HalfAPI'
   ];
 
