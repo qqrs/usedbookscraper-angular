@@ -87,7 +87,7 @@
             var ed_listings = response.items;
             angular.forEach(ed_listings, function(el) { 
               el['book'] = book; 
-              el['ed'] = ed;
+              el['edition'] = ed;
             });
             Array.prototype.push.apply(listings, ed_listings);
             Array.prototype.push.apply(book.listings, ed_listings);
@@ -109,7 +109,52 @@
 // =============================================================================
 
   function MyCtrl3($scope, BookScraperMaster) {
-    $scope.test = 'TEST TEST';
+    var sellers = {};
+    var listings = BookScraperMaster.listings;
+
+    BookScraperMaster.sellers = sellers;
+
+    angular.forEach(listings, function (listing) {
+      var seller;
+      if (sellers.hasOwnProperty(listing.seller)) {
+        seller = sellers[listing.seller];
+      } else {
+        seller = {
+          name: listing.seller,
+          feedback_count: listing.feedback_count,
+          feedback_rating: listing.feedback_rating,
+          books: [],
+          editions: [],
+          listings: []
+        };
+        sellers[listing.seller] = seller;
+      }
+
+      if (seller.books.indexOf(listing.book) === -1) {
+        seller.books.push(listing.book);
+      }
+      if (seller.editions.indexOf(listing.edition) === -1) {
+        seller.editions.push(listing.edition);
+      }
+      seller.listings.push(listing);
+      //TODO: either delete if reverse lookup not needed or create array on book
+      //listing.book['sellers'].push(seller);
+      //listing.edition['sellers'].push(seller);
+    });
+
+    $scope.sellerSortKey = function (seller) {
+      return seller.books.length;
+    };
+
+    // convert sellers object to array for rendering
+    $scope.sellers = [];
+    angular.forEach(sellers, function (val, key) {
+      $scope.sellers.push(val);
+    });
+
+    console.log('BookScraperMaster');
+    console.log(BookScraperMaster);
+    console.log($scope.sellers);
   }
 
   MyCtrl3.$inject = [

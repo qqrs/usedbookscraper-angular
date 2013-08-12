@@ -107,6 +107,7 @@
 
 // =============================================================================
 
+  //TODO: get all listings with condition >= cond, maxprice <= xx.xx, all pages
   function HalfService($rootScope, HalfAPI) {
     var halfService = {
       'findItems': function(params, successCallback) {
