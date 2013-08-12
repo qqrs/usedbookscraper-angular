@@ -14,6 +14,7 @@
 
     $scope.submitISBNList = function submitISBNList(isbnlist) {
       // split on comma, colon, pipe, or whitespace
+      //TODO: fix ',294801943' format
       var isbns = isbnlist.split(/[,:|\s]+/);
 
       var books = [];
@@ -28,6 +29,9 @@
         books.push(book);
         XisbnService.getEditions(isbn, function (book_editions) {
           book['editions'] = book_editions
+          //TODO: skip setting title/author if already set
+          book['title'] = book_editions[0].title;
+          book['author'] = book_editions[0].author;
           angular.forEach(book_editions, function(ed) { ed.book = book } );
           Array.prototype.push.apply(editions, book_editions);
           console.log(BookScraperMaster);
@@ -102,7 +106,21 @@
     'HalfService'
   ];
 
+// =============================================================================
+
+  function MyCtrl3($scope, BookScraperMaster) {
+    $scope.test = 'TEST TEST';
+  }
+
+  MyCtrl3.$inject = [
+    '$scope',
+    'BookScraperMaster'
+  ];
+
+// =============================================================================
+
   angular.module('myApp.controllers', ['ngResource'])
     .controller('MyCtrl1', MyCtrl1)
-    .controller('MyCtrl2', MyCtrl2);
+    .controller('MyCtrl2', MyCtrl2)
+    .controller('MyCtrl3', MyCtrl3);
 })();
