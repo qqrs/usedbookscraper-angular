@@ -50,8 +50,8 @@
       'getEditions': function(isbn, successCallback) {
         XisbnAPI.getEditions(
           {isbn: isbn},
-          function(data) { 
-            console.log(data); 
+          function(data) {
+            console.log(data);
             successCallback(mungeXisbnEditions(data.list));
           },
           // TODO: failure callback
@@ -71,7 +71,7 @@
 
     angular.forEach(raw_editions, function(ed) {
       // filter to English and book formats (BA=book BB=hardcover BC=paperback)
-      if (ed.lang === 'eng' && ed.form[0] && 
+      if (ed.lang === 'eng' && ed.form[0] &&
           (ed.form[0] === 'BA' || ed.form[0] === 'BB' || ed.form[0] === 'BC')) {
         this.push({
           'isbn':     ed.isbn[0],
@@ -107,21 +107,28 @@
 
 // =============================================================================
 
-  function HalfService(HalfAPI) {
-    return {
+  function HalfService($rootScope, HalfAPI) {
+    var halfService = {
       'findItems': function(params, successCallback) {
         HalfAPI.findItems(
           params,
-          function(data) { 
+          function(data) {
             successCallback(data);
+            $rootScope.$broadcast('halfService.findItems.call.response');
           },
-          function(data) {}   // TODO: failure callback
+          // TODO: failure callback
+          function(data) {
+            $rootScope.$broadcast('halfService.findItems.call.response');
+          }
         );
-      }
+        $rootScope.$broadcast('halfService.findItems.call.request');
+      },
     };
+    return halfService;
   }
 
   HalfService.$inject = [
+    '$rootScope',
     'HalfAPI'
   ];
 

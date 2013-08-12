@@ -53,6 +53,26 @@
     BookScraperMaster.listings = listings;
     $scope.books = books;
 
+    $scope.apiRequestProgress = {
+      call: { requests: 0, responses: 0, percent: 0 },
+      page: { requests: 0, responses: 0, percent: 0 }
+    };
+
+    // update progress bar
+    $scope.$on('halfService.findItems.call.request', function () {
+      var progress = $scope.apiRequestProgress.call;
+      progress.requests++;
+      console.warn('progress: ' + progress.responses + ' / ' + progress.requests);
+    });
+    $scope.$on('halfService.findItems.call.response', function () {
+      var progress = $scope.apiRequestProgress.call;
+      progress.responses++;
+      progress.percent = 100 * (progress.responses / progress.requests);
+      //console.log('progress: ' + $scope.apiRequestProgress.responses + ' / ' + $scope.apiRequestProgress.requests);
+      console.log('progress: ' + progress.percent + '%');
+    });
+
+    // get Half.com listings for each edition of each book
     angular.forEach(books, function (book) {
       book['listings'] = [];
       angular.forEach(book.editions, function (ed) {
@@ -73,6 +93,7 @@
         );
       });
     });
+
   }
 
   MyCtrl2.$inject = [

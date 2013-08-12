@@ -4,16 +4,23 @@
   {{ 'Current version is v%VERSION%.' | interpolate }}
 </p>
 
+<p>Progress: {{ apiRequestProgress.call.responses }}
+/ {{ apiRequestProgress.call.requests }}<br>
+<div class="progress">
+  <div class="bar" style="width: {{apiRequestProgress.call.percent}}%;"></div>
+</div>
+</p>
+
 <ul>
   <li ng-repeat="book in books">
     <h3>{{book.title}} &emdash; {{book.author}}</h3>
-    
+
     <ul>
       <li ng-repeat="listing in book.listings">
         <a href="{{listing.half_item_url}}">
           <b>{{listing.seller}}</b>
         </a><br>
-        {{listing.price | currency}} | 
+        {{listing.price | currency}} |
         {{listing.feedback_count}} |
         {{listing.feedback_rating}}% <br>
         {{listing.comments}}
