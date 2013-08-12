@@ -107,12 +107,33 @@
 
 // =============================================================================
 
+  function HalfService(HalfAPI) {
+    return {
+      'findItems': function(params, successCallback) {
+        HalfAPI.findItems(
+          params,
+          function(data) { 
+            successCallback(data);
+          },
+          function(data) {}   // TODO: failure callback
+        );
+      }
+    };
+  }
+
+  HalfService.$inject = [
+    'HalfAPI'
+  ];
+
+// =============================================================================
+
 
   angular.module('myApp.services', ['ngResource'])
     .value('version', '0.1')
     .factory('BookScraperMaster', BookScraperMaster)
     .factory('XisbnAPI', XisbnAPI)
     .factory('XisbnService', XisbnService)
-    .factory('HalfAPI', HalfAPI);
+    .factory('HalfAPI', HalfAPI)
+    .factory('HalfService', HalfService);
 
 })();

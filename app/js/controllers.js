@@ -45,7 +45,7 @@
 
 // =============================================================================
 
-  function MyCtrl2($scope, BookScraperMaster, HalfAPI) {
+  function MyCtrl2($scope, BookScraperMaster, HalfService) {
     var books = BookScraperMaster.books;
     var editions = BookScraperMaster.editions;
     var listings = [];
@@ -57,7 +57,7 @@
       book['listings'] = [];
       angular.forEach(book.editions, function (ed) {
         ed['listings'] = [];
-        HalfAPI.findItems(
+        HalfService.findItems(
           {isbn: ed.isbn, page: '1', condition: 'Good'},
           function(response) { 
             var ed_listings = response.items;
@@ -69,9 +69,7 @@
             Array.prototype.push.apply(book.listings, ed_listings);
             Array.prototype.push.apply(ed.listings, ed_listings);
             console.log(BookScraperMaster);
-          },
-          // TODO: failure callback
-          function(data) {}
+          }
         );
       });
     });
@@ -80,7 +78,7 @@
   MyCtrl2.$inject = [
     '$scope',
     'BookScraperMaster',
-    'HalfAPI'
+    'HalfService'
   ];
 
   angular.module('myApp.controllers', ['ngResource'])
