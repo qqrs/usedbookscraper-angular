@@ -4,10 +4,17 @@
   {{ 'Current version is v%VERSION%.' | interpolate }}
 </p>
 
-<p>Progress: {{ apiRequestProgress.call.responses }}
+<p>Progress (calls): {{ apiRequestProgress.call.responses }}
 / {{ apiRequestProgress.call.requests }}<br>
 <div class="progress">
   <div class="bar" style="width: {{apiRequestProgress.call.percent}}%;"></div>
+</div>
+</p>
+
+<p>Progress (pages): {{ apiRequestProgress.page.responses }}
+/ {{ apiRequestProgress.page.requests }}<br>
+<div class="progress">
+  <div class="bar" style="width: {{apiRequestProgress.page.percent}}%;"></div>
 </div>
 </p>
 

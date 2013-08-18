@@ -66,15 +66,22 @@
     $scope.$on('halfService.findItems.call.request', function () {
       var progress = $scope.apiRequestProgress.call;
       progress.requests++;
-      console.warn('progress: ' + progress.responses + ' / ' + progress.requests);
     });
     $scope.$on('halfService.findItems.call.response', function () {
       var progress = $scope.apiRequestProgress.call;
       progress.responses++;
       progress.percent = 100 * (progress.responses / progress.requests);
-      //console.log('progress: ' + $scope.apiRequestProgress.responses + ' / ' + $scope.apiRequestProgress.requests);
-      console.log('progress: ' + progress.percent + '%');
     });
+    $scope.$on('halfService.findItems.page.request', function () {
+      var progress = $scope.apiRequestProgress.page;
+      progress.requests++;
+    });
+    $scope.$on('halfService.findItems.page.response', function () {
+      var progress = $scope.apiRequestProgress.page;
+      progress.responses++;
+      progress.percent = 100 * (progress.responses / progress.requests);
+    });
+
 
     // get Half.com listings for each edition of each book
     angular.forEach(books, function (book) {

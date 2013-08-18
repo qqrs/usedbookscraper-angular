@@ -111,19 +111,29 @@
   function HalfService($rootScope, HalfAPI) {
     var _conditions = ['Acceptable', 'Good', 'VeryGood', 'LikeNew', 'BrandNew'];
     return {
-      'findItems': half_findItems,
+      'findItems': half_findItemsCall,
       'bookConditions': function () { return _conditions; }
     };
 
-    function half_findItems(params, successCallback) {
+    // half findItems call -- request first page and queue additional
+    // requests for more pages and better book conditions if needed
+    function half_findItemsCall(params, successCallback) {
       var condIndex,
-          paramsCopy;
+          paramsCopy,
+          i;
       // run request for specified parameters
       HalfAPI.findItems(
         params,
         function(data) {
           successCallback(data);
           $rootScope.$broadcast('halfService.findItems.call.response');
+          if (data.total_pages !== undefined && data.total_pages > 1) {
+            for (i = 2; i <= data.total_pages; i++) {
+              paramsCopy = half_paramsCopy(params);
+              paramsCopy.page = i;
+              half_findItemsPage(paramsCopy, successCallback);
+            }
+          }
         },
         // TODO: failure callback
         function(data) {
@@ -138,10 +148,31 @@
         if (condIndex !== -1 && condIndex + 1 < _conditions.length) {
           paramsCopy = half_paramsCopy(params);
           paramsCopy.condition = _conditions[condIndex + 1];
-          half_findItems(paramsCopy, successCallback);
+          half_findItemsCall(paramsCopy, successCallback);
         }
       }
     }
+
+    // half findItems page -- request for results page >= 2
+    function half_findItemsPage(params, successCallback) {
+      var condIndex,
+          paramsCopy,
+          i;
+      // run request for specified parameters
+      HalfAPI.findItems(
+        params,
+        function(data) {
+          successCallback(data);
+          $rootScope.$broadcast('halfService.findItems.page.response');
+        },
+        // TODO: failure callback
+        function(data) {
+          $rootScope.$broadcast('halfService.findItems.page.response');
+        }
+      );
+      $rootScope.$broadcast('halfService.findItems.page.request');
+    }
+
 
     // make a shallow copy of the Half request params
     // TODO: there has to be a better way to do this without requiring jQuery
