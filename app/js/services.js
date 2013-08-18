@@ -109,23 +109,57 @@
 
   //TODO: get all listings with condition >= cond, maxprice <= xx.xx, all pages
   function HalfService($rootScope, HalfAPI) {
-    var halfService = {
-      'findItems': function(params, successCallback) {
-        HalfAPI.findItems(
-          params,
-          function(data) {
-            successCallback(data);
-            $rootScope.$broadcast('halfService.findItems.call.response');
-          },
-          // TODO: failure callback
-          function(data) {
-            $rootScope.$broadcast('halfService.findItems.call.response');
-          }
-        );
-        $rootScope.$broadcast('halfService.findItems.call.request');
-      },
+    var _conditions = ['Acceptable', 'Good', 'VeryGood', 'LikeNew', 'BrandNew'];
+    return {
+      'findItems': half_findItems,
+      'bookConditions': function () { return _conditions; }
     };
-    return halfService;
+
+    function half_findItems(params, successCallback) {
+      var condIndex,
+          paramsCopy;
+      // run request for specified parameters
+      HalfAPI.findItems(
+        params,
+        function(data) {
+          successCallback(data);
+          $rootScope.$broadcast('halfService.findItems.call.response');
+        },
+        // TODO: failure callback
+        function(data) {
+          $rootScope.$broadcast('halfService.findItems.call.response');
+        }
+      );
+      $rootScope.$broadcast('halfService.findItems.call.request');
+
+      // recursively run request for next better condition if not best
+      if (params.condition) {
+        condIndex = _conditions.indexOf(params.condition);
+        if (condIndex !== -1 && condIndex + 1 < _conditions.length) {
+          paramsCopy = half_paramsCopy(params);
+          paramsCopy.condition = _conditions[condIndex + 1];
+          half_findItems(paramsCopy, successCallback);
+        }
+      }
+    }
+
+    // make a shallow copy of the Half request params
+    // TODO: there has to be a better way to do this without requiring jQuery
+    function half_paramsCopy(params) {
+      var newParams = {isbn: params.isbn};
+      if (params.page) {
+        newParams.page = params.page;
+      }
+      if (params.condition) {
+        newParams.condition = params.condition;
+      }
+      if (params.maxprice) {
+        newParams.maxprice = params.maxprice;
+      }
+      console.log(params);
+      console.log(newParams);
+      return newParams;
+    }
   }
 
   HalfService.$inject = [
