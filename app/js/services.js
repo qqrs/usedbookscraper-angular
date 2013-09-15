@@ -129,7 +129,7 @@
           $rootScope.$broadcast('halfService.findItems.call.response');
           if (data.total_pages !== undefined && data.total_pages > 1) {
             for (i = 2; i <= data.total_pages; i++) {
-              paramsCopy = half_paramsCopy(params);
+              paramsCopy = angular.copy(params);
               paramsCopy.page = i;
               half_findItemsPage(paramsCopy, successCallback);
             }
@@ -146,7 +146,7 @@
       if (params.condition) {
         condIndex = _conditions.indexOf(params.condition);
         if (condIndex !== -1 && condIndex + 1 < _conditions.length) {
-          paramsCopy = half_paramsCopy(params);
+          paramsCopy = angular.copy(params);
           paramsCopy.condition = _conditions[condIndex + 1];
           half_findItemsCall(paramsCopy, successCallback);
         }
@@ -173,24 +173,6 @@
       $rootScope.$broadcast('halfService.findItems.page.request');
     }
 
-
-    // make a shallow copy of the Half request params
-    // TODO: there has to be a better way to do this without requiring jQuery
-    function half_paramsCopy(params) {
-      var newParams = {isbn: params.isbn};
-      if (params.page) {
-        newParams.page = params.page;
-      }
-      if (params.condition) {
-        newParams.condition = params.condition;
-      }
-      if (params.maxprice) {
-        newParams.maxprice = params.maxprice;
-      }
-      console.log(params);
-      console.log(newParams);
-      return newParams;
-    }
   }
 
   HalfService.$inject = [
