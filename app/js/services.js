@@ -6,6 +6,11 @@
 
   function BookScraperMaster() {
     return {
+      goodreadsUserId: null,  // Goodreads user ID as string
+      goodreadsSelectedShelves: null,   // Goodreads shelves selected for search
+      //goodreadsUserId: 5123156,
+      //goodreadsSelectedShelves: ['to-read', 'coffee-table'],
+
       shelves: null,    // array of shelf names
       books: null,      // array of ISBN strings
       editions: null,   // array of edition objects
@@ -182,6 +187,56 @@
 
 // =============================================================================
 
+  function GoodreadsAPI($resource) {
+    return $resource(
+      "http://cryptic-ridge-1093.herokuapp.com/api/goodreads/:collection",
+      {
+        callback: 'JSON_CALLBACK',
+      },
+      {
+        getShelves: { method: 'JSONP', params: {collection: 'shelves'} },
+        getBooks: { method: 'JSONP', params: {collection: 'books'} }
+    });
+  }
+
+  GoodreadsAPI.$inject = [
+    '$resource'
+  ];
+
+  function GoodreadsService(GoodreadsAPI) {
+    return {
+      'getShelves': function(user_id, successCallback) {
+        GoodreadsAPI.getShelves(
+          {user_id: user_id},
+          function(data) {
+            console.log(data);
+            successCallback(data.results);
+          },
+          // TODO: failure callback
+          function(data, status) { console.log('Error: ' + status); }
+        );
+      },
+      'getBooks': function(user_id, shelf_name, successCallback) {
+        GoodreadsAPI.getBooks(
+          {user_id: user_id, shelf_name: shelf_name},
+          function(data) {
+            console.log(data);
+            successCallback(data.results);
+          },
+          // TODO: failure callback
+          function(data, status) { console.log('Error: ' + status); }
+        );
+      }
+    };
+  }
+
+
+  GoodreadsService.$inject = [
+    'GoodreadsAPI'
+  ];
+
+
+// =============================================================================
 
   angular.module('myApp.services', ['ngResource'])
     .value('version', '0.1')
@@ -189,6 +244,8 @@
     .factory('XisbnAPI', XisbnAPI)
     .factory('XisbnService', XisbnService)
     .factory('HalfAPI', HalfAPI)
-    .factory('HalfService', HalfService);
+    .factory('HalfService', HalfService)
+    .factory('GoodreadsAPI', GoodreadsAPI)
+    .factory('GoodreadsService', GoodreadsService);
 
 })();

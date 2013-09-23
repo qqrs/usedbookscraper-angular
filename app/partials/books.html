@@ -1,0 +1,13 @@
+<p>This is the partial for books.</p>
+<!--<form ng-submit="submitGoodreadsUserId(goodreadsUserId)">-->
+  <!--<input type="text" ng-model="goodreadsUserId" autofocus>-->
+  <!--<input type="submit">-->
+<!--</form>-->
+<ul>
+  <li ng-repeat="book in books">
+    <img ng-src="{{book.small_image_url}}">
+    {{book.title}} 
+    - {{book.author}}
+    - {{book.isbn}}
+  </li>
+</ul>

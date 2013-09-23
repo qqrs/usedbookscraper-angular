@@ -1,0 +1,11 @@
+<p>This is the partial for editions.</p>
+<ul>
+  <li ng-repeat="ed in editions | orderBy:['book', editionSortKey]:true">
+    {{ed.title}}
+    - {{ed.author}}
+    - {{ed.isbn}}
+    - {{ed.year}}
+    - {{ed.form}}
+    - {{ed.lang}}
+  </li>
+</ul>

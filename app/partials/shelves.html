@@ -1,0 +1,8 @@
+<p>This is the partial for shelves.</p>
+<form ng-submit="submitGoodreadsShelves(selectedShelves)">
+  <select multiple autofocus class="shelves-select" size="20"
+    ng-model="selectedShelves" 
+    ng-options="shelf.name for shelf in shelves">
+  </select>
+  <input type="submit">
+</form>
