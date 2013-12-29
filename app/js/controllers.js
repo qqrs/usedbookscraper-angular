@@ -77,7 +77,6 @@
       }
     }, true);
 
-    // TODO: checkbox select/deselect books
     // TODO: per-book filter settings: max price, condition, exclude library, desirability weight
     // TODO: spinner
 

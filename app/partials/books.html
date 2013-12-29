@@ -8,15 +8,14 @@
   </div>
   <div ng-if="!loading && !books.length"><h3>No books found</h3></div>
   <div ng-repeat="book in books">
-    <div ng-if="!book.isbn">No ISBN for book</div>
-    <input ng-model="selection[$index]" type="checkbox" ng-disabled="!book.isbn">
-    <img ng-src="{{book.small_image_url}}">
-    {{book.title}} 
-    - {{book.author}}
-    - {{book.isbn}}
+    <label>
+      <input ng-model="selection[$index]" type="checkbox" ng-disabled="!book.isbn">
+      <img ng-src="{{book.small_image_url}}">
+      {{book.title}} 
+      - {{book.author}}
+      - {{book.isbn}} 
+      <span ng-if="!book.isbn" class="label label-warning">No ISBN</span>
+    </label>
   </div>
   <input type="submit" ng-disabled="loading || !books.length">
 </form>
-
-<pre>{{selection || json}}</pre>
-<pre>{{selected_books || json}}</pre>
