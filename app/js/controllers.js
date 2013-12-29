@@ -232,6 +232,7 @@
 // =============================================================================
 
 
+/*
   function MyCtrl1($scope, BookScraperMaster, XisbnService) {
 
     $scope.altEditions = null;
@@ -396,6 +397,7 @@
     '$scope',
     'BookScraperMaster'
   ];
+*/
 
 // =============================================================================
 
@@ -406,7 +408,7 @@
     .controller('EditionsCtrl', EditionsCtrl)
     .controller('ListingsCtrl', ListingsCtrl)
     .controller('SellersCtrl', SellersCtrl)
-    .controller('MyCtrl1', MyCtrl1)
+    /*.controller('MyCtrl1', MyCtrl1)
     .controller('MyCtrl2', MyCtrl2)
-    .controller('MyCtrl3', MyCtrl3);
+    .controller('MyCtrl3', MyCtrl3)*/;
 })();
