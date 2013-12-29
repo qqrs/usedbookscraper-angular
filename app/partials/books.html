@@ -1,33 +1,38 @@
-<p>This is the partial for books.</p>
+<div class="span6 offset3">
+
+<h1>select books</h1><br>
+
 <div ng-show="loading">
   <img src="/static/spinner.gif"> 
-  Loading books 
+  Loading books...
 </div>
-<div ng-hide="loading"> 
+<div ng-hide="loading">
   <div ng-show="!books.length">
-    <h3>No books found.</h3>
+    <h4>No books found.</h4>
   </div>
 
   <div ng-hide="!books.length">
     <form ng-submit="submitSelectedBooks(selected_books)" ng-disabled="!books.length">
-      <input type="submit">
       <div>
         Select
         <a href="" ng-click="setAllSelections(true)">All</a> / 
         <a href="" ng-click="setAllSelections(false)">None</a>
-      </div>
+      </div><br>
       <div ng-repeat="book in books">
-        <label>
-          <input ng-model="selection[$index]" type="checkbox" ng-disabled="!book.isbn">
-          <img ng-src="{{book.small_image_url}}">
-          {{book.title}} 
-          - {{book.author}}
-          - {{book.isbn}} 
-          <span ng-if="!book.isbn" class="label label-warning">No ISBN</span>
+        <label class="well well-small" ng-disabled="!book.isbn" >
+          <input ng-model="selection[$index]" type="checkbox" ng-disabled="!book.isbn" class="books-checkbox">
+          <img ng-src="{{book.small_image_url}}" class="books-img">
+          <div class="books-label">
+            <div><b>{{book.title}}</b></div>
+            <div>{{book.author}}</div>
+            <!--<div>{{book.isbn}}</div>-->
+            <span ng-if="!book.isbn" class="label label-important">No ISBN</span>
+          </div>
         </label>
       </div>
       <input type="submit">
     </form>
   </div>
 
+</div>
 </div>
