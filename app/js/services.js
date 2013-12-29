@@ -15,7 +15,9 @@
       books: null,      // array of ISBN strings
       editions: null,   // array of edition objects
       listings: null,   // array of listing objects
-      sellers: null     // array of seller objects
+      sellers: null,    // array of seller objects
+
+      selected_books: null
     };
   }
 

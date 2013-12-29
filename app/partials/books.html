@@ -1,13 +1,21 @@
 <p>This is the partial for books.</p>
-<!--<form ng-submit="submitGoodreadsUserId(goodreadsUserId)">-->
-  <!--<input type="text" ng-model="goodreadsUserId" autofocus>-->
-  <!--<input type="submit">-->
-<!--</form>-->
-<ul>
-  <li ng-repeat="book in books">
+<form ng-submit="submitSelectedBooks(selected_books)">
+  <input type="submit" ng-disabled="loading || !books.length">
+  <div>
+    Select
+    <a href="" ng-click="setAllSelections(true)">All</a> / 
+    <a href="" ng-click="setAllSelections(false)">None</a>
+  </div>
+  <div ng-if="!loading && !books.length"><h3>No books found</h3></div>
+  <div ng-repeat="book in books">
+    <input ng-model="selection[$index]" type="checkbox">
     <img ng-src="{{book.small_image_url}}">
     {{book.title}} 
     - {{book.author}}
     - {{book.isbn}}
-  </li>
-</ul>
+  </div>
+  <input type="submit" ng-disabled="loading || !books.length">
+</form>
+
+<pre>{{selection || json}}</pre>
+<pre>{{selected_books || json}}</pre>
