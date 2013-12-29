@@ -89,7 +89,11 @@
     $scope.setAllSelections = function (value) {
       $scope.selection = [];
       for (var i = 0; i < books.length; i++) {
-        $scope.selection.push(value);
+        if (books[i].isbn === null) {
+          $scope.selection.push(false);
+        } else {
+          $scope.selection.push(value);
+        }
       }
     };
 
@@ -97,7 +101,7 @@
     $scope.$watch('selection', function () {
       $scope.selected_books = [];
       angular.forEach($scope.selection, function (is_selected, index) {
-        if (is_selected) {
+        if (is_selected && $scope.books[index].isbn !== null) {
           $scope.selected_books.push($scope.books[index]);
         }
       })

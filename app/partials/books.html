@@ -8,7 +8,8 @@
   </div>
   <div ng-if="!loading && !books.length"><h3>No books found</h3></div>
   <div ng-repeat="book in books">
-    <input ng-model="selection[$index]" type="checkbox">
+    <div ng-if="!book.isbn">No ISBN for book</div>
+    <input ng-model="selection[$index]" type="checkbox" ng-disabled="!book.isbn">
     <img ng-src="{{book.small_image_url}}">
     {{book.title}} 
     - {{book.author}}
