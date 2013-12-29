@@ -6,6 +6,7 @@
 
 
   function GoodreadsUserCtrl($scope, $location, BookScraperMaster) {
+    // TODO: for testing only
     $scope.goodreadsUserId = '5123156';
 
     $scope.submitGoodreadsUserId = function (userId) {
@@ -33,6 +34,7 @@
       }
     );
     // TODO: failure callback for 404
+    // TODO: spinner
 
     $scope.submitGoodreadsShelves = function (shelves) {
       BookScraperMaster.goodreadsSelectedShelves = shelves;
@@ -64,7 +66,9 @@
       });
     });
 
-    // TOOD: checkbox select/deselect books
+    // TODO: checkbox select/deselect books
+    // TODO: per-book filter settings: max price, condition, exclude library, desirability weight
+    // TODO: spinner
 
     BookScraperMaster.books = books;
     $scope.books = books
@@ -99,6 +103,9 @@
     $scope.editionSortKey = function (ed) {
       return ed.year || '0000';
     };
+
+    // TODO: checkbox select/deselect editions
+    // TODO: spinner
   }
 
   EditionsCtrl.$inject = [
@@ -141,6 +148,7 @@
       progress.responses++;
       progress.percent = 100 * (progress.responses / progress.requests);
     });
+    // TODO: advance after all requests complete
 
 
     // get Half.com listings for each edition of each book
