@@ -130,11 +130,11 @@
 
 // =============================================================================
 
-  function EditionsCtrl($scope, BookScraperMaster, XisbnService) {
+  function EditionsCtrl($scope, $location, BookScraperMaster, XisbnService) {
     var books = BookScraperMaster.selected_books;
     var editions = [];
 
-    books = [{"id":2659696,"isbn":"0198570503","title":"Global Catastrophic Risks","author":"Nick Bostrom","image_url":"http://www.goodreads.com/assets/nocover/111x148.png","small_image_url":"http://www.goodreads.com/assets/nocover/60x80.png","link":"http://www.goodreads.com/book/show/2659696-global-catastrophic-risks"},{"id":12311305,"isbn":"1741797152","title":"Lonely Planet Vietnam","author":"Iain Stewart","image_url":"http://www.goodreads.com/assets/nocover/111x148.png","small_image_url":"http://www.goodreads.com/assets/nocover/60x80.png","link":"http://www.goodreads.com/book/show/12311305-lonely-planet-vietnam"},{"id":3990666,"isbn":"0864426704","title":"Lonely Planet Cambodia","author":"Nick Ray","image_url":"http://www.goodreads.com/assets/nocover/111x148.png","small_image_url":"http://www.goodreads.com/assets/nocover/60x80.png","link":"http://www.goodreads.com/book/show/3990666-lonely-planet-cambodia"},{"id":552702,"isbn":"1562790692","title":"Pharmako/Poeia: Plant Powers, Poisons, and Herbcraft","author":"Dale Pendell","image_url":"http://d202m5krfqbpi5.cloudfront.net/books/1330212138m/552702.jpg","small_image_url":"http://d202m5krfqbpi5.cloudfront.net/books/1330212138s/552702.jpg","link":"http://www.goodreads.com/book/show/552702.Pharmako_Poeia"},{"id":828377,"isbn":"1843303299","title":"Men and Sheds","author":"Gordon Thorburn","image_url":"http://www.goodreads.com/assets/nocover/111x148.png","small_image_url":"http://www.goodreads.com/assets/nocover/60x80.png","link":"http://www.goodreads.com/book/show/828377.Men_and_Sheds"},{"id":27333,"isbn":"0618249060","title":"Silent Spring","author":"Rachel Carson","image_url":"http://www.goodreads.com/assets/nocover/111x148.png","small_image_url":"http://www.goodreads.com/assets/nocover/60x80.png","link":"http://www.goodreads.com/book/show/27333.Silent_Spring"},{"id":249049,"isbn":"0312361653","title":"Men's Style: The Thinking Man's Guide to Dress","author":"Russell Smith","image_url":"http://www.goodreads.com/assets/nocover/111x148.png","small_image_url":"http://www.goodreads.com/assets/nocover/60x80.png","link":"http://www.goodreads.com/book/show/249049.Men_s_Style"},{"id":12952273,"isbn":null,"title":"Race Against The Machine: How the Digital Revolution is Accelerating Innovation, Driving Productivity, and Irreversibly Transforming Employment and the Economy","author":"Erik Brynjolfsson","image_url":"http://d202m5krfqbpi5.cloudfront.net/books/1329373179m/12952273.jpg","small_image_url":"http://d202m5krfqbpi5.cloudfront.net/books/1329373179s/12952273.jpg","link":"http://www.goodreads.com/book/show/12952273-race-against-the-machine"},{"id":639076,"isbn":"0393326551","title":"Opening Skinner's Box: Great Psychological Experiments of the Twentieth Century","author":"Lauren Slater","image_url":"http://d202m5krfqbpi5.cloudfront.net/books/1361744788m/639076.jpg","small_image_url":"http://d202m5krfqbpi5.cloudfront.net/books/1361744788s/639076.jpg","link":"http://www.goodreads.com/book/show/639076.Opening_Skinner_s_Box"},{"id":254497,"isbn":"0192805851","title":"Consciousness: A Very Short Introduction","author":"Susan J. Blackmore","image_url":"http://www.goodreads.com/assets/nocover/111x148.png","small_image_url":"http://www.goodreads.com/assets/nocover/60x80.png","link":"http://www.goodreads.com/book/show/254497.Consciousness"},{"id":415,"isbn":"0143039946","title":"Gravity's Rainbow","author":"Thomas Pynchon","image_url":"http://d202m5krfqbpi5.cloudfront.net/books/1327868134m/415.jpg","small_image_url":"http://d202m5krfqbpi5.cloudfront.net/books/1327868134s/415.jpg","link":"http://www.goodreads.com/book/show/415.Gravity_s_Rainbow"},{"id":6759,"isbn":"0316921173","title":"Infinite Jest","author":"David Foster Wallace","image_url":"http://www.goodreads.com/assets/nocover/111x148.png","small_image_url":"http://www.goodreads.com/assets/nocover/60x80.png","link":"http://www.goodreads.com/book/show/6759.Infinite_Jest"},{"id":14185,"isbn":null,"title":"The Three Stigmata of Palmer Eldritch","author":"Philip K. Dick","image_url":"http://d202m5krfqbpi5.cloudfront.net/books/1338461946m/14185.jpg","small_image_url":"http://d202m5krfqbpi5.cloudfront.net/books/1338461946s/14185.jpg","link":"http://www.goodreads.com/book/show/14185.The_Three_Stigmata_of_Palmer_Eldritch"}];
+    //books = [{"id":2659696,"isbn":"0198570503","title":"Global Catastrophic Risks","author":"Nick Bostrom","image_url":"http://www.goodreads.com/assets/nocover/111x148.png","small_image_url":"http://www.goodreads.com/assets/nocover/60x80.png","link":"http://www.goodreads.com/book/show/2659696-global-catastrophic-risks"},{"id":12311305,"isbn":"1741797152","title":"Lonely Planet Vietnam","author":"Iain Stewart","image_url":"http://www.goodreads.com/assets/nocover/111x148.png","small_image_url":"http://www.goodreads.com/assets/nocover/60x80.png","link":"http://www.goodreads.com/book/show/12311305-lonely-planet-vietnam"},{"id":3990666,"isbn":"0864426704","title":"Lonely Planet Cambodia","author":"Nick Ray","image_url":"http://www.goodreads.com/assets/nocover/111x148.png","small_image_url":"http://www.goodreads.com/assets/nocover/60x80.png","link":"http://www.goodreads.com/book/show/3990666-lonely-planet-cambodia"},{"id":552702,"isbn":"1562790692","title":"Pharmako/Poeia: Plant Powers, Poisons, and Herbcraft","author":"Dale Pendell","image_url":"http://d202m5krfqbpi5.cloudfront.net/books/1330212138m/552702.jpg","small_image_url":"http://d202m5krfqbpi5.cloudfront.net/books/1330212138s/552702.jpg","link":"http://www.goodreads.com/book/show/552702.Pharmako_Poeia"},{"id":828377,"isbn":"1843303299","title":"Men and Sheds","author":"Gordon Thorburn","image_url":"http://www.goodreads.com/assets/nocover/111x148.png","small_image_url":"http://www.goodreads.com/assets/nocover/60x80.png","link":"http://www.goodreads.com/book/show/828377.Men_and_Sheds"},{"id":27333,"isbn":"0618249060","title":"Silent Spring","author":"Rachel Carson","image_url":"http://www.goodreads.com/assets/nocover/111x148.png","small_image_url":"http://www.goodreads.com/assets/nocover/60x80.png","link":"http://www.goodreads.com/book/show/27333.Silent_Spring"},{"id":249049,"isbn":"0312361653","title":"Men's Style: The Thinking Man's Guide to Dress","author":"Russell Smith","image_url":"http://www.goodreads.com/assets/nocover/111x148.png","small_image_url":"http://www.goodreads.com/assets/nocover/60x80.png","link":"http://www.goodreads.com/book/show/249049.Men_s_Style"},{"id":12952273,"isbn":null,"title":"Race Against The Machine: How the Digital Revolution is Accelerating Innovation, Driving Productivity, and Irreversibly Transforming Employment and the Economy","author":"Erik Brynjolfsson","image_url":"http://d202m5krfqbpi5.cloudfront.net/books/1329373179m/12952273.jpg","small_image_url":"http://d202m5krfqbpi5.cloudfront.net/books/1329373179s/12952273.jpg","link":"http://www.goodreads.com/book/show/12952273-race-against-the-machine"},{"id":639076,"isbn":"0393326551","title":"Opening Skinner's Box: Great Psychological Experiments of the Twentieth Century","author":"Lauren Slater","image_url":"http://d202m5krfqbpi5.cloudfront.net/books/1361744788m/639076.jpg","small_image_url":"http://d202m5krfqbpi5.cloudfront.net/books/1361744788s/639076.jpg","link":"http://www.goodreads.com/book/show/639076.Opening_Skinner_s_Box"},{"id":254497,"isbn":"0192805851","title":"Consciousness: A Very Short Introduction","author":"Susan J. Blackmore","image_url":"http://www.goodreads.com/assets/nocover/111x148.png","small_image_url":"http://www.goodreads.com/assets/nocover/60x80.png","link":"http://www.goodreads.com/book/show/254497.Consciousness"},{"id":415,"isbn":"0143039946","title":"Gravity's Rainbow","author":"Thomas Pynchon","image_url":"http://d202m5krfqbpi5.cloudfront.net/books/1327868134m/415.jpg","small_image_url":"http://d202m5krfqbpi5.cloudfront.net/books/1327868134s/415.jpg","link":"http://www.goodreads.com/book/show/415.Gravity_s_Rainbow"},{"id":6759,"isbn":"0316921173","title":"Infinite Jest","author":"David Foster Wallace","image_url":"http://www.goodreads.com/assets/nocover/111x148.png","small_image_url":"http://www.goodreads.com/assets/nocover/60x80.png","link":"http://www.goodreads.com/book/show/6759.Infinite_Jest"},{"id":14185,"isbn":null,"title":"The Three Stigmata of Palmer Eldritch","author":"Philip K. Dick","image_url":"http://d202m5krfqbpi5.cloudfront.net/books/1338461946m/14185.jpg","small_image_url":"http://d202m5krfqbpi5.cloudfront.net/books/1338461946s/14185.jpg","link":"http://www.goodreads.com/book/show/14185.The_Three_Stigmata_of_Palmer_Eldritch"}];
 
     BookScraperMaster.editions = editions;
     $scope.editions = editions;
@@ -181,28 +181,10 @@
       }
     };
 
-    // update $scope.selected_eds when selection changes
-    $scope.$watch('selection', function () {
-      var book, ed, book_eds;
-      $scope.selected_eds = [];
-      angular.forEach($scope.selection, function (book_sel, book_index) {
-        book = $scope.books[book_index];
-        book_eds = [];
-        angular.forEach(book_sel, function (is_selected, index) {
-          ed = book.editions[index];
-          if (is_selected && ed.isbn !== null) {
-            book_eds.push(ed.isbn);
-          }
-        });
-        $scope.selected_eds.push(book_eds);
-      });
-    }, true);
-
-    $scope.submitSelectedEditions = function (selected_eds) {
-      BookScraperMaster.selected_books = selected_books;
+    $scope.submitSelectedEditions = function (selection) {
+      BookScraperMaster.edition_selections = selection;
       $location.path('/listings');
     };
-
 
     $scope.finishLoading = function () {
       $scope.setAllSelections(true);
@@ -212,6 +194,7 @@
 
   EditionsCtrl.$inject = [
     '$scope',
+    '$location',
     'BookScraperMaster',
     'XisbnService'
   ];
@@ -252,6 +235,7 @@
     });
     // TODO: advance after all requests complete
 
+    // TODO: cancel requests if leaving controller
 
     // get Half.com listings for each edition of each book
     angular.forEach(books, function (book) {

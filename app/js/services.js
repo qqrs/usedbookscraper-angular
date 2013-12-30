@@ -17,7 +17,8 @@
       listings: null,   // array of listing objects
       sellers: null,    // array of seller objects
 
-      selected_books: null
+      selected_books: null,
+      edition_selections: null
     };
   }
 
