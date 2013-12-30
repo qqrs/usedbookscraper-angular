@@ -1,8 +1,20 @@
-<p>This is the partial for shelves.</p>
+<div class="span6 offset3">
+
+<h1>select shelves</h1><br>
+
+<div ng-show="loading">
+  <img src="/static/spinner.gif"> 
+  Loading shelves...
+</div>
+<div ng-hide="loading">
+
 <form ng-submit="submitGoodreadsShelves(selectedShelves)">
   <select multiple autofocus class="shelves-select" size="20"
     ng-model="selectedShelves" 
     ng-options="shelf.name for shelf in shelves">
-  </select>
+  </select><br>
   <input type="submit">
 </form>
+
+</div>
+</div>

@@ -26,19 +26,23 @@
   function ShelvesCtrl($scope, $location, BookScraperMaster, GoodreadsService) {
     console.log('ShelvesCtrl: ' + BookScraperMaster.goodreadsUserId);
     $scope.selectedShelves = [];
+    $scope.loading = true;
 
     GoodreadsService.getShelves(BookScraperMaster.goodreadsUserId,
       function (shelves) {
         BookScraperMaster.shelves = shelves;
         $scope.shelves = shelves;
+        $scope.finishLoading();
       }
     );
     // TODO: failure callback for 404
-    // TODO: spinner
 
     $scope.submitGoodreadsShelves = function (shelves) {
       BookScraperMaster.goodreadsSelectedShelves = shelves;
       $location.path('/books');
+    };
+    $scope.finishLoading = function () {
+      $scope.loading = false;
     };
   }
 
