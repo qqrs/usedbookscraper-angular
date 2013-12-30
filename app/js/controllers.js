@@ -138,6 +138,7 @@
   function EditionsCtrl($scope, $location, BookScraperMaster, XisbnService) {
     var books = BookScraperMaster.selected_books;
     var editions = [];
+    var editionSortFn;
 
     //books = [{"id":2659696,"isbn":"0198570503","title":"Global Catastrophic Risks","author":"Nick Bostrom","image_url":"http://www.goodreads.com/assets/nocover/111x148.png","small_image_url":"http://www.goodreads.com/assets/nocover/60x80.png","link":"http://www.goodreads.com/book/show/2659696-global-catastrophic-risks"},{"id":12311305,"isbn":"1741797152","title":"Lonely Planet Vietnam","author":"Iain Stewart","image_url":"http://www.goodreads.com/assets/nocover/111x148.png","small_image_url":"http://www.goodreads.com/assets/nocover/60x80.png","link":"http://www.goodreads.com/book/show/12311305-lonely-planet-vietnam"},{"id":3990666,"isbn":"0864426704","title":"Lonely Planet Cambodia","author":"Nick Ray","image_url":"http://www.goodreads.com/assets/nocover/111x148.png","small_image_url":"http://www.goodreads.com/assets/nocover/60x80.png","link":"http://www.goodreads.com/book/show/3990666-lonely-planet-cambodia"},{"id":552702,"isbn":"1562790692","title":"Pharmako/Poeia: Plant Powers, Poisons, and Herbcraft","author":"Dale Pendell","image_url":"http://d202m5krfqbpi5.cloudfront.net/books/1330212138m/552702.jpg","small_image_url":"http://d202m5krfqbpi5.cloudfront.net/books/1330212138s/552702.jpg","link":"http://www.goodreads.com/book/show/552702.Pharmako_Poeia"},{"id":828377,"isbn":"1843303299","title":"Men and Sheds","author":"Gordon Thorburn","image_url":"http://www.goodreads.com/assets/nocover/111x148.png","small_image_url":"http://www.goodreads.com/assets/nocover/60x80.png","link":"http://www.goodreads.com/book/show/828377.Men_and_Sheds"},{"id":27333,"isbn":"0618249060","title":"Silent Spring","author":"Rachel Carson","image_url":"http://www.goodreads.com/assets/nocover/111x148.png","small_image_url":"http://www.goodreads.com/assets/nocover/60x80.png","link":"http://www.goodreads.com/book/show/27333.Silent_Spring"},{"id":249049,"isbn":"0312361653","title":"Men's Style: The Thinking Man's Guide to Dress","author":"Russell Smith","image_url":"http://www.goodreads.com/assets/nocover/111x148.png","small_image_url":"http://www.goodreads.com/assets/nocover/60x80.png","link":"http://www.goodreads.com/book/show/249049.Men_s_Style"},{"id":12952273,"isbn":null,"title":"Race Against The Machine: How the Digital Revolution is Accelerating Innovation, Driving Productivity, and Irreversibly Transforming Employment and the Economy","author":"Erik Brynjolfsson","image_url":"http://d202m5krfqbpi5.cloudfront.net/books/1329373179m/12952273.jpg","small_image_url":"http://d202m5krfqbpi5.cloudfront.net/books/1329373179s/12952273.jpg","link":"http://www.goodreads.com/book/show/12952273-race-against-the-machine"},{"id":639076,"isbn":"0393326551","title":"Opening Skinner's Box: Great Psychological Experiments of the Twentieth Century","author":"Lauren Slater","image_url":"http://d202m5krfqbpi5.cloudfront.net/books/1361744788m/639076.jpg","small_image_url":"http://d202m5krfqbpi5.cloudfront.net/books/1361744788s/639076.jpg","link":"http://www.goodreads.com/book/show/639076.Opening_Skinner_s_Box"},{"id":254497,"isbn":"0192805851","title":"Consciousness: A Very Short Introduction","author":"Susan J. Blackmore","image_url":"http://www.goodreads.com/assets/nocover/111x148.png","small_image_url":"http://www.goodreads.com/assets/nocover/60x80.png","link":"http://www.goodreads.com/book/show/254497.Consciousness"},{"id":415,"isbn":"0143039946","title":"Gravity's Rainbow","author":"Thomas Pynchon","image_url":"http://d202m5krfqbpi5.cloudfront.net/books/1327868134m/415.jpg","small_image_url":"http://d202m5krfqbpi5.cloudfront.net/books/1327868134s/415.jpg","link":"http://www.goodreads.com/book/show/415.Gravity_s_Rainbow"},{"id":6759,"isbn":"0316921173","title":"Infinite Jest","author":"David Foster Wallace","image_url":"http://www.goodreads.com/assets/nocover/111x148.png","small_image_url":"http://www.goodreads.com/assets/nocover/60x80.png","link":"http://www.goodreads.com/book/show/6759.Infinite_Jest"},{"id":14185,"isbn":null,"title":"The Three Stigmata of Palmer Eldritch","author":"Philip K. Dick","image_url":"http://d202m5krfqbpi5.cloudfront.net/books/1338461946m/14185.jpg","small_image_url":"http://d202m5krfqbpi5.cloudfront.net/books/1338461946s/14185.jpg","link":"http://www.goodreads.com/book/show/14185.The_Three_Stigmata_of_Palmer_Eldritch"}];
 
@@ -152,6 +153,7 @@
     angular.forEach(books, function (book) {
       $scope.remaining_requests++;
       XisbnService.getEditions(book.isbn, function (book_editions) {
+        book_editions.sort(editionSortFn);
         book.editions = book_editions
         angular.forEach(book_editions, function(ed) { ed.book = book } );
         Array.prototype.push.apply(editions, book_editions);
@@ -165,8 +167,20 @@
       }
     }, true);
 
-    $scope.editionSortKey = function (ed) {
-      return ed.year || '0000';
+    editionSortFn = function (a,b) {
+      if (a.year === b.year) {
+        return 0;
+      } else if (!a.year) {
+        return 1;
+      } else if (!b.year) {
+        return -1;
+      } else if (a.year > b.year) {
+        return -1;
+      } else if (a.year < b.year) {
+        return 1;
+      } else {
+        return 0;   // should not reach this case
+      }
     };
 
     $scope.selection = [];

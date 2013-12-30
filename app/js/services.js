@@ -53,6 +53,8 @@
 // =============================================================================
 
 
+  // TODO: caching
+  // TODO: handle overlimit response HTTP 200: {"stat":"overlimit"}
   function XisbnService(XisbnAPI) {
     return {
       'getEditions': function(isbn, successCallback) {
@@ -115,6 +117,7 @@
 
 // =============================================================================
 
+  //TODO: caching
   //TODO: get all listings with condition >= cond, maxprice <= xx.xx, all pages
   function HalfService($rootScope, HalfAPI) {
     var _conditions = ['Acceptable', 'Good', 'VeryGood', 'LikeNew', 'BrandNew'];
@@ -205,7 +208,8 @@
   GoodreadsAPI.$inject = [
     '$resource'
   ];
-
+ 
+  // TODO: caching
   function GoodreadsService(GoodreadsAPI) {
     return {
       'getShelves': function(user_id, successCallback) {
