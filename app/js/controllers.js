@@ -107,7 +107,7 @@
         if (is_selected && $scope.books[index].isbn !== null) {
           $scope.selected_books.push($scope.books[index]);
         }
-      })
+      });
     }, true);
 
     $scope.submitSelectedBooks = function (selected_books) {
@@ -160,18 +160,54 @@
       }
     }, true);
 
-
     $scope.editionSortKey = function (ed) {
       return ed.year || '0000';
     };
-    $scope.finishLoading = function () {
-      //$scope.setAllSelections(true);
-      $scope.loading = false;
-      console.log(JSON.stringify(books));
+
+    $scope.selection = [];
+    $scope.setAllSelections = function (value) {
+      var book_sel;
+      $scope.selection = [];
+      for (var i = 0; i < books.length; i++) {
+        book_sel = [];
+        for (var j = 0; j < books[i].editions.length; j++) {
+          if (books[i].editions[j].isbn === null) {
+            book_sel.push(false);
+          } else {
+            book_sel.push(value);
+          }
+        }
+        $scope.selection.push(book_sel);
+      }
     };
 
-    // TODO: checkbox select/deselect editions
-    // TODO: group editions by book
+    // update $scope.selected_eds when selection changes
+    $scope.$watch('selection', function () {
+      var book, ed, book_eds;
+      $scope.selected_eds = [];
+      angular.forEach($scope.selection, function (book_sel, book_index) {
+        book = $scope.books[book_index];
+        book_eds = [];
+        angular.forEach(book_sel, function (is_selected, index) {
+          ed = book.editions[index];
+          if (is_selected && ed.isbn !== null) {
+            book_eds.push(ed.isbn);
+          }
+        });
+        $scope.selected_eds.push(book_eds);
+      });
+    }, true);
+
+    $scope.submitSelectedEditions = function (selected_eds) {
+      BookScraperMaster.selected_books = selected_books;
+      $location.path('/listings');
+    };
+
+
+    $scope.finishLoading = function () {
+      $scope.setAllSelections(true);
+      $scope.loading = false;
+    };
   }
 
   EditionsCtrl.$inject = [

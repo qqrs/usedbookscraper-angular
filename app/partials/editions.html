@@ -13,6 +13,11 @@
 
   <div ng-hide="!editions.length">
     <form ng-submit="submitSelectedEditions(selected_eds)" ng-disabled="!books.length">
+      <div>
+        Select
+        <a href="" ng-click="setAllSelections(true)">All</a> / 
+        <a href="" ng-click="setAllSelections(false)">None</a>
+      </div><br>
       <div ng-repeat="book in books">
         <label class="well well-small" ng-disabled="!book.isbn" >
           <img ng-src="{{book.small_image_url}}" class="books-img">
@@ -23,7 +28,7 @@
 
             <label class="checkbox" ng-repeat="ed in book.editions | orderBy:editionSortKey:'true'">
             <small>
-              <input ng-model="selection[$index]" type="checkbox" ng-disabled="!ed.isbn">
+              <input ng-model="selection[$parent.$index][$index]" type="checkbox" ng-disabled="!ed.isbn">
               <div> <b>{{ed.title}}</b> {{!ed.year ? '' : '(' + ed.year + ')'}} </div>
               <div>{{ed.author}}</div>
               <div>isbn: {{ed.isbn}}</div>
@@ -39,4 +44,6 @@
   </div>
 
 </div>
+<pre>{{selection}}</pre>
+<pre>{{selected_eds}}</pre>
 </div>
