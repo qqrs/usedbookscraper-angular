@@ -180,6 +180,27 @@
         $scope.selection.push(book_sel);
       }
     };
+    $scope.setAllSelectionsForBook = function (book_index, value) {
+      var book_sel, prev_sel;
+      prev_sel = $scope.selection;
+      $scope.selection = [];
+      for (var i = 0; i < books.length; i++) {
+        if (i !== book_index) {
+          $scope.selection.push(prev_sel[i]);
+        } else {
+          book_sel = [];
+          for (var j = 0; j < books[i].editions.length; j++) {
+            if (books[i].editions[j].isbn === null) {
+              book_sel.push(false);
+            } else {
+              book_sel.push(value);
+            }
+          }
+          $scope.selection.push(book_sel);
+        }
+      }
+    };
+
 
     $scope.submitSelectedEditions = function (selection) {
       BookScraperMaster.edition_selections = selection;

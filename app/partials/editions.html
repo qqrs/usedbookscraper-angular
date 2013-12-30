@@ -19,7 +19,7 @@
         <a href="" ng-click="setAllSelections(false)">None</a>
       </div><br>
       <div ng-repeat="book in books">
-        <label class="well well-small" ng-disabled="!book.isbn" >
+        <div class="well well-small">
           <img ng-src="{{book.small_image_url}}" class="books-img">
           <div class="books-label">
             <div><b>{{book.title}}</b></div>
@@ -36,14 +36,14 @@
             </label>
 
           </div>
-        </label>
+          <br> <div><small>
+            Select
+            <a href="" ng-click="setAllSelectionsForBook($index, true)">All</a> / 
+            <a href="" ng-click="setAllSelectionsForBook($index, false)">None</a>
+          </small></div>
+        </div>
       </div>
       <input type="submit">
     </form>
 
   </div>
-
-</div>
-<pre>{{selection}}</pre>
-<pre>{{selected_eds}}</pre>
-</div>
