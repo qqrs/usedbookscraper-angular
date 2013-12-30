@@ -26,7 +26,7 @@
             <div>{{book.author}}</div>
             <br>
 
-            <label class="checkbox" ng-repeat="ed in book.editions | orderBy:editionSortKey:'true'">
+            <label class="checkbox" ng-repeat="ed in book.editions">
             <small>
               <input ng-model="selection[$parent.$index][$index]" type="checkbox" ng-disabled="!ed.isbn">
               <div> <b>{{ed.title}}</b> {{!ed.year ? '' : '(' + ed.year + ')'}} </div>
