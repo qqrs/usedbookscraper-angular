@@ -1,11 +1,42 @@
-<p>This is the partial for editions.</p>
-<ul>
-  <li ng-repeat="ed in editions | orderBy:['book', editionSortKey]:true">
-    {{ed.title}}
-    - {{ed.author}}
-    - {{ed.isbn}}
-    - {{ed.year}}
-    - {{ed.form}}
-    - {{ed.lang}}
-  </li>
-</ul>
+<div class="span6 offset3">
+
+<h1>select editions</h1><br>
+
+<div ng-show="loading">
+  <img src="/static/spinner.gif"> 
+  Loading editions...
+</div>
+<div ng-hide="loading">
+  <div ng-show="!editions.length">
+    <h4>No editions found.</h4>
+  </div>
+
+  <div ng-hide="!editions.length">
+    <form ng-submit="submitSelectedEditions(selected_eds)" ng-disabled="!books.length">
+      <div ng-repeat="book in books">
+        <label class="well well-small" ng-disabled="!book.isbn" >
+          <img ng-src="{{book.small_image_url}}" class="books-img">
+          <div class="books-label">
+            <div><b>{{book.title}}</b></div>
+            <div>{{book.author}}</div>
+            <br>
+
+            <label class="checkbox" ng-repeat="ed in book.editions | orderBy:editionSortKey:'true'">
+            <small>
+              <input ng-model="selection[$index]" type="checkbox" ng-disabled="!ed.isbn">
+              <div> <b>{{ed.title}}</b> {{!ed.year ? '' : '(' + ed.year + ')'}} </div>
+              <div>{{ed.author}}</div>
+              <div>isbn: {{ed.isbn}}</div>
+            </small>
+            </label>
+
+          </div>
+        </label>
+      </div>
+      <input type="submit">
+    </form>
+
+  </div>
+
+</div>
+</div>
