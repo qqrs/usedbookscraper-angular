@@ -221,6 +221,7 @@
     };
 
     $scope.submitSelectedEditions = function (selection) {
+      // TODO: error if too many books or editions
       BookScraperMaster.edition_selections = selection;
       $location.path('/listings');
     };
@@ -240,7 +241,7 @@
 
 // =============================================================================
 
-  function ListingsCtrl($scope, BookScraperMaster, HalfService) {
+  function ListingsCtrl($scope, $location, BookScraperMaster, HalfService) {
     var books = BookScraperMaster.selected_books;
     var editions = BookScraperMaster.editions;
     var selection = BookScraperMaster.edition_selections;
@@ -263,6 +264,7 @@
       var progress = $scope.apiRequestProgress.call;
       progress.responses++;
       progress.percent = 100 * (progress.responses / progress.requests);
+      $scope.advanceIfFinished();
     });
     $scope.$on('halfService.findItems.page.request', function () {
       var progress = $scope.apiRequestProgress.page;
@@ -272,6 +274,7 @@
       var progress = $scope.apiRequestProgress.page;
       progress.responses++;
       progress.percent = 100 * (progress.responses / progress.requests);
+      $scope.advanceIfFinished();
     });
     // TODO: advance after all requests complete
 
@@ -304,10 +307,23 @@
       });
     });
 
+    $scope.advanceIfFinished = function () {
+      if (($scope.apiRequestProgress.call.requests ===
+            $scope.apiRequestProgress.call.responses) &&
+          ($scope.apiRequestProgress.page.requests ===
+            $scope.apiRequestProgress.page.responses)) {
+        $scope.finishLoading();
+      }
+    }
+
+    $scope.finishLoading = function () {
+      $location.path('/sellers');
+    };
   }
 
   ListingsCtrl.$inject = [
     '$scope',
+    '$location',
     'BookScraperMaster',
     'HalfService'
   ];
