@@ -279,21 +279,21 @@
 
     // get Half.com listings for each edition of each book
     angular.forEach(books, function (book, book_index) {
-      book['listings'] = [];
+      book.listings = [];
       angular.forEach(book.editions, function (ed, ed_index) {
         if (!selection[book_index][ed_index]) {
           console.log('         ed.isbn: ' + ed.isbn + '; book_index: ' + book_index + '; ed_index: ' + ed_index);
           return;
         }
         console.log('selected ed.isbn: ' + ed.isbn + '; book_index: ' + book_index + '; ed_index: ' + ed_index);
-        ed['listings'] = [];
+        ed.listings = [];
         HalfService.findItems(
           {isbn: ed.isbn, page: '1', condition: 'Good', maxprice: 4.00},
           function(response) { 
             var ed_listings = response.items;
             angular.forEach(ed_listings, function(el) { 
-              el['book'] = book; 
-              el['edition'] = ed;
+              el.book = book; 
+              el.edition = ed;
             });
             Array.prototype.push.apply(listings, ed_listings);
             Array.prototype.push.apply(book.listings, ed_listings);
