@@ -2,10 +2,18 @@
 
 /* Directives */
 
+(function () {
 
-angular.module('myApp.directives', []).
-  directive('appVersion', ['version', function(version) {
-    return function(scope, elm, attrs) {
-      elm.text(version);
+  function SellerBooksDirective() {
+    return {
+      templateUrl: 'partials/seller_books.html',
+      replace: true,
+      scope: { seller: '=ubsSellerBooks' },
+      controller: 'SellerBooksCtrl'
     };
-  }]);
+  }
+
+  angular.module('myApp.directives', [])
+    .directive('ubsSellerBooks', SellerBooksDirective);
+  }
+)();

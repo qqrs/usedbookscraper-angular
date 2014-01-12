@@ -354,9 +354,7 @@
         sellers[listing.seller] = seller;
       }
 
-      //bookIndex = seller.books.indexOf(listing.book);
       sellerBook = _.find(seller.books, {book: listing.book});
-      //if (bookIndex === -1) {
       if (!sellerBook) {
         sellerBook = {
           book: listing.book,
@@ -366,7 +364,6 @@
         seller.books.push(sellerBook);
       } else {
         sellerBook.listings.push(listing);
-        //seller.book_listings[bookIndex].push(listing);
       }
       // TODO: sort listings and choose actual best
       //if (seller.editions.indexOf(listing.edition) === -1) {
@@ -399,6 +396,33 @@
   ];
 
 // =============================================================================
+//
+  function SellerBooksCtrl($scope, $element, $attrs, $transclude, BookScraperMaster) {
+    $scope.orderTotalCost = _.reduce($scope.seller.books, function (sum, sbook) {
+      return sum + Number(sbook.bestListing.price) + 1.89;
+    }, 1.60);
+  }
+  
+  SellerBooksCtrl.$inject = [
+    '$scope',
+    '$element',
+    '$attrs',
+    '$transclude',
+    'BookScraperMaster'
+  ];
+
+// =============================================================================
+
+  function TestCtrl($scope, BookScraperMaster) {
+    $scope.msg = 'TESTME';
+  }
+
+  TestCtrl.$inject = [
+    '$scope',
+    'BookScraperMaster'
+  ];
+
+// =============================================================================
 
   angular.module('myApp.controllers', ['ngResource'])
     .controller('GoodreadsUserCtrl', GoodreadsUserCtrl)
@@ -407,4 +431,6 @@
     .controller('EditionsCtrl', EditionsCtrl)
     .controller('ListingsCtrl', ListingsCtrl)
     .controller('SellersCtrl', SellersCtrl)
+    .controller('SellerBooksCtrl', SellerBooksCtrl)
+    .controller('TestCtrl', TestCtrl)
 })();
