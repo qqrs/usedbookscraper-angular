@@ -11,33 +11,44 @@
     <div class="well well-small">
       <div>
         <div class="seller-label">{{seller.name}}</div>
-        <div> Feedback: {{seller.feedback_count}} &middot; {{seller.feedback_rating}}%</div>
+        <div>feedback: {{seller.feedback_count}} &middot; {{seller.feedback_rating}}%</div>
       </div>
       <br>
 
-      <ol>
-      <li ng-repeat="book in seller.books">
+      <table class="table">
+        <thead><tr>
+          <th>price</th>
+          <th>shipping</th>
+          <th>book</th>
+        </tr></thead>
+        <tbody>
+      <tr ng-repeat="book in seller.books">
+        <td>{{seller.book_listings[$index][0].price | currency}}</td>
+        <td>+ $1.89</td>
+        <td>
         <div><b>{{book.title}}</b></div>
         <div>{{book.author}}</div>
 
-        <div><small>
-          <div ng-repeat="listing in seller.book_listings[$index]">
-            <div>
-              <a href="{{listing.half_item_url}}" target="_blank">
-                <b>{{listing.edition.title}}</b></a>
-              {{!listing.edition.year ? '' : '(' + listing.edition.year + ')'}}</div>
-            <div class="pull-right">{{listing.price | currency}}</div>
-            <div>{{listing.edition.author}}</div>
-            <div class="pull-right">condition: {{listing.condition | bookConditionHuman}}</div>
-            <!--<div>isbn: {{listing.edition.isbn}}</div>-->
-            <div>comments: {{listing.comments}}</div>
-            <br>
-            <!--TODO: hard/softcover, half listing book title and author-->
-          </div>
-        </small></div>
+        <!--<div><small>-->
+          <!--<div ng-repeat="listing in seller.book_listings[$index]">-->
+            <!--<div>-->
+              <!--<a href="{{listing.half_item_url}}" target="_blank">-->
+                <!--<b>{{listing.edition.title}}</b></a>-->
+              <!--{{!listing.edition.year ? '' : '(' + listing.edition.year + ')'}}</div>-->
+            <!--<div class="pull-right">{{listing.price | currency}}</div>-->
+            <!--<div>{{listing.edition.author}}</div>-->
+            <!--<div class="pull-right">condition: {{listing.condition | bookConditionHuman}}</div>-->
+            <!--[><div>isbn: {{listing.edition.isbn}}</div><]-->
+            <!--<div>comments: {{listing.comments}}</div>-->
+            <!--<br>-->
+            <!--[>TODO: hard/softcover, half listing book title and author<]-->
+          <!--</div>-->
+        <!--</small></div>-->
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
-      </li>
-      </ol>
     </div>
   </div>
 </div>
