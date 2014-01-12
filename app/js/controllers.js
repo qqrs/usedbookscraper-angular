@@ -338,7 +338,8 @@
     BookScraperMaster.sellers = sellers;
 
     angular.forEach(listings, function (listing) {
-      var seller;
+      var seller, 
+          sellerBook;
       if (sellers.hasOwnProperty(listing.seller)) {
         seller = sellers[listing.seller];
       } else {
@@ -347,24 +348,31 @@
           feedback_count: listing.feedback_count,
           feedback_rating: listing.feedback_rating,
           books: [],
-          editions: [],
-          listings: [],
-          book_listings: []
+          //editions: [],
+          //listings: [],
         };
         sellers[listing.seller] = seller;
       }
 
-      bookIndex = seller.books.indexOf(listing.book);
-      if (bookIndex === -1) {
-        seller.books.push(listing.book);
-        seller.book_listings.push([listing]);
+      //bookIndex = seller.books.indexOf(listing.book);
+      sellerBook = _.find(seller.books, {book: listing.book});
+      //if (bookIndex === -1) {
+      if (!sellerBook) {
+        sellerBook = {
+          book: listing.book,
+          listings: [listing],
+          bestListing: listing
+        };
+        seller.books.push(sellerBook);
       } else {
-        seller.book_listings[bookIndex].push(listing);
+        sellerBook.listings.push(listing);
+        //seller.book_listings[bookIndex].push(listing);
       }
-      if (seller.editions.indexOf(listing.edition) === -1) {
-        seller.editions.push(listing.edition);
-      }
-      seller.listings.push(listing);
+      // TODO: sort listings and choose actual best
+      //if (seller.editions.indexOf(listing.edition) === -1) {
+        //seller.editions.push(listing.edition);
+      //}
+      //seller.listings.push(listing);
       //TODO: either delete if reverse lookup not needed or create array on book
       //listing.book['sellers'].push(seller);
       //listing.edition['sellers'].push(seller);

@@ -1,4 +1,4 @@
-<div class="span6 offset3">
+<div class="span8 offset2">
 
 <h1>results</h1><br>
 
@@ -17,17 +17,54 @@
 
       <table class="table">
         <thead><tr>
+          <th></th>
           <th>price</th>
           <th>shipping</th>
-          <th>book</th>
+          <th></th>
+          <th></th>
         </tr></thead>
         <tbody>
-      <tr ng-repeat="book in seller.books">
-        <td>{{seller.book_listings[$index][0].price | currency}}</td>
-        <td>+ $1.89</td>
-        <td>
-        <div><b>{{book.title}}</b></div>
-        <div>{{book.author}}</div>
+          <tr>
+            <td></td>
+            <td></td>
+            <td class="text-right">$3.49</td>
+            <td colspan="2">base shipping cost</td>
+          </tr>
+
+          <tr ng-repeat="sbook in seller.books">
+            <td class="text-right">{{$index + 1}}.</td>
+            <td class="text-right"><b>{{sbook.bestListing.price | currency}}</b></td>
+            <td class="text-right"><span ng-if="$index !== 0">+ $1.89</span></td>
+            <td>
+              <div><b>{{sbook.book.title}}</b></div>
+              <div>{{sbook.book.author}}</div>
+              <div><small>comments: {{sbook.bestListing.comments}}</small></div>
+            </td>
+            <td class="text-right">
+              <a href="{{sbook.bestListing.half_item_url}}" target="_blank"
+                  class="btn btn-primary" style="white-space: nowrap">
+                buy now >></a>
+            </td>
+          </tr>
+
+          <tr>
+            <td></td>
+            <td style="border-top: 2px solid black"><b>$24.30</b></td>
+            <td style="border-top: 2px solid black"></td>
+            <td colspan="2"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
 
         <!--<div><small>-->
           <!--<div ng-repeat="listing in seller.book_listings[$index]">-->
@@ -44,22 +81,6 @@
             <!--[>TODO: hard/softcover, half listing book title and author<]-->
           <!--</div>-->
         <!--</small></div>-->
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-    </div>
-  </div>
-</div>
-
-
-
-
-
-
-
-
 
 
 
