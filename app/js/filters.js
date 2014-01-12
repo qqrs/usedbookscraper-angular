@@ -3,8 +3,8 @@
 /* Filters */
 
 angular.module('myApp.filters', []).
-  filter('interpolate', ['version', function(version) {
-    return function(text) {
-      return String(text).replace(/\%VERSION\%/mg, version);
+  filter('bookConditionHuman', function(version) {
+    return function(cond) {
+      return String(cond).replace(/[A-Z]/g, ' $&').substr(1);
     }
-  }]);
+  });

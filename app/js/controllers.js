@@ -331,6 +331,7 @@
 // =============================================================================
 
   function SellersCtrl($scope, BookScraperMaster) {
+    var bookIndex;
     var sellers = {};
     var listings = BookScraperMaster.listings;
 
@@ -347,13 +348,18 @@
           feedback_rating: listing.feedback_rating,
           books: [],
           editions: [],
-          listings: []
+          listings: [],
+          book_listings: []
         };
         sellers[listing.seller] = seller;
       }
 
-      if (seller.books.indexOf(listing.book) === -1) {
+      bookIndex = seller.books.indexOf(listing.book);
+      if (bookIndex === -1) {
         seller.books.push(listing.book);
+        seller.book_listings.push([listing]);
+      } else {
+        seller.book_listings[bookIndex].push(listing);
       }
       if (seller.editions.indexOf(listing.edition) === -1) {
         seller.editions.push(listing.edition);
