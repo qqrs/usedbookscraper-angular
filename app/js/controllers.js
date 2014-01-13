@@ -396,14 +396,31 @@
   ];
 
 // =============================================================================
-//
+
   function SellerBooksCtrl($scope, $element, $attrs, $transclude, BookScraperMaster) {
     $scope.orderTotalCost = _.reduce($scope.seller.books, function (sum, sbook) {
       return sum + Number(sbook.bestListing.price) + 1.89;
     }, 1.60);
   }
-  
+
   SellerBooksCtrl.$inject = [
+    '$scope',
+    '$element',
+    '$attrs',
+    '$transclude',
+    'BookScraperMaster'
+  ];
+
+// =============================================================================
+
+  function SellerBookListingsCtrl($scope, $element, $attrs, $transclude, BookScraperMaster) {
+    $scope.showListings = false;
+    $scope.setShowListings = function (value) {
+      $scope.showListings = value;
+    };
+  }
+
+  SellerBookListingsCtrl.$inject = [
     '$scope',
     '$element',
     '$attrs',
@@ -415,6 +432,9 @@
 
   function TestCtrl($scope, BookScraperMaster) {
     $scope.msg = 'TESTME';
+    $scope.sbook = {
+      listings: [null, null, null]
+    };
   }
 
   TestCtrl.$inject = [
@@ -432,5 +452,6 @@
     .controller('ListingsCtrl', ListingsCtrl)
     .controller('SellersCtrl', SellersCtrl)
     .controller('SellerBooksCtrl', SellerBooksCtrl)
+    .controller('SellerBookListingsCtrl', SellerBookListingsCtrl)
     .controller('TestCtrl', TestCtrl)
 })();

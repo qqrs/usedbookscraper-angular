@@ -59,3 +59,19 @@
   font-size: 24px;
   line-height: 30px;
 }
+
+.seller-book-comments {
+  line-height: 16px;
+}
+
+.seller-book-listings {
+  border-style: none;
+  border-left: 3px solid #cccccc;
+  border-radius: 0px;
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+}
+
+small {
+  line-height: 16px;
+}
