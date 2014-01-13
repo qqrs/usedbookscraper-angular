@@ -123,7 +123,11 @@
     var _conditions = ['Acceptable', 'Good', 'VeryGood', 'LikeNew', 'BrandNew'];
     return {
       'findItems': half_findItemsCall,
-      'bookConditions': function () { return _conditions; }
+      'bookConditions': function () { return _conditions; },
+      'getValueForCondition': function (cond) {
+        var val = _conditions.indexOf(cond);
+        return (val >= 0 ? val : -Infinity);
+      }
     };
 
     // half findItems call -- request first page and queue additional

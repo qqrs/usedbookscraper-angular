@@ -7,7 +7,7 @@
 </div>
 
 <div ng-hide="!sellers.length">
-  <div ng-repeat="seller in sellers | orderBy:sellerSortKey:true">
+  <div ng-repeat="seller in sellers">
     <div ubs-seller-books="seller"></div>
   </div>
 </div>

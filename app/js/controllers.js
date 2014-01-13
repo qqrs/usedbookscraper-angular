@@ -44,7 +44,7 @@
     $scope.finishLoading = function () {
       $scope.loading = false;
       // TODO: testing: select last shelf
-      $scope.submitGoodreadsShelves([$scope.shelves[$scope.shelves.length - 1]]);
+      //$scope.submitGoodreadsShelves([$scope.shelves[$scope.shelves.length - 1]]);
     };
   }
 
@@ -330,10 +330,20 @@
 
 // =============================================================================
 
-  function SellersCtrl($scope, BookScraperMaster) {
-    var bookIndex;
-    var sellers = {};
-    var listings = BookScraperMaster.listings;
+  function SellersCtrl($scope, BookScraperMaster, HalfService) {
+    var bookIndex,
+        sellers = {},
+        listings = BookScraperMaster.listings;
+
+    var populateNewSeller = function (listing) {
+      var seller = {
+        name: listing.seller,
+        feedback_count: listing.feedback_count,
+        feedback_rating: listing.feedback_rating,
+        books: [],
+      };
+      return seller;
+    };
 
     BookScraperMaster.sellers = sellers;
 
@@ -343,14 +353,7 @@
       if (sellers.hasOwnProperty(listing.seller)) {
         seller = sellers[listing.seller];
       } else {
-        seller = {
-          name: listing.seller,
-          feedback_count: listing.feedback_count,
-          feedback_rating: listing.feedback_rating,
-          books: [],
-          //editions: [],
-          //listings: [],
-        };
+        seller = populateNewSeller(listing);
         sellers[listing.seller] = seller;
       }
 
@@ -359,31 +362,54 @@
         sellerBook = {
           book: listing.book,
           listings: [listing],
-          bestListing: listing
+          //bestListing: listing
         };
         seller.books.push(sellerBook);
       } else {
         sellerBook.listings.push(listing);
       }
       // TODO: sort listings and choose actual best
-      //if (seller.editions.indexOf(listing.edition) === -1) {
-        //seller.editions.push(listing.edition);
-      //}
-      //seller.listings.push(listing);
-      //TODO: either delete if reverse lookup not needed or create array on book
-      //listing.book['sellers'].push(seller);
-      //listing.edition['sellers'].push(seller);
     });
 
+    _.forEach(sellers, function (seller) {
+      _.forEach(seller.books, function (book) {
+        book.listings = _.sortBy(book.listings, function (listing) {
+          var cond = HalfService.getValueForCondition(listing.condition);
+          // TODO: account for shipping cost (i.e., paperback vs hardcover)
+          // TODO: use Array.sort and compare a/b instead of sort key
+          //return [(Number(listing.price) - (0.5 * cond)), -listing.edition.year];
+          return (Number(listing.price) - (0.5 * cond));
+        });
+        _.forEach(book.listings, function (listing) {
+          var cond = HalfService.getValueForCondition(listing.condition);
+          listing.sortKey = [(Number(listing.price) - (0.5 * cond)), -listing.edition.year];
+        });
+        book.bestListing = book.listings[0];
+      });
+    });
+
+    /*
     $scope.sellerSortKey = function (seller) {
       return seller.books.length;
     };
+    */
 
     // convert sellers object to array for rendering
+    /*
     $scope.sellers = [];
     angular.forEach(sellers, function (val, key) {
       $scope.sellers.push(val);
     });
+    */
+    // TODO: sort sellers.books by priority, name
+    // TODO: truncate or paginate $scope.sellers
+    // TODO: overwrite sellers
+
+    $scope.sellers = _.chain(sellers)
+      .toArray()
+      .sortBy(function (seller) {
+        return -seller.books.length;
+      }).first(20).value();
 
     console.log('BookScraperMaster');
     console.log(BookScraperMaster);
@@ -392,7 +418,8 @@
 
   SellersCtrl.$inject = [
     '$scope',
-    'BookScraperMaster'
+    'BookScraperMaster',
+    'HalfService'
   ];
 
 // =============================================================================
