@@ -398,9 +398,13 @@
 // =============================================================================
 
   function SellerBooksCtrl($scope, $element, $attrs, $transclude, BookScraperMaster) {
-    $scope.orderTotalCost = _.reduce($scope.seller.books, function (sum, sbook) {
-      return sum + Number(sbook.bestListing.price) + 1.89;
-    }, 1.60);
+    $scope.updateOrderTotalCost = function () {
+      $scope.orderTotalCost = _.reduce($scope.seller.books, function (sum, sbook) {
+        return sum + Number(sbook.bestListing.price) + 1.89;
+      }, 1.60);
+    };
+
+    $scope.updateOrderTotalCost();
   }
 
   SellerBooksCtrl.$inject = [
@@ -418,6 +422,13 @@
     $scope.setShowListings = function (value) {
       $scope.showListings = value;
     };
+
+    $scope.$watch('sbook.bestListing', function (newval, oldval) {
+      if (newval !== oldval) {
+        console.log('bestListing changed');
+        $scope.$parent.updateOrderTotalCost();
+      }
+    });
   }
 
   SellerBookListingsCtrl.$inject = [
