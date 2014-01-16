@@ -1,0 +1,36 @@
+<div ng-if="sbook.listings.length > 1">
+  <button class="btn btn-mini" ng-click="setShowListings(!showListings)">
+    <div ng-hide="showListings">
+      <i class="icon-chevron-down"></i>
+      See {{sbook.listings.length - 1}} more 
+      listing<span ng-if="sbook.listings.length > 2">s</span>
+    </div>
+    <div ng-show="showListings">
+      <i class="icon-chevron-up"></i>
+      Hide listings
+    </div>
+  </button>
+</div>
+
+<div ng-if="showListings" class="well well-small seller-book-listings">
+  <form>
+    <label class="radio" ng-repeat="listing in sbook.listings">
+      <br>
+      <input type="radio" ng-model="sbook.bestListing" ng-value="listing">
+      <small>
+        <div>
+          <a href="{{listing.half_item_url}}" target="_blank">
+          <b>{{listing.edition.title}}</b></a>
+          {{!listing.edition.year ? '' : '(' + listing.edition.year + ')'}}
+        </div>
+        <div class="pull-right">{{listing.price | currency}}</div>
+        <div>{{listing.edition.author}}</div>
+        <div class="pull-right">condition: {{listing.condition | bookConditionHuman}}</div>
+        <div>isbn: {{listing.edition.isbn}}</div>
+        <div>comments: {{listing.comments}}</div>
+      </small>
+      <!--TODO: hard/softcover, edition, half listing book title and author-->
+    </label>
+  </form>
+</div>
+</div>
