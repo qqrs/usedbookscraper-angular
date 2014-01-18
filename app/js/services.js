@@ -127,7 +127,8 @@
       'getValueForCondition': function (cond) {
         var val = _conditions.indexOf(cond);
         return (val >= 0 ? val : -Infinity);
-      }
+      },
+      'getListingMarginalShippingCost': getListingMarginalShippingCost
     };
 
     // half findItems call -- request first page and queue additional
@@ -186,6 +187,18 @@
         }
       );
       $rootScope.$broadcast('halfService.findItems.page.request');
+    }
+
+    function getListingMarginalShippingCost(listing) {
+      if (listing.shipping_cost === 3.99) {         // hardback
+        return 2.49;
+      } else if (listing.shipping_cost === 3.49) {  // paperback
+        return 1.89;
+      } else if (listing.shipping_cost === 2.99) {  // audio/video media
+        return 1.89;
+      } else {                                      // should not happen
+        return listing.shipping_cost;
+      }
     }
 
   }

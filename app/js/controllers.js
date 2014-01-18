@@ -44,7 +44,7 @@
     $scope.finishLoading = function () {
       $scope.loading = false;
       // TODO: testing: select last shelf
-      //$scope.submitGoodreadsShelves([$scope.shelves[$scope.shelves.length - 1]]);
+      $scope.submitGoodreadsShelves([$scope.shelves[$scope.shelves.length - 1]]);
     };
   }
 
@@ -424,11 +424,26 @@
 
 // =============================================================================
 
-  function SellerBooksCtrl($scope, $element, $attrs, $transclude, BookScraperMaster) {
+  function SellerBooksCtrl($scope, $element, $attrs, $transclude, BookScraperMaster, HalfService) {
+    $scope.marginalShippingCost = HalfService.getListingMarginalShippingCost;
+
     $scope.updateOrderTotalCost = function () {
-      $scope.orderTotalCost = _.reduce($scope.seller.books, function (sum, sbook) {
-        return sum + Number(sbook.bestListing.price) + 1.89;
-      }, 1.60);
+      $scope.baseShippingBook = _.max($scope.seller.books, function (sbook) {
+        return sbook.bestListing.shipping_cost;
+      });
+      $scope.baseShippingCost = $scope.baseShippingBook.bestListing.shipping_cost;
+
+      // order total = books cost + base ship + marginal ship of other books
+      $scope.orderTotalCost = $scope.baseShippingCost;
+      _.forEach($scope.seller.books, function (sbook) {
+        $scope.orderTotalCost += sbook.bestListing.price;
+        if ($scope.baseShippingBook !== sbook) {
+          $scope.orderTotalCost += 
+            $scope.marginalShippingCost(sbook.bestListing);
+        }
+      });
+
+      $scope.avgBookCost = $scope.orderTotalCost / $scope.seller.books.length;
     };
 
     $scope.updateOrderTotalCost();
@@ -439,7 +454,8 @@
     '$element',
     '$attrs',
     '$transclude',
-    'BookScraperMaster'
+    'BookScraperMaster',
+    'HalfService'
   ];
 
 // =============================================================================

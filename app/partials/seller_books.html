@@ -17,14 +17,20 @@
       <tr>
         <td></td>
         <td></td>
-        <td class="text-right">$3.49</td>
-        <td colspan="2">base shipping cost</td>
+        <td class="text-right">{{baseShippingCost | currency}}</td>
+        <td colspan="2">
+          base shipping cost
+          <span ng-if="baseShippingCost === 3.49">&mdash; paperbacks only</span>
+          <span ng-if="baseShippingCost === 3.99">&mdash; paperbacks and hardbacks</span>
+        </td>
       </tr>
 
       <tr ng-repeat="sbook in seller.books">
         <td class="text-right">{{$index + 1}}.</td>
         <td class="text-right"><b>{{sbook.bestListing.price | currency}}</b></td>
-        <td class="text-right"><span ng-if="$index !== 0">+ $1.89</span></td>
+        <td class="text-right">
+          <span ng-if="sbook !== baseShippingBook">+ {{marginalShippingCost(sbook.bestListing) | currency}}</span>
+        </td>
         <td>
           <div><b>{{sbook.book.title}}</b></div>
           <div>{{sbook.book.author}}</div>
@@ -46,7 +52,9 @@
           <b>{{orderTotalCost | currency}}</b>
         </td>
         <td style="border-top: 2px solid black"></td>
-        <td colspan="2"></td>
+        <td colspan="2">
+          {{avgBookCost | currency}} per book
+        </td>
       </tr>
     </tbody>
   </table>
