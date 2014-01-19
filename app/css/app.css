@@ -72,6 +72,13 @@
   -moz-border-radius: 0px;
 }
 
+.seller-book-shipping-included {
+  color: grey; 
+  text-align: center; 
+  font-size: 12px; 
+  line-height: 14px
+}
+
 small {
   line-height: 16px;
 }

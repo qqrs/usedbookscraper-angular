@@ -29,7 +29,8 @@
         <td class="text-right">{{$index + 1}}.</td>
         <td class="text-right"><b>{{sbook.bestListing.price | currency}}</b></td>
         <td class="text-right">
-          <span ng-if="sbook !== baseShippingBook">+ {{marginalShippingCost(sbook.bestListing) | currency}}</span>
+          <div ng-if="sbook !== baseShippingBook">+ {{marginalShippingCost(sbook.bestListing) | currency}}</div>
+          <div ng-if="sbook === baseShippingBook" class="seller-book-shipping-included">included<br> in base<br> shipping</div>
         </td>
         <td>
           <div><b>{{sbook.book.title}}</b></div>
