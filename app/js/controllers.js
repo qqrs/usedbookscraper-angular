@@ -44,7 +44,7 @@
     $scope.finishLoading = function () {
       $scope.loading = false;
       // TODO: testing: select last shelf
-      $scope.submitGoodreadsShelves([$scope.shelves[$scope.shelves.length - 1]]);
+      //$scope.submitGoodreadsShelves([$scope.shelves[$scope.shelves.length - 1]]);
     };
   }
 
