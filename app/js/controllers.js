@@ -120,7 +120,7 @@
       $scope.setAllSelections(true);
       $scope.loading = false;
       // TODO: testing: continue with all books selected
-      $timeout(function () {$scope.submitSelectedBooks($scope.selected_books);});
+      //$timeout(function () {$scope.submitSelectedBooks($scope.selected_books);});
     };
   }
 

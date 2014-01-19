@@ -17,6 +17,7 @@
         Select
         <a href="" ng-click="setAllSelections(true)">All</a> / 
         <a href="" ng-click="setAllSelections(false)">None</a>
+        <button type="submit" class="btn btn-primary pull-right">continue &gt;&gt;</button>
       </div><br>
       <div ng-repeat="book in books">
         <label class="well well-small" ng-disabled="!book.isbn" >
@@ -29,7 +30,7 @@
           </div>
         </label>
       </div>
-      <input type="submit">
+      <button type="submit" class="btn btn-primary pull-right">continue &gt;&gt;</button>
     </form>
   </div>
 
