@@ -175,8 +175,10 @@
     angular.forEach(books, function (book) {
       $scope.remaining_requests++;
       XisbnService.getEditions(book.isbn, function (book_editions) {
-        book_editions.sort(editionSortFn);
-        book.editions = book_editions
+        book_editions = _.sortBy(book_editions, function (ed) {
+          return ((-Number(ed.year)) || 0);
+        });
+        book.editions = book_editions;
         angular.forEach(book_editions, function(ed) { ed.book = book } );
         Array.prototype.push.apply(editions, book_editions);
         console.log(BookScraperMaster);
@@ -188,22 +190,6 @@
         $scope.finishLoading();
       }
     }, true);
-
-    editionSortFn = function (a,b) {
-      if (a.year === b.year) {
-        return 0;
-      } else if (!a.year) {
-        return 1;
-      } else if (!b.year) {
-        return -1;
-      } else if (a.year > b.year) {
-        return -1;
-      } else if (a.year < b.year) {
-        return 1;
-      } else {
-        return 0;   // should not reach this case
-      }
-    };
 
     $scope.selection = [];
     $scope.setAllSelections = function (value) {
