@@ -81,8 +81,8 @@
 
     angular.forEach(raw_editions, function(ed) {
       // filter to English and book formats (BA=book BB=hardcover BC=paperback)
-      if (ed.lang === 'eng' && ed.form[0] &&
-          (ed.form[0] === 'BA' || ed.form[0] === 'BB' || ed.form[0] === 'BC')) {
+      if (ed.lang === 'eng' && ed.form &&
+          (_.intersection(['BA','BB','BC'], ed.form).length > 0)) {
         this.push({
           'isbn':     ed.isbn[0],
           'title':    ed.title,
