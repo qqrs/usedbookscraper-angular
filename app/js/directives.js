@@ -43,8 +43,8 @@
     return {
       replace: false,
       controller: 'ErrorAlertsCtrl',
-      template: '<div class="alert" ng-show="alertsList.length"><ul>' +
-                '<li ng-repeat="alert in alertsList">{{alert}}</li></ul></div>'
+      template: '<div class="alert alert-error" ng-show="alertsList.length">' +
+            '<ul><li ng-repeat="alert in alertsList">{{alert}}</li></ul></div>'
     };
   }
 

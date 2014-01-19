@@ -14,22 +14,22 @@
           matches;
           
       //var userId = profileUrl.replace(/.*goodreads.com\/user\/show\/([0-9]+)-.+/, '\$1');
-      matches = profileUrl.match(/.*goodreads.com\/user\/show\/([0-9]+)-.+/);
+      matches = profileUrl.match(/^.*goodreads.com\/user\/show\/([0-9]+)-.+$/);
       if (matches) {
         userId = matches[1];
       } else {
-        matches = profileUrl.match(/([0-9]+)/);
+        matches = profileUrl.match(/^\s*([0-9]+)\s*$/);
         if (matches) {
           userId = matches[1];
         }
       }
 
       if (!userId) {
-        $rootScope.$broadcast('errorAlerts.addAlert', 'Invalid Goodreads profile URL');
+        $rootScope.$broadcast('errorAlerts.addAlert', 'error: invalid goodreads profile url');
         return;
       }
 
-      BookScraperMaster.goodreadsUserId = userId;
+      BookScraperMaster.goodreadsUserId = parseInt(userId, 10);
       $location.path('/shelves');
       $rootScope.$broadcast('errorAlerts.clearAlerts');
     };
