@@ -251,7 +251,7 @@
     $scope.books = books;
 
     $scope.apiRequestProgress = {
-      call: { requests: 0, responses: 0, percent: 0 },
+      call: { requests: 0, responses: 0, percent: 0, finished: false },
       page: { requests: 0, responses: 0, percent: 0 }
     };
 
@@ -264,6 +264,9 @@
       var progress = $scope.apiRequestProgress.call;
       progress.responses++;
       progress.percent = 100 * (progress.responses / progress.requests);
+      if (progress.responses === progress.requests) {
+        progress.finished = true;
+      }
       $scope.advanceIfFinished();
     });
     $scope.$on('halfService.findItems.page.request', function () {
