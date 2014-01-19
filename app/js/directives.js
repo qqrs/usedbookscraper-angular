@@ -22,7 +22,7 @@
     };
   }
 
-  function GiphyEmbed() {
+  function GiphyEmbedDirective() {
     return {
       templateUrl: 'partials/giphy_embed.html',
       replace: true,
@@ -30,9 +30,19 @@
     };
   }
 
+  function ProgressTrackerDirective() {
+    return {
+      replace: false,
+      controller: 'ProgressTrackerCtrl',
+      template: '<div class="wizard"><a ng-repeat="step in progressSteps" ' +
+        'ng-href="{{step.href}}" ng-class="step.sclass">{{step.name}}</a></div>'
+    };
+  }
+
   angular.module('myApp.directives', [])
     .directive('ubsSellerBookListings', SellerBookListingsDirective)
     .directive('ubsSellerBooks', SellerBooksDirective)
-    .directive('giphyEmbed', GiphyEmbed);
+    .directive('giphyEmbed', GiphyEmbedDirective)
+    .directive('ubsProgressTracker', ProgressTrackerDirective);
   }
 )();

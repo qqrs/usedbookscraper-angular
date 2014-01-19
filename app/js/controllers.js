@@ -4,7 +4,6 @@
 
 (function() {
 
-
   function GoodreadsUserCtrl($scope, $location, BookScraperMaster) {
     // TODO: for testing only
     $scope.goodreadsUserId = '5123156';
@@ -515,6 +514,52 @@
 
 // =============================================================================
 
+  function ProgressTrackerCtrl ($scope, $element, $attrs, $transclude, $location) {
+    var splitPath,
+        _steps;
+
+    _steps = [
+      'user', 'shelves', 'books', 'editions', 'listings', 'sellers'
+    ];
+
+    $scope.$on('$routeChangeSuccess', function (event, current) {
+      var splitPath,
+          currentStep,
+          isBeyondCurrent;
+
+      splitPath = $location.path().split('/');
+      currentStep = ((splitPath.length >= 2) ? splitPath[1] : '');
+      isBeyondCurrent = (currentStep === '' || !_.contains(_steps, currentStep));
+
+      $scope.progressSteps = _.map(_steps, function (step) {
+        var href = '',
+            sclass;
+
+        if (step === currentStep) {
+          sclass = 'current';
+          isBeyondCurrent = true;
+        } else if (isBeyondCurrent) {
+          sclass = 'wizard-disabled';
+        } else {
+          sclass = ''
+          href = '#' + step;
+        }
+
+        return { 'name': step, 'sclass': sclass, 'href': href };
+      });
+    });
+  }
+
+  ProgressTrackerCtrl.$inject = [
+    '$scope',
+    '$element',
+    '$attrs',
+    '$transclude',
+    '$location'
+  ];
+
+// =============================================================================
+
   function TestCtrl($scope, BookScraperMaster) {
     $scope.msg = 'TESTME';
     $scope.sbook = {
@@ -539,5 +584,6 @@
     .controller('SellerBooksCtrl', SellerBooksCtrl)
     .controller('SellerBookListingsCtrl', SellerBookListingsCtrl)
     .controller('GiphyEmbedCtrl', GiphyEmbedCtrl)
+    .controller('ProgressTrackerCtrl', ProgressTrackerCtrl)
     .controller('TestCtrl', TestCtrl);
 })();

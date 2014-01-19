@@ -82,3 +82,25 @@
 small {
   line-height: 16px;
 }
+ 
+/* wizard progress tracker css from https://github.com/twbs/bootstrap/issues/1982#issuecomment-7814657 */
+.wizard { font-size: 12px; padding: 9px 0px 0px 0px; }
+.wizard a {padding: 1px 16px 1px 24px; margin-right:5px; background:#efefef; position:relative; display:inline-block; }
+.wizard a:before {width:0px; height:0px; border-top: 11px inset transparent; border-bottom: 11px inset transparent; border-left: 12px solid #fff; position: absolute; content: ""; top: 0; left: 0;}
+.wizard a:after {width:0px; height:0px; border-top: 11px inset transparent; border-bottom: 11px inset transparent; border-left: 12px solid #efefef; position: absolute; content: ""; top: 0; right: -12px; z-index:2;}
+.wizard a:first-child:before {border:none;}
+.wizard a:last-child:after {border:none;}
+
+.wizard a:first-child {-moz-border-radius: 4px 0 0 4px; -webkit-border-radius: 4px 0 0 4px; border-radius:   4px 0 0 4px;}
+.wizard a:last-child {-moz-border-radius: 0 4px 4px 0; -webkit-border-radius: 0 4px 4px 0; border-radius:   0 4px 4px 0;}
+
+.wizard .badge {margin:0 5px 0 18px; position:relative; top:-1px;}
+.wizard a:first-child .badge {margin-left:0;}
+
+.wizard .current {background:#007ACC; color:#fff;}
+.wizard .current:after {border-left-color:#007ACC;}
+
+.wizard a:hover { text-decoration: none; }
+.wizard .current { cursor: default; }
+.wizard .wizard-disabled { cursor: default; color:#999; }
+
