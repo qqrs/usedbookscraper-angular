@@ -4,18 +4,41 @@
 
 (function() {
 
-  function GoodreadsUserCtrl($scope, $location, BookScraperMaster) {
+  function GoodreadsUserCtrl($scope, $rootScope, $location, BookScraperMaster) {
     // TODO: for testing only
-    $scope.goodreadsUserId = '5123156';
+    //$scope.goodreadsUserId = '5123156';
+    $scope.goodreadsProfileUrl = 'http://www.goodreads.com/user/show/5123156-russ';
 
-    $scope.submitGoodreadsUserId = function (userId) {
+    $scope.submitGoodreadsProfileUrl = function (profileUrl) {
+      var userId = null,
+          matches;
+          
+      //var userId = profileUrl.replace(/.*goodreads.com\/user\/show\/([0-9]+)-.+/, '\$1');
+      matches = profileUrl.match(/.*goodreads.com\/user\/show\/([0-9]+)-.+/);
+      if (matches) {
+        userId = matches[1];
+      } else {
+        matches = profileUrl.match(/([0-9]+)/);
+        if (matches) {
+          userId = matches[1];
+        }
+      }
+
+      if (!userId) {
+        $rootScope.$broadcast('errorAlerts.addAlert', 'Invalid Goodreads profile URL');
+        return;
+      }
+
       BookScraperMaster.goodreadsUserId = userId;
       $location.path('/shelves');
+      $rootScope.$broadcast('errorAlerts.clearAlerts');
     };
+
   }
 
   GoodreadsUserCtrl.$inject = [
     '$scope',
+    '$rootScope',
     '$location',
     'BookScraperMaster'
   ];
@@ -514,7 +537,7 @@
 
 // =============================================================================
 
-  function ProgressTrackerCtrl ($scope, $element, $attrs, $transclude, $location) {
+  function ProgressTrackerCtrl($scope, $element, $attrs, $transclude, $location) {
     var splitPath,
         _steps;
 
@@ -560,6 +583,35 @@
 
 // =============================================================================
 
+  function ErrorAlertsCtrl($scope, $rootScope, $element, $attrs, $transclude) {
+    $scope.alertsList = [];
+
+    var deregAddAlert = $rootScope.$on('errorAlerts.addAlert', 
+      function (event, msg) {
+        if (!_.contains($scope.alertsList, msg)) {
+          $scope.alertsList.push(msg);
+          // TODO: scroll to top of page
+        }
+      }
+    );
+    var deregClearAlerts = $rootScope.$on('errorAlerts.clearAlerts', function () {
+      $scope.alertsList = [];
+    });
+
+    $scope.$on('$destroy', deregAddAlert);
+    $scope.$on('$destroy', deregClearAlerts);
+  }
+
+  ErrorAlertsCtrl.$inject = [
+    '$scope',
+    '$rootScope',
+    '$element',
+    '$attrs',
+    '$transclude'
+  ];
+
+// =============================================================================
+
   function TestCtrl($scope, BookScraperMaster) {
     $scope.msg = 'TESTME';
     $scope.sbook = {
@@ -585,5 +637,6 @@
     .controller('SellerBookListingsCtrl', SellerBookListingsCtrl)
     .controller('GiphyEmbedCtrl', GiphyEmbedCtrl)
     .controller('ProgressTrackerCtrl', ProgressTrackerCtrl)
+    .controller('ErrorAlertsCtrl', ErrorAlertsCtrl)
     .controller('TestCtrl', TestCtrl);
 })();

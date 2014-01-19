@@ -39,10 +39,20 @@
     };
   }
 
+  function ErrorAlertsDirective() {
+    return {
+      replace: false,
+      controller: 'ErrorAlertsCtrl',
+      template: '<div class="alert" ng-show="alertsList.length"><ul>' +
+                '<li ng-repeat="alert in alertsList">{{alert}}</li></ul></div>'
+    };
+  }
+
   angular.module('myApp.directives', [])
     .directive('ubsSellerBookListings', SellerBookListingsDirective)
     .directive('ubsSellerBooks', SellerBooksDirective)
     .directive('giphyEmbed', GiphyEmbedDirective)
-    .directive('ubsProgressTracker', ProgressTrackerDirective);
+    .directive('ubsProgressTracker', ProgressTrackerDirective)
+    .directive('ubsErrorAlerts', ErrorAlertsDirective);
   }
 )();

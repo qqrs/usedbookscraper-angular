@@ -1,9 +1,14 @@
 <div class="span6 offset3">
 
-<h1>enter goodreads user id</h1><br>
+<h1>enter goodreads profile url</h1><br>
 
-<form class="form-inline" ng-submit="submitGoodreadsUserId(goodreadsUserId)">
-  <input type="text" ng-model="goodreadsUserId" autofocus>
+<p>Copy and paste the URL of your goodreads.com profile.</p>
+<p>Example: <tt>http://www.goodreads.com/user/show/1234567-yourusername</tt></p>
+<p>Tip: Your goodreads.com account must be set to make your reading lists publicly viewable (this is the default).</p>
+<br>
+
+<form class="form-inline" ng-submit="submitGoodreadsProfileUrl(goodreadsProfileUrl)">
+  <input type="text" class="span4" ng-model="goodreadsProfileUrl" autofocus>
   <button type="submit" class="btn btn-primary">continue &gt;&gt;</button>
 </form>
 
