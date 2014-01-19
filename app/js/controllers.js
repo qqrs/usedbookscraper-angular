@@ -112,6 +112,7 @@
       }
     }, true);
 
+    // TODO: remove duplicate books
     // TODO: sort results by author?
 
     BookScraperMaster.books = books;
