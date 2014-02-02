@@ -147,6 +147,19 @@
     };
   }
 
+  BookOptionsCtrl.$inject = [
+    '$scope',
+    '$location',
+    '$timeout',
+    'BookScraperMaster',
+    'GoodreadsService'
+  ];
+
+// =============================================================================
+
+  function BookOptionsCtrl($scope, $location, $timeout, BookScraperMaster, GoodreadsService) {
+  }
+
   BooksCtrl.$inject = [
     '$scope',
     '$location',
@@ -192,6 +205,18 @@
     }, true);
 
     $scope.selection = [];
+    var buildSelectionsForBook = function (book, value) {
+      return _.map(book.editions, function (ed) {
+        // disallow selection of edition if it has no isbn
+        return (!ed.isbn) ? false : value;
+      });
+    };
+    $scope.setAllSelections = function (value) {
+      $scope.selection = _.map(books, function (book) {
+        return buildSelectionsForBook(book, value);
+      });
+    };
+    /*
     $scope.setAllSelections = function (value) {
       var book_sel;
       $scope.selection = [];
@@ -207,6 +232,12 @@
         $scope.selection.push(book_sel);
       }
     };
+    */
+    $scope.setAllSelectionsForBook = function (book_index, value) {
+      var book = books[book_index];
+      $scope.selection[book_index] = buildSelectionsForBook(book, value);
+    }
+    /*
     $scope.setAllSelectionsForBook = function (book_index, value) {
       var book_sel, prev_sel;
       prev_sel = $scope.selection;
@@ -227,6 +258,7 @@
         }
       }
     };
+    */
 
     $scope.submitSelectedEditions = function (selection) {
       // TODO: error if too many books or editions
@@ -616,6 +648,7 @@
     .controller('GoodreadsUserCtrl', GoodreadsUserCtrl)
     .controller('ShelvesCtrl', ShelvesCtrl)
     .controller('BooksCtrl', BooksCtrl)
+    .controller('BookOptionsCtrl', BookOptionsCtrl)
     .controller('EditionsCtrl', EditionsCtrl)
     .controller('ListingsCtrl', ListingsCtrl)
     .controller('SellersCtrl', SellersCtrl)

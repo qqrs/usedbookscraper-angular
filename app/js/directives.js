@@ -4,6 +4,15 @@
 
 (function () {
 
+  function BookOptionsDirective() {
+    return {
+      templateUrl: 'partials/book_options.html',
+      replace: true,
+      scope: { options: '=ubsBookOptions' },
+      controller: 'BookOptionsCtrl'
+    };
+  }
+
   function SellerBooksDirective() {
     return {
       templateUrl: 'partials/seller_books.html',
@@ -49,6 +58,7 @@
   }
 
   angular.module('myApp.directives', [])
+    .directive('ubsBookOptions', BookOptionsDirective)
     .directive('ubsSellerBookListings', SellerBookListingsDirective)
     .directive('ubsSellerBooks', SellerBooksDirective)
     .directive('giphyEmbed', GiphyEmbedDirective)
