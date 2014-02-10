@@ -7,7 +7,14 @@
 </div>
 
 <div ng-hide="!sellers.length">
-  <div ng-repeat="seller in sellers">
+  <div ubs-pager pager-num-pages="pagedSellers.length" 
+    pager-per-page="perPage" pager-current-page="currentPage"></div>
+
+  <div ng-repeat="seller in pagedSellers[currentPage]">
     <div ubs-seller-books="seller"></div>
   </div>
+
+  <div ubs-pager pager-num-pages="pagedSellers.length" 
+    pager-per-page="perPage" pager-current-page="currentPage"></div>
+
 </div>

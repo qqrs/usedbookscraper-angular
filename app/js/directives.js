@@ -57,12 +57,26 @@
     };
   }
 
+  function PagerDirective() {
+    return {
+      templateUrl: 'partials/pager.html',
+      replace: false,
+      scope: {
+        numPages: '=pagerNumPages',
+        perPage: '=pagerPerPage',
+        currentPage: '=pagerCurrentPage'
+      },
+      controller: 'PagerCtrl'
+    };
+  }
+
   angular.module('myApp.directives', [])
     .directive('ubsBookOptions', BookOptionsDirective)
     .directive('ubsSellerBookListings', SellerBookListingsDirective)
     .directive('ubsSellerBooks', SellerBooksDirective)
     .directive('giphyEmbed', GiphyEmbedDirective)
     .directive('ubsProgressTracker', ProgressTrackerDirective)
-    .directive('ubsErrorAlerts', ErrorAlertsDirective);
+    .directive('ubsErrorAlerts', ErrorAlertsDirective)
+    .directive('ubsPager', PagerDirective);
   }
 )();

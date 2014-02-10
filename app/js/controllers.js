@@ -167,6 +167,7 @@
     'GoodreadsService'
   ];
 
+
 // =============================================================================
 
   function EditionsCtrl($scope, $location, BookScraperMaster, XisbnService) {
@@ -406,18 +407,28 @@
     });
     */
     // TODO: sort sellers.books by priority, name
-    // TODO: truncate or paginate $scope.sellers
     // TODO: overwrite sellers
 
     $scope.sellers = _.chain(sellers)
       .toArray()
       .sortBy(function (seller) {
         return -seller.books.length;
-      }).first(20).value();
+      }).value();
+
+    // build paginated sellers array
+    $scope.currentPage = 0;
+    $scope.perPage = 20;
+    $scope.pagedSellers = _.map(
+      _.range(0, $scope.sellers.length, $scope.perPage), 
+      function (start) {
+        return $scope.sellers.slice(start, start + $scope.perPage);
+      }
+    );
 
     console.log('BookScraperMaster');
     console.log(BookScraperMaster);
     console.log($scope.sellers);
+    console.log($scope.pagedSellers);
   }
 
   SellersCtrl.$inject = [
@@ -588,11 +599,44 @@
 
 // =============================================================================
 
+  function PagerCtrl($scope, $anchorScroll) {
+    $scope.pagePrev = function () {
+      $scope.currentPage = Math.max($scope.currentPage - 1, 0);
+      $anchorScroll();
+    };
+    $scope.pageNext = function () {
+      $scope.currentPage = Math.min($scope.currentPage + 1, $scope.numPages - 1);
+      $anchorScroll();
+    };
+    $scope.setPage = function (pageNum) {
+      $scope.currentPage = pageNum;
+      $anchorScroll();
+    };
+    $scope.pageNumbers = _.range(0, $scope.numPages);
+  }
+
+  PagerCtrl.$inject = [
+    '$scope',
+    '$anchorScroll',
+  ];
+
+// =============================================================================
+
   function TestCtrl($scope, BookScraperMaster) {
     $scope.msg = 'TESTME';
     $scope.sbook = {
       listings: [null, null, null]
     };
+    $scope.sellers = [1,2,3,4,5,6,7,8,9,10,11,12];
+    var perPage = 5;
+    $scope.perPage = perPage;
+    $scope.pagedSellers = _.map(_.range(0, $scope.sellers.length, perPage), 
+      function (start) {
+        return $scope.sellers.slice(start, start + perPage);
+      }
+    );
+
+    $scope.currentPage = 0;
   }
 
   TestCtrl.$inject = [
@@ -615,5 +659,6 @@
     .controller('GiphyEmbedCtrl', GiphyEmbedCtrl)
     .controller('ProgressTrackerCtrl', ProgressTrackerCtrl)
     .controller('ErrorAlertsCtrl', ErrorAlertsCtrl)
+    .controller('PagerCtrl', PagerCtrl)
     .controller('TestCtrl', TestCtrl);
 })();

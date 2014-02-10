@@ -1,0 +1,14 @@
+<div class="pagination">
+  <ul>
+    <li ng-class="(currentPage === 0) ? 'disabled' : ''">
+      <a href="" ng-click="pagePrev()">&laquo;</a>
+    </li>
+    <li ng-repeat="pageNum in pageNumbers" 
+        ng-class="(pageNum === currentPage) ? 'active' : ''">
+      <a href="" ng-click="setPage(pageNum)">{{pageNum + 1}}</a>
+    </li>
+    <li ng-class="(currentPage === numPages - 1) ? 'disabled' : ''">
+      <a href="" ng-click="pageNext()">&raquo;</a>
+    </li>
+  </ul>
+</div>
