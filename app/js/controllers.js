@@ -293,7 +293,8 @@
         console.log('selected ed.isbn: ' + ed.isbn + '; book_index: ' + book_index + '; ed_index: ' + ed_index);
         ed.listings = [];
         HalfService.findItems(
-          {isbn: ed.isbn, page: '1', condition: 'Good', maxprice: 4.00},
+          //{isbn: ed.isbn, page: '1', condition: 'Good', maxprice: 4.00},
+          {isbn: ed.isbn, page: '1', condition: 'Good', maxprice: ((book.author === "Lauren Slater") ? 8.00 : 4.00)},
           function(response) { 
             var ed_listings = response.items;
             angular.forEach(ed_listings, function(el) { 
@@ -409,10 +410,19 @@
     // TODO: sort sellers.books by priority, name
     // TODO: overwrite sellers
 
+    var sellerBooksSortKey = function (sbook) {
+      return _.contains(sbook.book.shelves, 'coffee-table') ? 1 : 0;
+    };
     $scope.sellers = _.chain(sellers)
       .toArray()
       .sortBy(function (seller) {
-        return -seller.books.length;
+        //var num_books = seller.books.length;
+        seller.books = _.sortBy(seller.books, sellerBooksSortKey);
+        var num_books = _.filter(seller.books, function (sbook) {
+          return !_.contains(sbook.book.shelves, 'coffee-table');
+        }).length;
+        seller.books_score = num_books;
+        return -num_books;
       }).value();
 
     // build paginated sellers array

@@ -33,8 +33,12 @@
           <div ng-if="sbook === baseShippingBook" class="seller-book-shipping-included">included<br> in base<br> shipping</div>
         </td>
         <td>
-          <div><b>{{sbook.book.title}}</b></div>
+          <div>
+            <b>{{sbook.book.title}}</b>
+            {{!sbook.bestListing.edition.year ? '' : '(' + sbook.bestListing.edition.year + ')'}}
+          </div>
           <div>{{sbook.book.author}}</div>
+          <div class="pull-right">condition: {{sbook.bestListing.condition | bookConditionHuman}}</div>
           <!--TODO: add condition, hard/softcover, edition -->
           <small><div class="seller-book-comments">comments: {{sbook.bestListing.comments}}</div></small>
           <div ubs-seller-book-listings="sbook"></div>
@@ -55,6 +59,7 @@
         <td style="border-top: 2px solid black"></td>
         <td colspan="2">
           {{avgBookCost | currency}} per book
+          &nbsp; &nbsp; &nbsp; score: {{seller.books_score}}
         </td>
       </tr>
     </tbody>
