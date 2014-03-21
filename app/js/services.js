@@ -4,10 +4,12 @@
 
 (function() {
 
+  //TODO: make sure this gets reset to defaults when starting over
   function BookScraperMaster() {
     return {
       goodreadsUserId: null,  // Goodreads user ID as string
       goodreadsSelectedShelves: null,   // Goodreads shelves selected for search
+      isbnList: null,   // ISBNs entered directly by user
       //goodreadsUserId: 5123156,
       //goodreadsSelectedShelves: ['to-read', 'coffee-table'],
 

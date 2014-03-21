@@ -8,6 +8,8 @@
     // TODO: for testing only
     //$scope.goodreadsUserId = '5123156';
     $scope.goodreadsProfileUrl = 'http://www.goodreads.com/user/show/5123156-russ';
+    $scope.isbnText = '12345, 213424 , 235123';
+    $scope.isbnText = '0679736662, 9780393326550, 978-0618249060';
 
     $scope.submitGoodreadsProfileUrl = function (profileUrl) {
       var userId = null,
@@ -34,6 +36,11 @@
       $rootScope.$broadcast('errorAlerts.clearAlerts');
     };
 
+    $scope.submitIsbnList = function (isbnText) {
+      BookScraperMaster.isbnList = isbnText.replace('-', '').split(/[,;\s]+/);
+      $location.path('/editions');
+      $rootScope.$broadcast('errorAlerts.clearAlerts');
+    }
   }
 
   GoodreadsUserCtrl.$inject = [
@@ -172,6 +179,7 @@
 
   function EditionsCtrl($scope, $location, BookScraperMaster, XisbnService) {
     var books = BookScraperMaster.selected_books;
+    var isbnList = BookScraperMaster.isbnList;
     var editions = [];
     var editionSortFn;
 
@@ -182,10 +190,24 @@
     $scope.loading = true;
     $scope.remaining_requests = 0;
 
+    if (isbnList !== null) {
+      books = _.map(isbnList, function (isbn) {
+        return {'isbn': isbn, 'title': null, 'author': null};
+      });
+      BookScraperMaster.books = books;
+      BookScraperMaster.selected_books = books;
+      $scope.books = books;
+    }
+
     // get alternate editions for each book
     angular.forEach(books, function (book) {
       $scope.remaining_requests++;
       XisbnService.getEditions(book.isbn, function (book_editions) {
+        if (isbnList !== null && book_editions) {
+          book.title = book_editions[0].title;
+          book.author = book_editions[0].author;
+        }
+
         book_editions = _.sortBy(book_editions, function (ed) {
           return ((-Number(ed.year)) || 0);
         });
