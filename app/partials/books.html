@@ -29,8 +29,8 @@
             <div>
               <ng-form class="form-inline book-options-form" ng-hide="!book.isbn || !selection[$index]">
                 <fieldset ng-disabled="!selection[$index]">
-                  max price:
-                  <input type="number" min="0.00" required
+                  max price: $
+                  <input type="number" step="0.01" min="0.00" required
                     class="input-mini book-options-input" ng-model="book.options.maxprice">
                   &nbsp;&nbsp;
                   condition:
