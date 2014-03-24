@@ -325,7 +325,8 @@
         ed.listings = [];
         HalfService.findItems(
           //{isbn: ed.isbn, page: '1', condition: 'Good', maxprice: 4.00},
-          {isbn: ed.isbn, page: '1', condition: 'Good', maxprice: ((book.author === "Lauren Slater") ? 8.00 : 4.00)},
+          //{isbn: ed.isbn, page: '1', condition: 'Good', maxprice: ((book.author === "Lauren Slater") ? 8.00 : 4.00)},
+          {isbn: ed.isbn, page: '1', condition: book.options.condition, maxprice: book.options.maxprice},
           function(response) { 
             var ed_listings = response.items;
             angular.forEach(ed_listings, function(el) { 
