@@ -87,7 +87,7 @@
 
 // =============================================================================
 
-  function BooksCtrl($scope, $location, $timeout, BookScraperMaster, GoodreadsService) {
+  function BooksCtrl($scope, $location, $timeout, BookScraperMaster, GoodreadsService, HalfService) {
     var books = [];
 
     console.log(BookScraperMaster);
@@ -113,7 +113,6 @@
     }, true);
 
     // TODO: sort results by author?
-    // TODO: per-book filter settings: max price, condition, exclude library and cliffs notes, desirability weight (must-have, normal, add-on only)
 
     BookScraperMaster.books = books;
     $scope.books = books;
@@ -146,6 +145,15 @@
     };
 
     $scope.finishLoading = function () {
+      // TODO: per-book filter settings: max price, condition, exclude library and cliffs notes, desirability weight (must-have, normal, add-on only)
+      // per-book search/filter options defaults
+      _.forEach(books, function (book) {
+        book.options = {
+          maxprice: 4.00,
+          condition: 'Good'
+        };
+      });
+      $scope.bookConditions = HalfService.bookConditions();
       $scope.setAllSelections(true);
       $scope.loading = false;
       // TODO: testing: continue with all books selected
@@ -158,7 +166,8 @@
     '$location',
     '$timeout',
     'BookScraperMaster',
-    'GoodreadsService'
+    'GoodreadsService',
+    'HalfService'
   ];
 
 // =============================================================================

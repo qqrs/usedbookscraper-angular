@@ -26,6 +26,20 @@
           <div class="books-label">
             <div><b>{{book.title}}</b></div>
             <div>{{book.author}}</div>
+            <div>
+              <ng-form class="form-inline book-options-form" ng-hide="!book.isbn || !selection[$index]">
+                <fieldset ng-disabled="!selection[$index]">
+                  max price:
+                  <input type="number" min="0.00" required
+                    class="input-mini book-options-input" ng-model="book.options.maxprice">
+                  &nbsp;&nbsp;
+                  condition:
+                  <select class="span2 book-options-select" ng-model="book.options.condition"
+                    ng-options="cond | bookConditionHuman for cond in bookConditions">
+                  </select>
+                </fieldset>
+              </form>
+            </div>
             <span ng-if="!book.isbn" class="label label-important">No ISBN</span>
           </div>
         </label>
