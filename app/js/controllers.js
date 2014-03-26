@@ -150,7 +150,9 @@
       _.forEach(books, function (book) {
         book.options = {
           maxprice: 4.00,
-          condition: 'Good'
+          condition: 'Good',
+          excludeLibrary: true,
+          excludeCliffsNotes: true
         };
       });
       $scope.bookConditions = HalfService.bookConditions();
@@ -328,7 +330,21 @@
           //{isbn: ed.isbn, page: '1', condition: 'Good', maxprice: ((book.author === "Lauren Slater") ? 8.00 : 4.00)},
           {isbn: ed.isbn, page: '1', condition: book.options.condition, maxprice: book.options.maxprice},
           function(response) { 
-            var ed_listings = response.items;
+            var ed_listings = _.filter(response.items, function (listing) {
+              if (book.options.excludeLibrary && 
+                  /library/i.test(listing.comments)) {
+                console.log('excluding library');
+                console.log(listing);
+                return false;
+              }
+              if (book.options.excludeCliffsNotes && 
+                  /cliff'?s? notes?/i.test(listing.comments)) {
+                console.log('excluding cliffs notes');
+                console.log(listing);
+                return false;
+              }
+              return true;
+            });
             angular.forEach(ed_listings, function(el) { 
               el.book = book; 
               el.edition = ed;

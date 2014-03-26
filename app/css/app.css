@@ -60,13 +60,19 @@
   font-size: 12px;
 }
 
+.book-options-fieldset {
+  margin-top: 8px;
+}
+
 .book-options-select {
   height: 20px;
+  width: 100px;
   font-size: 12px;
 }
 
 input[type=number].book-options-input {
   height: 20px;
+  width: 40px;
   font-size: 12px;
   padding-top: 0px;
   padding-bottom: 0px;
@@ -76,6 +82,10 @@ input[type=number].book-options-input::-webkit-inner-spin-button,
 input[type=number].book-options-input::-webkit-outer-spin-button { 
   -webkit-appearance: none;
   margin: 0;
+}
+
+.book-options-label {
+  font-size: 12px;
 }
 
 .seller-label {
