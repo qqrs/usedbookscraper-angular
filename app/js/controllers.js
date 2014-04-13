@@ -117,6 +117,13 @@
     BookScraperMaster.books = books;
     $scope.books = books;
 
+    $scope.desirabilityChoices = [
+      ['Must-have', 10.0],
+      ['High', 3.0],
+      ['Normal', 1.0],
+      ['Add-on', 0.1]
+    ];
+
     $scope.selection = [];
     $scope.setAllSelections = function (value) {
       $scope.selection = [];
@@ -145,10 +152,13 @@
     };
 
     $scope.finishLoading = function () {
+      // TODO: book option master defaults
+      // TODO: per-shelf book options defaults
       // TODO: per-book filter settings: max price, condition, exclude library and cliffs notes, desirability weight (must-have, normal, add-on only)
       // per-book search/filter options defaults
       _.forEach(books, function (book) {
         book.options = {
+          desirability: 1.0,
           maxprice: 4.00,
           condition: 'Good',
           excludeLibrary: true,
@@ -328,6 +338,7 @@
         HalfService.findItems(
           //{isbn: ed.isbn, page: '1', condition: 'Good', maxprice: 4.00},
           //{isbn: ed.isbn, page: '1', condition: 'Good', maxprice: ((book.author === "Lauren Slater") ? 8.00 : 4.00)},
+          // TODO: maxprice safe if user enters non-number?
           {isbn: ed.isbn, page: '1', condition: book.options.condition, maxprice: book.options.maxprice},
           function(response) { 
             var ed_listings = _.filter(response.items, function (listing) {
@@ -430,16 +441,23 @@
           cost = listing.price + ship_cost;
       return (cost - (0.5 * cond));
     };
+    var sellerBooksScore = function (sbook) {
+      return sbook.book.options.desirability;
+    };
+    var sellerBooksSortKey = function (sbook) {
+      //return _.contains(sbook.book.shelves, 'coffee-table') ? 1 : 0;
+      return -sellerBooksScore(sbook);
+    };
 
-    _.forEach(sellers, function (seller) {
-      _.forEach(seller.books, function (book) {
+    _.each(sellers, function (seller) {
+      var score = 0.0;
+      _.each(seller.books, function (book) {
         book.listings = _.sortBy(book.listings, sellerBookListingsSortKey);
-        // TODO: remove, testing only
-        _.forEach(book.listings, function (listing) {
-          listing.sortKeyDebug = sellerBookListingsSortKey(listing);
-        });
         book.bestListing = book.listings[0];
+        score += sellerBooksScore(book);
       });
+      seller.booksScore = score;
+      seller.books = _.sortBy(seller.books, sellerBooksSortKey);
     });
 
     /*
@@ -448,29 +466,13 @@
     };
     */
 
-    // convert sellers object to array for rendering
-    /*
-    $scope.sellers = [];
-    angular.forEach(sellers, function (val, key) {
-      $scope.sellers.push(val);
-    });
-    */
     // TODO: sort sellers.books by priority, name
     // TODO: overwrite sellers
 
-    var sellerBooksSortKey = function (sbook) {
-      return _.contains(sbook.book.shelves, 'coffee-table') ? 1 : 0;
-    };
     $scope.sellers = _.chain(sellers)
       .toArray()
       .sortBy(function (seller) {
-        //var num_books = seller.books.length;
-        seller.books = _.sortBy(seller.books, sellerBooksSortKey);
-        var num_books = _.filter(seller.books, function (sbook) {
-          return !_.contains(sbook.book.shelves, 'coffee-table');
-        }).length;
-        seller.books_score = num_books;
-        return -num_books;
+        return -seller.booksScore;
       }).value();
 
     // build paginated sellers array

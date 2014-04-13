@@ -29,26 +29,35 @@
             <div>
               <ng-form class="form-inline book-options-form" ng-hide="!book.isbn || !selection[$index]">
                 <fieldset class="book-options-fieldset" ng-disabled="!selection[$index]">
-                  max price: $
-                  <input type="number" step="0.01" min="0.00" required
-                    class="input-mini book-options-input" ng-model="book.options.maxprice">
-                  &nbsp;&nbsp;
-                  condition:
-                  <select class="book-options-select" ng-model="book.options.condition"
-                    ng-options="cond | bookConditionHuman for cond in bookConditions">
-                  </select>
-                  &nbsp;&nbsp;
-                  <label class="checkbox book-options-label">
-                    <input type="checkbox" ng-model="book.options.excludeLibrary">
-                    exclude library
-                  </label>
-                  &nbsp;&nbsp;
-                  <label class="checkbox book-options-label">
-                    <input type="checkbox" ng-model="book.options.excludeCliffsNotes">
-                    exclude cliff's notes
-                  </label>
+                  <div>
+                    desirability:
+                    <select ng-model="book.options.desirability" 
+                      ng-options="opt[1] as opt[0] for opt in desirabilityChoices"
+                      class="input-mini book-options-select">
+                    </select>
+                    &nbsp;&nbsp;
+                    condition:
+                    <select class="book-options-select" ng-model="book.options.condition"
+                      ng-options="cond | bookConditionHuman for cond in bookConditions">
+                    </select>
+                  </div>
+                  <div>
+                    max price: $
+                    <input type="number" step="0.01" min="0.00" required
+                      class="input-mini book-options-input" ng-model="book.options.maxprice">
+                    &nbsp;&nbsp;
+                    <label class="checkbox book-options-label">
+                      <input type="checkbox" ng-model="book.options.excludeLibrary">
+                      exclude library
+                    </label>
+                    &nbsp;&nbsp;
+                    <label class="checkbox book-options-label">
+                      <input type="checkbox" ng-model="book.options.excludeCliffsNotes">
+                      exclude cliff's notes
+                    </label>
+                  </div>
                 </fieldset>
-              </form>
+              </ng-form>
             </div>
             <span ng-if="!book.isbn" class="label label-important">No ISBN</span>
           </div>
