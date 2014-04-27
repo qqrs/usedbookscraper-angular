@@ -20,6 +20,7 @@ body {
   min-height: 500px;
 }
 
+/*
 .menu {
   list-style: none;
   border-bottom: 0.1em solid black;
@@ -56,6 +57,7 @@ body {
 .table th.text-center, .table td.text-center {
   text-align: center;
 }
+*/
 
 .books-checkbox {
   display: inline-block;
