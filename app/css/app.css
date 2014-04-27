@@ -71,11 +71,20 @@ body {
 }
 .books-img {
   display: inline-block;
-  width: 60px;
-  height: 80px;
+  width: auto;
+  height: auto;
+  max-height: 80px;
+  max-width: 60px;
   vertical-align: top;
   margin-right: 10px;
 }
+img.seller-books-img {
+  width: auto;
+  height: auto;
+  max-height: 80px;
+  max-width: 60px;
+}
+
 
 .books-label {
   display: inline-block;

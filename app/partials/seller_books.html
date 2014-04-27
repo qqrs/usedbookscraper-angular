@@ -12,12 +12,14 @@
       <th>shipping</th>
       <th></th>
       <th></th>
+      <th></th>
     </tr></thead>
     <tbody>
       <tr>
         <td></td>
         <td></td>
         <td class="text-right">{{baseShippingCost | currency}}</td>
+        <td></td>
         <td colspan="2">
           base shipping cost
           <span ng-if="baseShippingCost === 3.49">&mdash; paperbacks only</span>
@@ -31,6 +33,9 @@
         <td class="text-right">
           <div ng-if="sbook !== baseShippingBook">+ {{marginalShippingCost(sbook.bestListing) | currency}}</div>
           <div ng-if="sbook === baseShippingBook" class="seller-book-shipping-included">included<br> in base<br> shipping</div>
+        </td>
+        <td class="text-right">
+          <img class="seller-books-img" ng-src="{{sbook.book.small_image_url}}">
         </td>
         <td>
           <!--TODO: line wrapping / overflow-->
@@ -56,6 +61,7 @@
           <b>{{orderTotalCost | currency}}</b>
         </td>
         <td style="border-top: 2px solid black"></td>
+        <td></td>
         <td colspan="2">
           {{avgBookCost | currency}} per book
           <!--TODO: remove score-->

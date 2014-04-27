@@ -342,6 +342,12 @@
           // TODO: maxprice safe if user enters non-number?
           {isbn: ed.isbn, page: '1', condition: book.options.condition, maxprice: book.options.maxprice},
           function(response) { 
+            if (response.image && 
+                book.image_url === 'http://www.goodreads.com/assets/nocover/111x148.png') {
+                //book.small_image_url === "http://www.goodreads.com/assets/nocover/60x80.png"
+              book.image_url = response.image;
+              book.small_image_url = response.image;
+            }
             var ed_listings = _.filter(response.items, function (listing) {
               if (book.options.excludeLibrary && 
                   /library/i.test(listing.comments)) {
