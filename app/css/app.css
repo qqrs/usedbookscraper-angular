@@ -15,8 +15,8 @@ body {
 }
 
 .main-content {
-  background-color: rgba(245,245,245, 0.8);
-  border-color: rgba(227,227,227, 0.8);
+  background-color: rgba(245,245,245, 0.95);
+  border-color: rgb(227,227,227);
   min-height: 500px;
 }
 
