@@ -59,6 +59,11 @@ body {
 }
 */
 
+.navbar-inverse .brand,
+.navbar-inverse .nav>li>a {
+  color: #aaa;
+}
+
 .books-checkbox {
   display: inline-block;
   vertical-align: top;
