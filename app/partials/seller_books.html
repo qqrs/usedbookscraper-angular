@@ -33,13 +33,13 @@
           <div ng-if="sbook === baseShippingBook" class="seller-book-shipping-included">included<br> in base<br> shipping</div>
         </td>
         <td>
+          <!--TODO: line wrapping / overflow-->
           <div>
             <b>{{sbook.book.title}}</b>
             {{!sbook.bestListing.edition.year ? '' : '(' + sbook.bestListing.edition.year + ')'}}
           </div>
           <div>{{sbook.book.author}}</div>
           <div class="pull-right">condition: {{sbook.bestListing.condition | bookConditionHuman}}</div>
-          <!--TODO: add condition, hard/softcover, edition -->
           <small><div class="seller-book-comments">comments: {{sbook.bestListing.comments}}</div></small>
           <div ubs-seller-book-listings="sbook"></div>
         </td>
@@ -49,7 +49,6 @@
             buy now >></a>
         </td>
       </tr>
-      <!--TODO: choose from xx more listings (with directive and partial)-->
 
       <tr>
         <td></td>

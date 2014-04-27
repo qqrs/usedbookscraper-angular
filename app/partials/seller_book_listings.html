@@ -18,6 +18,7 @@
       <br>
       <input type="radio" ng-model="sbook.bestListing" ng-value="listing">
       <small>
+        <!--TODO: line wrapping / overflow-->
         <div>
           <a href="{{listing.half_item_url}}" target="_blank">
           <b>{{listing.edition.title}}</b></a>
@@ -29,7 +30,6 @@
         <div>isbn: {{listing.edition.isbn}}</div>
         <div>comments: {{listing.comments}}</div>
       </small>
-      <!--TODO: hard/softcover, edition, half listing book title and author-->
     </label>
   </form>
 </div>
