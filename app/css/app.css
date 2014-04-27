@@ -1,5 +1,26 @@
 /* app css stylesheet */
 
+body { 
+  background-color: 0xfff;
+  /*background: url('http://image.shutterstock.com/display_pic_with_logo/54561/127064891/stock-photo-sarajevo-bosnia-august-bookshelves-on-street-market-on-august-in-sarajevo-bosnia-127064891.jpg') no-repeat center center fixed; */
+/*http://www.flickr.com/photos/rfduck/4905424782/sizes/o/*/
+  /*background: url('http://farm5.staticflickr.com/4082/4905424782_167b33e4b7_o.jpg') no-repeat center center fixed; */
+  background: url('/static/bookstore.jpg') no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  padding-top: 60px;
+  padding-bottom: 60px;
+}
+
+.main-content {
+  background-color: rgba(245,245,245, 0.95);
+  border-color: rgb(227,227,227);
+  min-height: 500px;
+}
+
+/*
 .menu {
   list-style: none;
   border-bottom: 0.1em solid black;
@@ -35,6 +56,12 @@
 
 .table th.text-center, .table td.text-center {
   text-align: center;
+}
+*/
+
+.navbar-inverse .brand,
+.navbar-inverse .nav>li>a {
+  color: #aaa;
 }
 
 .books-checkbox {
@@ -118,9 +145,9 @@ small {
  
 /* wizard progress tracker css from https://github.com/twbs/bootstrap/issues/1982#issuecomment-7814657 */
 .wizard { font-size: 12px; padding: 9px 0px 0px 0px; }
-.wizard a {padding: 1px 16px 1px 24px; margin-right:5px; background:#efefef; position:relative; display:inline-block; }
-.wizard a:before {width:0px; height:0px; border-top: 11px inset transparent; border-bottom: 11px inset transparent; border-left: 12px solid #fff; position: absolute; content: ""; top: 0; left: 0;}
-.wizard a:after {width:0px; height:0px; border-top: 11px inset transparent; border-bottom: 11px inset transparent; border-left: 12px solid #efefef; position: absolute; content: ""; top: 0; right: -12px; z-index:2;}
+.wizard a {padding: 1px 16px 1px 24px; margin-right:5px; color:#ccc; background:#515151; position:relative; display:inline-block; }
+.wizard a:before {width:0px; height:0px; border-top: 11px inset transparent; border-bottom: 11px inset transparent; border-left: 12px solid #222; position: absolute; content: ""; top: 0; left: 0;}
+.wizard a:after {width:0px; height:0px; border-top: 11px inset transparent; border-bottom: 11px inset transparent; border-left: 12px solid #515151; position: absolute; content: ""; top: 0; right: -12px; z-index:2;}
 .wizard a:first-child:before {border:none;}
 .wizard a:last-child:after {border:none;}
 
@@ -130,8 +157,8 @@ small {
 .wizard .badge {margin:0 5px 0 18px; position:relative; top:-1px;}
 .wizard a:first-child .badge {margin-left:0;}
 
-.wizard .current {background:#007ACC; color:#fff;}
-.wizard .current:after {border-left-color:#007ACC;}
+.wizard .current {background:#005085; color:#ccc;}
+.wizard .current:after {border-left-color:#005085;}
 
 .wizard a:hover { text-decoration: none; }
 .wizard .current { cursor: default; }
