@@ -35,7 +35,9 @@
           <div ng-if="sbook === baseShippingBook" class="seller-book-shipping-included">included<br> in base<br> shipping</div>
         </td>
         <td class="text-right">
-          <img class="seller-books-img" ng-src="{{sbook.book.small_image_url}}">
+          <!--<img class="seller-books-img" ng-src="{{sbook.book.small_image_url}}">-->
+          <!--<img class="seller-books-img" ng-src="{{sbook.bestListing.small_image_url}}">-->
+          <img class="seller-books-img" ng-src="{{sbook.bestListing.edition.half_image_url}}">
         </td>
         <td>
           <!--TODO: line wrapping / overflow-->
