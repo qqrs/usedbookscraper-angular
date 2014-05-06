@@ -37,7 +37,10 @@
     };
 
     $scope.submitIsbnList = function (isbnText) {
-      BookScraperMaster.isbnList = isbnText.replace('-', '').split(/[,;\s]+/);
+      // TODO: set book options
+      var isbnList = _.compact(isbnText.replace('-', '').split(/[,;\s]+/));
+      BookScraperMaster.isbnList = isbnList;
+      console.log(isbnList);
       $location.path('/editions');
       $rootScope.$broadcast('errorAlerts.clearAlerts');
     }
