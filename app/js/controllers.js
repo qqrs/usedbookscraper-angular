@@ -6,16 +6,13 @@
 
   function GoodreadsUserCtrl($scope, $rootScope, $location, BookScraperMaster) {
     // TODO: for testing only
-    //$scope.goodreadsUserId = '5123156';
     $scope.goodreadsProfileUrl = 'http://www.goodreads.com/user/show/5123156-russ';
-    $scope.isbnText = '12345, 213424 , 235123';
     $scope.isbnText = '0679736662, 9780393326550, 978-0618249060';
 
     $scope.submitGoodreadsProfileUrl = function (profileUrl) {
       var userId = null,
           matches;
           
-      //var userId = profileUrl.replace(/.*goodreads.com\/user\/show\/([0-9]+)-.+/, '\$1');
       matches = profileUrl.match(/^.*goodreads.com\/user\/show\/([0-9]+)-.+$/);
       if (matches) {
         userId = matches[1];
@@ -37,7 +34,6 @@
     };
 
     $scope.submitIsbnList = function (isbnText) {
-      // TODO: set book options
       var isbnList = _.compact(isbnText.replace('-', '').split(/[,;\s]+/));
       BookScraperMaster.isbnList = isbnList;
       console.log(isbnList);
