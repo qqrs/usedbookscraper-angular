@@ -20,7 +20,15 @@
       sellers: null,    // array of seller objects
 
       selected_books: null,
-      edition_selections: null
+      edition_selections: null,
+
+      book_options_defaults: {
+        desirability: 1.0,
+        maxprice: 4.00,
+        condition: 'Good',
+        excludeLibrary: true,
+        excludeCliffsNotes: true
+      }
     };
   }
 

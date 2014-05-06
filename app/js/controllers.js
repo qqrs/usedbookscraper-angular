@@ -99,7 +99,7 @@
     $scope.remaining_requests = 0;
 
     // get book isbns for each shelf using GoodreadsService
-    angular.forEach(BookScraperMaster.goodreadsSelectedShelves, function(shelf){
+    angular.forEach(BookScraperMaster.goodreadsSelectedShelves, function(shelf) {
       console.log(shelf.name);
       $scope.remaining_requests++;
       GoodreadsService.getBooks(BookScraperMaster.goodreadsUserId, shelf.name,
@@ -161,13 +161,7 @@
       // TODO: per-book filter settings: max price, condition, exclude library and cliffs notes, desirability weight (must-have, normal, add-on only)
       // per-book search/filter options defaults
       _.forEach(books, function (book) {
-        book.options = {
-          desirability: 1.0,
-          maxprice: 4.00,
-          condition: 'Good',
-          excludeLibrary: true,
-          excludeCliffsNotes: true
-        };
+        book.options = BookScraperMaster.book_options_defaults;
       });
       $scope.bookConditions = HalfService.bookConditions();
       $scope.setAllSelections(true);
@@ -217,7 +211,12 @@
 
     if (isbnList !== null) {
       books = _.map(isbnList, function (isbn) {
-        return {'isbn': isbn, 'title': null, 'author': null};
+        return {
+          isbn: isbn,
+          title: null,
+          author: null,
+          options: BookScraperMaster.book_options_defaults
+        };
       });
       BookScraperMaster.books = books;
       BookScraperMaster.selected_books = books;
