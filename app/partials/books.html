@@ -27,6 +27,8 @@
             <div><b>{{book.title}}</b></div>
             <div>{{book.author}}</div>
             <div>
+              <!--TODO: make into a directive-->
+              <!--TODO: click to copy options object and allow editing-->
               <ng-form class="form-inline book-options-form" ng-hide="!book.isbn || !selection[$index]">
                 <fieldset class="book-options-fieldset" ng-disabled="!selection[$index]">
                   <div>

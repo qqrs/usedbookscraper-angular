@@ -221,6 +221,7 @@
     }
 
     // get alternate editions for each book
+    //TODO: add error handler to decrement remaining requests
     angular.forEach(books, function (book) {
       $scope.remaining_requests++;
       XisbnService.getEditions(book.isbn, function (book_editions) {
