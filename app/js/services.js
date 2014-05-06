@@ -72,6 +72,11 @@
           {isbn: isbn},
           function(data) {
             console.log(data);
+            if (data.stat !== "ok") {
+              // TODO: failure callback
+              console.log('getEditions: ' + isbn + ': ' + data.stat);
+              return;
+            }
             successCallback(mungeXisbnEditions(data.list));
           },
           // TODO: failure callback
