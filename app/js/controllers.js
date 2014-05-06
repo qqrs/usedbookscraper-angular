@@ -157,7 +157,8 @@
       // TODO: per-book filter settings: max price, condition, exclude library and cliffs notes, desirability weight (must-have, normal, add-on only)
       // per-book search/filter options defaults
       _.forEach(books, function (book) {
-        book.options = BookScraperMaster.book_options_defaults;
+        //TODO: use the default options and only copy as needed
+        book.options = angular.copy(BookScraperMaster.book_options_defaults);
       });
       $scope.bookConditions = HalfService.bookConditions();
       $scope.setAllSelections(true);
