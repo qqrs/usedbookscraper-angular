@@ -38,13 +38,12 @@
           <img class="seller-books-img" ng-src="{{sbook.bestListing.edition.half_image_url}}">
         </td>
         <td>
-          <!--TODO: line wrapping / overflow-->
           <div>
             <b>{{sbook.book.title}}</b>
             {{!sbook.bestListing.edition.year ? '' : '(' + sbook.bestListing.edition.year + ')'}}
           </div>
-          <div>{{sbook.book.author}}</div>
           <div class="pull-right">condition: {{sbook.bestListing.condition | bookConditionHuman}}</div>
+          <div>{{sbook.book.author}}</div>
           <small><div class="seller-book-comments">comments: {{sbook.bestListing.comments}}</div></small>
           <div ubs-seller-book-listings="sbook"></div>
         </td>
