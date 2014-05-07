@@ -23,14 +23,17 @@
     return editions;
   }
 
-  var XisbnService = function XisbnService($resource, $log) {
-    var xisbnAPI = $resource(
-      "http://xisbn.worldcat.org/webservices/xid/isbn/:isbn",
-      {
+  var XisbnService = function XisbnService($resource, $cacheFactory, $log) {
+    var xisbnAPI,
+        xisbnCache;
+
+    xisbnCache = $cacheFactory('xisbn');
+
+    xisbnAPI = $resource(
+      "http://xisbn.worldcat.org/webservices/xid/isbn/:isbn", {
         format: 'json',
         callback: 'JSON_CALLBACK',
-      },
-      {
+      }, {
         getEditions: {
           method: 'JSONP',
           params: {
@@ -40,21 +43,31 @@
       }
     });
 
-    // TODO: caching
-    //TODO: is service init run only a single time per app?
     return {
       'getEditions': function(isbn, successFn, failureFn) {
-        xisbnAPI.getEditions(
-          {isbn: isbn},
-          function(data) {
-            if (data.stat !== "ok") {
-              failureFn(data, 200, data.stat);
-              return;
-            }
-            successFn(mungeXisbnEditions(data.list));
-          },
-          function(data, stat) { failureFn(data, stat, ''); }
-        );
+        var cached = xisbnCache.get(isbn),
+            handleSuccess,
+            handleFailure;
+
+        handleSuccess = function(data) {
+          if (!cached) {
+            xisbnCache.put(isbn, data);
+          }
+          if (data.stat !== "ok") {
+            failureFn(data, 200, data.stat);
+            return;
+          }
+          successFn(mungeXisbnEditions(data.list));
+        };
+        handleFailure = function(data, stat) {
+          failureFn(data, stat, ''); 
+        };
+
+        if (cached) {
+          handleSuccess(cached);
+        } else {
+          xisbnAPI.getEditions({isbn: isbn}, handleSuccess, handleFailure);
+        }
       }
     };
   }
@@ -73,7 +86,7 @@
     return service;
   }
 
-  XisbnService.$inject = ['$resource', '$log'];
+  XisbnService.$inject = ['$resource', '$cacheFactory', '$log'];
   XisbnServiceTest.$inject = XisbnService.$inject;
 
   angular.module('myApp.services.xisbn', ['ngResource'])
