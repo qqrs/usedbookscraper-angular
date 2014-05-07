@@ -4,6 +4,7 @@
 
 (function() {
 
+  // TODO: clear alerts message on every view change
   function GoodreadsUserCtrl($scope, $rootScope, $location, BookScraperMaster) {
     // TODO: for testing only
     $scope.goodreadsProfileUrl = 'http://www.goodreads.com/user/show/5123156-russ';
@@ -193,7 +194,7 @@
 
 // =============================================================================
 
-  function EditionsCtrl($scope, $location, BookScraperMaster, XisbnService) {
+  function EditionsCtrl($scope, $rootScope, $location, $log, BookScraperMaster, XisbnService) {
     var books = BookScraperMaster.selected_books;
     var isbnList = BookScraperMaster.isbnList;
     var editions = [];
@@ -224,7 +225,7 @@
     //TODO: add error handler to decrement remaining requests
     angular.forEach(books, function (book) {
       $scope.remaining_requests++;
-      XisbnService.getEditions(book.isbn, function (book_editions) {
+      XisbnService.getEditions(book.isbn, function successFn(book_editions) {
         if (isbnList !== null && book_editions) {
           book.title = book_editions[0].title;
           book.author = book_editions[0].author;
@@ -237,6 +238,14 @@
         angular.forEach(book_editions, function(ed) { ed.book = book } );
         Array.prototype.push.apply(editions, book_editions);
         console.log(BookScraperMaster);
+        $scope.remaining_requests--;
+      },
+      function failureFn(data, stat, msg) {
+        var userMsg = ((data.stat === 'invalidId') ? 'invalid isbn: fix query'
+                        : 'editions lookup error: try again');
+        $rootScope.$broadcast('errorAlerts.addAlert',
+          userMsg + ' or continue with partial results');
+        $log.warn('XisbnService request failed ' + stat +': ' + msg);
         $scope.remaining_requests--;
       });
     });
@@ -277,7 +286,9 @@
 
   EditionsCtrl.$inject = [
     '$scope',
+    '$rootScope',
     '$location',
+    '$log',
     'BookScraperMaster',
     'XisbnService'
   ];

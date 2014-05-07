@@ -37,84 +37,6 @@
 
 // =============================================================================
 
-
-  function XisbnAPI($resource) {
-    return $resource(
-      "http://xisbn.worldcat.org/webservices/xid/isbn/:isbn",
-      {
-        format: 'json',
-        callback: 'JSON_CALLBACK',
-      },
-      {
-        getEditions: {
-          method: 'JSONP',
-          params: {
-            method: 'getEditions',
-            fl: 'form,lang,author,ed,year,isbn,title'
-          }
-      }
-    });
-  }
-
-  XisbnAPI.$inject = [
-    '$resource'
-  ];
-
-// =============================================================================
-
-
-  // TODO: caching
-  // TODO: handle overlimit response HTTP 200: {"stat":"overlimit"}
-  function XisbnService(XisbnAPI) {
-    return {
-      'getEditions': function(isbn, successCallback) {
-        XisbnAPI.getEditions(
-          {isbn: isbn},
-          function(data) {
-            console.log(data);
-            if (data.stat !== "ok") {
-              // TODO: failure callback
-              console.log('getEditions: ' + isbn + ': ' + data.stat);
-              return;
-            }
-            successCallback(mungeXisbnEditions(data.list));
-          },
-          // TODO: failure callback
-          function(data, status) { console.log('Error: ' + status); }
-        );
-      }
-    };
-  }
-
-  XisbnService.$inject = [
-    'XisbnAPI'
-  ];
-
-  // filter unwanted editions and munge each edition object
-  function mungeXisbnEditions(raw_editions) {
-    var editions = [];
-
-    angular.forEach(raw_editions, function(ed) {
-      // filter to English and book formats (BA=book BB=hardcover BC=paperback)
-      if (ed.lang === 'eng' && ed.form &&
-          (_.intersection(['BA','BB','BC'], ed.form).length > 0)) {
-        this.push({
-          'isbn':     ed.isbn[0],
-          'title':    ed.title,
-          'author':   ed.author,
-          'lang':     ed.lang,
-          'ed':       ed.ed,
-          'year':     ed.year
-        });
-      }
-    }, editions);
-
-    console.log(editions);
-    return editions;
-  }
-
-// =============================================================================
-
   function HalfAPI($resource) {
     return $resource(
       "http://cryptic-ridge-1093.herokuapp.com/api/half/find_items",
@@ -280,8 +202,6 @@
   angular.module('myApp.services', ['ngResource'])
     .value('version', '0.1')
     .factory('BookScraperMaster', BookScraperMaster)
-    .factory('XisbnAPI', XisbnAPI)
-    .factory('XisbnService', XisbnService)
     .factory('HalfAPI', HalfAPI)
     .factory('HalfService', HalfService)
     .factory('GoodreadsAPI', GoodreadsAPI)
