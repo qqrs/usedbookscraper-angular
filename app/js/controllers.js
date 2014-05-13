@@ -31,7 +31,6 @@
 
       BookScraperMaster.goodreadsUserId = parseInt(userId, 10);
       $location.path('/shelves');
-      $rootScope.$broadcast('errorAlerts.clearAlerts');
     };
 
     $scope.submitIsbnList = function (isbnText) {
@@ -39,7 +38,6 @@
       BookScraperMaster.isbnList = isbnList;
       console.log(isbnList);
       $location.path('/editions');
-      $rootScope.$broadcast('errorAlerts.clearAlerts');
     }
   }
 
@@ -241,6 +239,7 @@
         $scope.remaining_requests--;
       },
       function failureFn(data, stat, msg) {
+        // TODO: better error msg
         var userMsg = ((data.stat === 'invalidId') ? 'invalid isbn: fix query'
                         : 'editions lookup error: try again');
         $rootScope.$broadcast('errorAlerts.addAlert',
@@ -644,31 +643,33 @@
 
 // =============================================================================
 
-  function ErrorAlertsCtrl($scope, $rootScope, $element, $attrs, $transclude) {
+  function ErrorAlertsCtrl($scope, $rootScope, $anchorScroll) {
     $scope.alertsList = [];
 
     var deregAddAlert = $rootScope.$on('errorAlerts.addAlert', 
       function (event, msg) {
         if (!_.contains($scope.alertsList, msg)) {
           $scope.alertsList.push(msg);
-          // TODO: scroll to top of page
+          $anchorScroll();
         }
       }
     );
     var deregClearAlerts = $rootScope.$on('errorAlerts.clearAlerts', function () {
       $scope.alertsList = [];
     });
+    var deregRouteChange = $rootScope.$on('$routeChangeStart', function () {
+      $scope.alertsList = [];
+    });
 
     $scope.$on('$destroy', deregAddAlert);
     $scope.$on('$destroy', deregClearAlerts);
+    $scope.$on('$destroy', deregRouteChange);
   }
 
   ErrorAlertsCtrl.$inject = [
     '$scope',
     '$rootScope',
-    '$element',
-    '$attrs',
-    '$transclude'
+    '$anchorScroll'
   ];
 
 // =============================================================================
