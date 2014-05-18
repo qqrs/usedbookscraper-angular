@@ -147,64 +147,10 @@
 
 // =============================================================================
 
-  function GoodreadsAPI($resource) {
-    return $resource(
-      "http://cryptic-ridge-1093.herokuapp.com/api/goodreads/:collection",
-      {
-        callback: 'JSON_CALLBACK',
-      },
-      {
-        getShelves: { method: 'JSONP', params: {collection: 'shelves'} },
-        getBooks: { method: 'JSONP', params: {collection: 'books'} }
-    });
-  }
-
-  GoodreadsAPI.$inject = [
-    '$resource'
-  ];
- 
-  // TODO: caching
-  function GoodreadsService(GoodreadsAPI) {
-    return {
-      'getShelves': function(user_id, successCallback) {
-        GoodreadsAPI.getShelves(
-          {user_id: user_id},
-          function(data) {
-            console.log(data);
-            successCallback(data.results);
-          },
-          // TODO: failure callback
-          function(data, status) { console.log('Error: ' + status); }
-        );
-      },
-      'getBooks': function(user_id, shelf_name, successCallback) {
-        GoodreadsAPI.getBooks(
-          {user_id: user_id, shelf_name: shelf_name},
-          function(data) {
-            console.log(data);
-            successCallback(data.results);
-          },
-          // TODO: failure callback
-          function(data, status) { console.log('Error: ' + status); }
-        );
-      }
-    };
-  }
-
-
-  GoodreadsService.$inject = [
-    'GoodreadsAPI'
-  ];
-
-
-// =============================================================================
-
   angular.module('myApp.services', ['ngResource'])
     .value('version', '0.1')
     .factory('BookScraperMaster', BookScraperMaster)
     .factory('HalfAPI', HalfAPI)
-    .factory('HalfService', HalfService)
-    .factory('GoodreadsAPI', GoodreadsAPI)
-    .factory('GoodreadsService', GoodreadsService);
+    .factory('HalfService', HalfService);
 
 })();

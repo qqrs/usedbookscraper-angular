@@ -50,12 +50,12 @@
 
 // =============================================================================
 
-  function ShelvesCtrl($scope, $location, BookScraperMaster, GoodreadsService) {
+  function ShelvesCtrl($scope, $location, BookScraperMaster, GoodreadsAPI) {
     console.log('ShelvesCtrl: ' + BookScraperMaster.goodreadsUserId);
     $scope.selectedShelves = [];
     $scope.loading = true;
 
-    GoodreadsService.getShelves(BookScraperMaster.goodreadsUserId,
+    GoodreadsAPI.getShelves(BookScraperMaster.goodreadsUserId,
       function (shelves) {
         BookScraperMaster.shelves = shelves;
         $scope.shelves = shelves;
@@ -79,13 +79,13 @@
     '$scope',
     '$location',
     'BookScraperMaster',
-    'GoodreadsService'
+    'GoodreadsAPI'
   ];
 
 
 // =============================================================================
 
-  function BooksCtrl($scope, $location, $timeout, BookScraperMaster, GoodreadsService, HalfService) {
+  function BooksCtrl($scope, $location, $timeout, BookScraperMaster, GoodreadsAPI, HalfService) {
     var books = [];
 
     console.log(BookScraperMaster);
@@ -93,11 +93,11 @@
     $scope.loading = true;
     $scope.remaining_requests = 0;
 
-    // get book isbns for each shelf using GoodreadsService
+    // get book isbns for each shelf using GoodreadsAPI
     angular.forEach(BookScraperMaster.goodreadsSelectedShelves, function(shelf) {
       console.log(shelf.name);
       $scope.remaining_requests++;
-      GoodreadsService.getBooks(BookScraperMaster.goodreadsUserId, shelf.name,
+      GoodreadsAPI.getBooks(BookScraperMaster.goodreadsUserId, shelf.name,
         function (shelf_books) {
           Array.prototype.push.apply(books, shelf_books);
           console.log(books);
@@ -172,13 +172,13 @@
     '$location',
     '$timeout',
     'BookScraperMaster',
-    'GoodreadsService',
+    'GoodreadsAPI',
     'HalfService'
   ];
 
 // =============================================================================
 
-  function BookOptionsCtrl($scope, $location, $timeout, BookScraperMaster, GoodreadsService) {
+  function BookOptionsCtrl($scope, $location, $timeout, BookScraperMaster, GoodreadsAPI) {
   }
 
   BookOptionsCtrl.$inject = [
@@ -186,7 +186,7 @@
     '$location',
     '$timeout',
     'BookScraperMaster',
-    'GoodreadsService'
+    'GoodreadsAPI'
   ];
 
 

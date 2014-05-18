@@ -7,6 +7,7 @@ angular.module('myApp', [
     'myApp.filters',
     'myApp.services',
     'myApp.services.xisbn',
+    'myApp.services.goodreads',
     'myApp.directives',
     'myApp.controllers'])
   /*
