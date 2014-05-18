@@ -7,11 +7,11 @@
   Loading books...
 </div>
 <div ng-hide="loading">
-  <div ng-show="!books.length">
+  <div ng-show="!books.length || failure">
     <h4>No books found.</h4>
   </div>
 
-  <div ng-hide="!books.length">
+  <div ng-hide="!books.length || failure">
     <form ng-submit="submitSelectedBooks(selected_books)" ng-disabled="!books.length">
       <div>
         Select

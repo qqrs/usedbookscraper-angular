@@ -55,19 +55,16 @@
             xisbnCache.put(isbn, data);
           }
           if (data.stat !== "ok") {
-            failureFn(data, 200, data.stat);
+            failureFn({}, data.stat);
             return;
           }
           successFn(mungeXisbnEditions(data.list));
-        };
-        handleFailure = function(data, stat) {
-          failureFn(data, stat, ''); 
         };
 
         if (cached) {
           handleSuccess(cached);
         } else {
-          xisbnResource.getEditions({isbn: isbn}, handleSuccess, handleFailure);
+          xisbnResource.getEditions({isbn: isbn}, handleSuccess, failureFn);
         }
       }
     };
@@ -81,7 +78,7 @@
         fn = service.getEditions;
     service.getEditions = function(isbn, successFn, failureFn) {
       _.sample([fn, fn, function() {
-        (failureFn || _.noop)('', 400, 'XisbnApiTest mock error');
+        (failureFn || _.noop)({}, 'XisbnApiTest mock error');
       }]).apply(this, arguments);
     };
     return service;

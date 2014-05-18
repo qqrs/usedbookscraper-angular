@@ -3,12 +3,12 @@
 (function() {
 
   function GoodreadsApi($resource, $log) {
-    var goodreadsProxyResource,
+    var grResource,
         service;
 
     service = {};
 
-    goodreadsProxyResource = $resource(
+    grResource = $resource(
       "http://cryptic-ridge-1093.herokuapp.com/api/goodreads/:collection",
       {
         callback: 'JSON_CALLBACK',
@@ -19,26 +19,32 @@
     });
 
     service.getShelves = function(user_id, successFn, failureFn) {
-      goodreadsProxyResource.getShelves(
+      var handleSuccess,
+          handleFailure;
+
+      handleSuccess = function(data) {
+        successFn(data.results);
+      };
+
+      grResource.getShelves(
         {user_id: user_id},
-        function(data) {
-          console.log(data);
-          successFn(data.results);
-        },
-        // TODO: failure callback
-        function(data, status) { console.log('Error: ' + status); }
+        handleSuccess,
+        failureFn
       );
     };
 
     service.getBooks = function(user_id, shelf_name, successFn, failureFn) {
-      goodreadsProxyResource.getBooks(
+      var handleSuccess,
+          handleFailure;
+
+      handleSuccess = function(data) {
+        successFn(data.results);
+      };
+
+      grResource.getBooks(
         {user_id: user_id, shelf_name: shelf_name},
-        function(data) {
-          console.log(data);
-          successFn(data.results);
-        },
-        // TODO: failure callback
-        function(data, status) { console.log('Error: ' + status); }
+        handleSuccess,
+        failureFn
       );
     };
 
@@ -46,19 +52,29 @@
   }
 
   /**
-   * Simulate HTTP failures for getShelves and getBooks methods, respectively.
+   * Simulate HTTP failures for all getShelves calls.
    */
   var GoodreadsApiTestShelves = function GoodreadsApiTestShelves() {
     var service = GoodreadsApi.apply(this, arguments);
     service.getShelves = function(user_id, successFn, failureFn) {
-      (failureFn || _.noop)('', 400, 'GoodreadsApiTest mock error');
+      (failureFn || _.noop)({}, 'GoodreadsApiTest mock error');
     };
     return service;
   }
+  /**
+   * Simulate HTTP failures for every other getBooks call.
+   */
   var GoodreadsApiTestBooks = function GoodreadsApiTestBooks() {
-    var service = GoodreadsApi.apply(this, arguments);
+    var service = GoodreadsApi.apply(this, arguments),
+        fn = service.getBooks,
+        count = 0;
     service.getBooks = function(user_id, shelf_name, successFn, failureFn) {
-      (failureFn || _.noop)('', 400, 'GoodreadsApiTest mock error');
+      if (count % 2 === 1) {
+        (failureFn || _.noop)({}, 'GoodreadsApiTest mock error');
+      } else {
+        fn.apply(this,arguments);
+      }
+      count++;
     };
     return service;
   }

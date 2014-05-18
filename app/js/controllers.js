@@ -36,7 +36,6 @@
     $scope.submitIsbnList = function (isbnText) {
       var isbnList = _.compact(isbnText.replace('-', '').split(/[,;\s]+/));
       BookScraperMaster.isbnList = isbnList;
-      console.log(isbnList);
       $location.path('/editions');
     }
   }
@@ -50,19 +49,24 @@
 
 // =============================================================================
 
-  function ShelvesCtrl($scope, $location, BookScraperMaster, GoodreadsApi) {
+  function ShelvesCtrl($scope, $rootScope, $location, $log, BookScraperMaster, GoodreadsApi) {
     console.log('ShelvesCtrl: ' + BookScraperMaster.goodreadsUserId);
     $scope.selectedShelves = [];
     $scope.loading = true;
 
     GoodreadsApi.getShelves(BookScraperMaster.goodreadsUserId,
-      function (shelves) {
+      function successFn(shelves) {
         BookScraperMaster.shelves = shelves;
         $scope.shelves = shelves;
         $scope.finishLoading();
+      },
+      function failureFn(response, msg) {
+        $rootScope.$broadcast('errorAlerts.addAlert',
+          'error: unable to get goodreads shelves -- check user id/url');
+        $log.error('GoodreadsApi request failed: ' + msg);
+        $scope.loading = false;
       }
     );
-    // TODO: failure callback for 404
 
     $scope.submitGoodreadsShelves = function (shelves) {
       BookScraperMaster.goodreadsSelectedShelves = shelves;
@@ -77,7 +81,9 @@
 
   ShelvesCtrl.$inject = [
     '$scope',
+    '$rootScope',
     '$location',
+    '$log',
     'BookScraperMaster',
     'GoodreadsApi'
   ];
@@ -85,24 +91,35 @@
 
 // =============================================================================
 
-  function BooksCtrl($scope, $location, $timeout, BookScraperMaster, GoodreadsApi, HalfService) {
+  function BooksCtrl($scope, $rootScope, $location, $timeout, $log,
+                      BookScraperMaster, GoodreadsApi, HalfService) {
     var books = [];
 
     console.log(BookScraperMaster);
 
     $scope.loading = true;
+    $scope.failure = false;
     $scope.remaining_requests = 0;
 
     // get book isbns for each shelf using GoodreadsApi
     angular.forEach(BookScraperMaster.goodreadsSelectedShelves, function(shelf) {
-      console.log(shelf.name);
       $scope.remaining_requests++;
-      GoodreadsApi.getBooks(BookScraperMaster.goodreadsUserId, shelf.name,
-        function (shelf_books) {
+      GoodreadsApi.getBooks(
+        BookScraperMaster.goodreadsUserId,
+        shelf.name,
+        function successFn(shelf_books) {
           Array.prototype.push.apply(books, shelf_books);
-          console.log(books);
           $scope.remaining_requests--;
-      });
+        },
+        function failureFn(response, msg) {
+          $rootScope.$broadcast('errorAlerts.addAlert',
+            'error: unable to get goodreads shelf books -- wait and try again');
+          $log.error('GoodreadsApi request failed: ' + msg);
+          $scope.remaining_requests = -1;
+          $scope.loading = false;
+          $scope.failure = true;
+        }
+      );
     });
     $scope.$watch('remaining_requests', function () {
       if ($scope.remaining_requests === 0) {
@@ -169,8 +186,10 @@
 
   BooksCtrl.$inject = [
     '$scope',
+    '$rootScope',
     '$location',
     '$timeout',
+    '$log',
     'BookScraperMaster',
     'GoodreadsApi',
     'HalfService'
@@ -238,13 +257,16 @@
         console.log(BookScraperMaster);
         $scope.remaining_requests--;
       },
-      function failureFn(data, stat, msg) {
+      function failureFn(response, msg) {
         // TODO: better error msg
-        var userMsg = ((data.stat === 'invalidId') ? 'invalid isbn: fix query'
-                        : 'editions lookup error: try again');
-        $rootScope.$broadcast('errorAlerts.addAlert',
-          userMsg + ' or continue with partial results');
-        $log.warn('XisbnApi request failed ' + stat +': ' + msg);
+        if (msg === 'invalidId') {
+          $rootScope.$broadcast('errorAlerts.addAlert',
+            'invalid isbn: fix query or continue with partial results');
+        } else {
+          $rootScope.$broadcast('errorAlerts.addAlert',
+            'editions lookup error: try again or continue with partial results');
+        }
+        $log.warn('XisbnApi request failed: ' + msg);
         $scope.remaining_requests--;
       });
     });
