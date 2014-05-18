@@ -6,8 +6,9 @@ angular.module('myApp', [
     'ngRoute',
     'myApp.filters',
     'myApp.services',
-    'myApp.services.xisbn',
     'myApp.services.goodreads',
+    'myApp.services.xisbn',
+    'myApp.services.half',
     'myApp.directives',
     'myApp.controllers'])
   /*

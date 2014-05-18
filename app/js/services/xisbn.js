@@ -70,9 +70,7 @@
     };
   }
 
-  /**
-   * Simulate HTTP failures for one in three requests.
-   */
+  // Simulate HTTP failures for one in three requests.
   var XisbnApiTest = function XisbnServiceTest() {
     var service = XisbnApi.apply(this, arguments),
         fn = service.getEditions;

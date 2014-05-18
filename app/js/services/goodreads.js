@@ -51,9 +51,8 @@
     return service;
   }
 
-  /**
-   * Simulate HTTP failures for all getShelves calls.
-   */
+
+  // Simulate HTTP failures for all getShelves calls
   var GoodreadsApiTestShelves = function GoodreadsApiTestShelves() {
     var service = GoodreadsApi.apply(this, arguments);
     service.getShelves = function(user_id, successFn, failureFn) {
@@ -61,9 +60,8 @@
     };
     return service;
   }
-  /**
-   * Simulate HTTP failures for every other getBooks call.
-   */
+
+  // Simulate HTTP failures for every other getBooks call
   var GoodreadsApiTestBooks = function GoodreadsApiTestBooks() {
     var service = GoodreadsApi.apply(this, arguments),
         fn = service.getBooks,
