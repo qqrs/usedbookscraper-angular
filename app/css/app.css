@@ -18,6 +18,16 @@ body {
   background-color: rgba(245,245,245, 0.95);
   border-color: rgb(227,227,227);
   min-height: 500px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  float: none;
+}
+
+.inner-content {
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /*
