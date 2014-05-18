@@ -82,6 +82,6 @@
   GoodreadsApiTestShelves.$inject = GoodreadsApi.$inject;
   GoodreadsApiTestBooks.$inject = GoodreadsApi.$inject;
  
-  angular.module('myApp.services.goodreads', ['ngResource'])
+  angular.module('ubsApp.services.goodreads', ['ngResource'])
     .factory('GoodreadsApi', GoodreadsApi);
 })();

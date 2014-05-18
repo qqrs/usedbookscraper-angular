@@ -70,7 +70,7 @@
     };
   }
 
-  angular.module('myApp.directives', [])
+  angular.module('ubsApp.directives', [])
     .directive('ubsBookOptions', BookOptionsDirective)
     .directive('ubsSellerBookListings', SellerBookListingsDirective)
     .directive('ubsSellerBooks', SellerBooksDirective)

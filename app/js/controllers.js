@@ -743,7 +743,7 @@
 
 // =============================================================================
 
-  angular.module('myApp.controllers', ['ngResource'])
+  angular.module('ubsApp.controllers', ['ngResource'])
     .controller('GoodreadsUserCtrl', GoodreadsUserCtrl)
     .controller('ShelvesCtrl', ShelvesCtrl)
     .controller('BooksCtrl', BooksCtrl)

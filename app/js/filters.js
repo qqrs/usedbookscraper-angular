@@ -2,7 +2,7 @@
 
 /* Filters */
 
-angular.module('myApp.filters', []).
+angular.module('ubsApp.filters', []).
   filter('bookConditionHuman', function(version) {
     return function(cond) {
       return String(cond).replace(/[A-Z]/g, ' $&').substr(1);

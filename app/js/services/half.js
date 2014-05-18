@@ -137,6 +137,6 @@
   XisbnApiTest.$inject = XisbnApi.$inject;
   */
 
-  angular.module('myApp.services.half', ['ngResource'])
+  angular.module('ubsApp.services.half', ['ngResource'])
     .factory('HalfService', HalfService);
 })();

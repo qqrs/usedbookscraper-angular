@@ -2,15 +2,15 @@
 
 
 // Declare app level module which depends on filters, and services
-angular.module('myApp', [
+angular.module('ubsApp', [
     'ngRoute',
-    'myApp.filters',
-    'myApp.services',
-    'myApp.services.goodreads',
-    'myApp.services.xisbn',
-    'myApp.services.half',
-    'myApp.directives',
-    'myApp.controllers'])
+    'ubsApp.filters',
+    'ubsApp.services',
+    'ubsApp.services.goodreads',
+    'ubsApp.services.xisbn',
+    'ubsApp.services.half',
+    'ubsApp.directives',
+    'ubsApp.controllers'])
   /*
   .config(['$locationProvider',
     function($locationProvider) {

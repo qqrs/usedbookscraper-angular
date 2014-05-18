@@ -85,6 +85,6 @@
   XisbnApi.$inject = ['$resource', '$cacheFactory', '$log'];
   XisbnApiTest.$inject = XisbnApi.$inject;
 
-  angular.module('myApp.services.xisbn', ['ngResource'])
+  angular.module('ubsApp.services.xisbn', ['ngResource'])
     .factory('XisbnApi', XisbnApi)
 })();
