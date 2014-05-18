@@ -192,7 +192,7 @@
 
 // =============================================================================
 
-  function EditionsCtrl($scope, $rootScope, $location, $log, BookScraperMaster, XisbnService) {
+  function EditionsCtrl($scope, $rootScope, $location, $log, BookScraperMaster, XisbnAPI) {
     var books = BookScraperMaster.selected_books;
     var isbnList = BookScraperMaster.isbnList;
     var editions = [];
@@ -223,7 +223,7 @@
     //TODO: add error handler to decrement remaining requests
     angular.forEach(books, function (book) {
       $scope.remaining_requests++;
-      XisbnService.getEditions(book.isbn, function successFn(book_editions) {
+      XisbnAPI.getEditions(book.isbn, function successFn(book_editions) {
         if (isbnList !== null && book_editions) {
           book.title = book_editions[0].title;
           book.author = book_editions[0].author;
@@ -244,7 +244,7 @@
                         : 'editions lookup error: try again');
         $rootScope.$broadcast('errorAlerts.addAlert',
           userMsg + ' or continue with partial results');
-        $log.warn('XisbnService request failed ' + stat +': ' + msg);
+        $log.warn('XisbnAPI request failed ' + stat +': ' + msg);
         $scope.remaining_requests--;
       });
     });
@@ -289,7 +289,7 @@
     '$location',
     '$log',
     'BookScraperMaster',
-    'XisbnService'
+    'XisbnAPI'
   ];
 
 // =============================================================================

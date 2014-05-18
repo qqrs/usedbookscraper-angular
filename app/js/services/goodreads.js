@@ -3,8 +3,10 @@
 (function() {
 
   function GoodreadsAPI($resource) {
-
-    var goodreadsProxyResource = $resource(
+    var goodreadsProxyResource,
+        booksCache;
+        
+    goodreadsProxyResource = $resource(
       "http://cryptic-ridge-1093.herokuapp.com/api/goodreads/:collection",
       {
         callback: 'JSON_CALLBACK',

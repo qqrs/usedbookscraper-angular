@@ -23,13 +23,13 @@
     return editions;
   }
 
-  var XisbnService = function XisbnService($resource, $cacheFactory, $log) {
-    var xisbnAPI,
+  var XisbnAPI = function XisbnAPI($resource, $cacheFactory, $log) {
+    var xisbnResource,
         xisbnCache;
 
     xisbnCache = $cacheFactory('xisbn');
 
-    xisbnAPI = $resource(
+    xisbnResource = $resource(
       "http://xisbn.worldcat.org/webservices/xid/isbn/:isbn", {
         format: 'json',
         callback: 'JSON_CALLBACK',
@@ -66,7 +66,7 @@
         if (cached) {
           handleSuccess(cached);
         } else {
-          xisbnAPI.getEditions({isbn: isbn}, handleSuccess, handleFailure);
+          xisbnResource.getEditions({isbn: isbn}, handleSuccess, handleFailure);
         }
       }
     };
@@ -76,7 +76,7 @@
    * Simulate HTTP failures for one in three requests.
    */
   var XisbnServiceTest = function XisbnServiceTest() {
-    var service = XisbnService.apply(this, arguments),
+    var service = XisbnAPI.apply(this, arguments),
         fn = service.getEditions;
     service.getEditions = function(isbn, successFn, failureFn) {
       _.sample([fn, fn, function() {
@@ -86,9 +86,9 @@
     return service;
   }
 
-  XisbnService.$inject = ['$resource', '$cacheFactory', '$log'];
-  XisbnServiceTest.$inject = XisbnService.$inject;
+  XisbnAPI.$inject = ['$resource', '$cacheFactory', '$log'];
+  XisbnAPI.$inject = XisbnAPI.$inject;
 
   angular.module('myApp.services.xisbn', ['ngResource'])
-    .factory('XisbnService', XisbnService)
+    .factory('XisbnAPI', XisbnAPI)
 })();
