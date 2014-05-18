@@ -3,7 +3,12 @@
 (function() {
 
   function GoodreadsAPI($resource, $log) {
-    var goodreadsProxyResource = $resource(
+    var goodreadsProxyResource,
+        service;
+
+    service = {};
+
+    goodreadsProxyResource = $resource(
       "http://cryptic-ridge-1093.herokuapp.com/api/goodreads/:collection",
       {
         callback: 'JSON_CALLBACK',
@@ -13,30 +18,31 @@
         getBooks: { method: 'JSONP', params: {collection: 'books'} }
     });
 
-    return {
-      'getShelves': function(user_id, successFn, failureFn) {
-        goodreadsProxyResource.getShelves(
-          {user_id: user_id},
-          function(data) {
-            console.log(data);
-            successFn(data.results);
-          },
-          // TODO: failure callback
-          function(data, status) { console.log('Error: ' + status); }
-        );
-      },
-      'getBooks': function(user_id, shelf_name, successFn, failureFn) {
-        goodreadsProxyResource.getBooks(
-          {user_id: user_id, shelf_name: shelf_name},
-          function(data) {
-            console.log(data);
-            successFn(data.results);
-          },
-          // TODO: failure callback
-          function(data, status) { console.log('Error: ' + status); }
-        );
-      }
+    service.getShelves = function(user_id, successFn, failureFn) {
+      goodreadsProxyResource.getShelves(
+        {user_id: user_id},
+        function(data) {
+          console.log(data);
+          successFn(data.results);
+        },
+        // TODO: failure callback
+        function(data, status) { console.log('Error: ' + status); }
+      );
     };
+
+    service.getBooks = function(user_id, shelf_name, successFn, failureFn) {
+      goodreadsProxyResource.getBooks(
+        {user_id: user_id, shelf_name: shelf_name},
+        function(data) {
+          console.log(data);
+          successFn(data.results);
+        },
+        // TODO: failure callback
+        function(data, status) { console.log('Error: ' + status); }
+      );
+    };
+
+    return service;
   }
 
   /**
