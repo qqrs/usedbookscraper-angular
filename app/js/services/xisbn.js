@@ -27,6 +27,7 @@
     var xisbnResource,
         xisbnCache;
 
+    // manage cache manually -- Angular HTTP cache option doesn't work for JSONP
     xisbnCache = $cacheFactory('xisbn');
 
     xisbnResource = $resource(
@@ -75,19 +76,19 @@
   /**
    * Simulate HTTP failures for one in three requests.
    */
-  var XisbnServiceTest = function XisbnServiceTest() {
+  var XisbnAPITest = function XisbnServiceTest() {
     var service = XisbnAPI.apply(this, arguments),
         fn = service.getEditions;
     service.getEditions = function(isbn, successFn, failureFn) {
       _.sample([fn, fn, function() {
-        (failureFn || _.noop)('', 400, 'XisbnServiceTest mock error');
+        (failureFn || _.noop)('', 400, 'XisbnAPITest mock error');
       }]).apply(this, arguments);
     };
     return service;
   }
 
   XisbnAPI.$inject = ['$resource', '$cacheFactory', '$log'];
-  XisbnAPI.$inject = XisbnAPI.$inject;
+  XisbnAPITest.$inject = XisbnAPI.$inject;
 
   angular.module('myApp.services.xisbn', ['ngResource'])
     .factory('XisbnAPI', XisbnAPI)
