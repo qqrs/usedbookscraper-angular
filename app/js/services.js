@@ -38,7 +38,6 @@
 // =============================================================================
 
   angular.module('ubsApp.services', ['ngResource'])
-    .value('version', '0.1')
     .factory('BookScraperMaster', BookScraperMaster);
 
 })();
