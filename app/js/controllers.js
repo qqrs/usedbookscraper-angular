@@ -50,12 +50,12 @@
 
 // =============================================================================
 
-  function ShelvesCtrl($scope, $location, BookScraperMaster, GoodreadsAPI) {
+  function ShelvesCtrl($scope, $location, BookScraperMaster, GoodreadsApi) {
     console.log('ShelvesCtrl: ' + BookScraperMaster.goodreadsUserId);
     $scope.selectedShelves = [];
     $scope.loading = true;
 
-    GoodreadsAPI.getShelves(BookScraperMaster.goodreadsUserId,
+    GoodreadsApi.getShelves(BookScraperMaster.goodreadsUserId,
       function (shelves) {
         BookScraperMaster.shelves = shelves;
         $scope.shelves = shelves;
@@ -79,13 +79,13 @@
     '$scope',
     '$location',
     'BookScraperMaster',
-    'GoodreadsAPI'
+    'GoodreadsApi'
   ];
 
 
 // =============================================================================
 
-  function BooksCtrl($scope, $location, $timeout, BookScraperMaster, GoodreadsAPI, HalfService) {
+  function BooksCtrl($scope, $location, $timeout, BookScraperMaster, GoodreadsApi, HalfService) {
     var books = [];
 
     console.log(BookScraperMaster);
@@ -93,11 +93,11 @@
     $scope.loading = true;
     $scope.remaining_requests = 0;
 
-    // get book isbns for each shelf using GoodreadsAPI
+    // get book isbns for each shelf using GoodreadsApi
     angular.forEach(BookScraperMaster.goodreadsSelectedShelves, function(shelf) {
       console.log(shelf.name);
       $scope.remaining_requests++;
-      GoodreadsAPI.getBooks(BookScraperMaster.goodreadsUserId, shelf.name,
+      GoodreadsApi.getBooks(BookScraperMaster.goodreadsUserId, shelf.name,
         function (shelf_books) {
           Array.prototype.push.apply(books, shelf_books);
           console.log(books);
@@ -172,13 +172,13 @@
     '$location',
     '$timeout',
     'BookScraperMaster',
-    'GoodreadsAPI',
+    'GoodreadsApi',
     'HalfService'
   ];
 
 // =============================================================================
 
-  function BookOptionsCtrl($scope, $location, $timeout, BookScraperMaster, GoodreadsAPI) {
+  function BookOptionsCtrl($scope, $location, $timeout, BookScraperMaster, GoodreadsApi) {
   }
 
   BookOptionsCtrl.$inject = [
@@ -186,13 +186,13 @@
     '$location',
     '$timeout',
     'BookScraperMaster',
-    'GoodreadsAPI'
+    'GoodreadsApi'
   ];
 
 
 // =============================================================================
 
-  function EditionsCtrl($scope, $rootScope, $location, $log, BookScraperMaster, XisbnAPI) {
+  function EditionsCtrl($scope, $rootScope, $location, $log, BookScraperMaster, XisbnApi) {
     var books = BookScraperMaster.selected_books;
     var isbnList = BookScraperMaster.isbnList;
     var editions = [];
@@ -223,7 +223,7 @@
     //TODO: add error handler to decrement remaining requests
     angular.forEach(books, function (book) {
       $scope.remaining_requests++;
-      XisbnAPI.getEditions(book.isbn, function successFn(book_editions) {
+      XisbnApi.getEditions(book.isbn, function successFn(book_editions) {
         if (isbnList !== null && book_editions) {
           book.title = book_editions[0].title;
           book.author = book_editions[0].author;
@@ -244,7 +244,7 @@
                         : 'editions lookup error: try again');
         $rootScope.$broadcast('errorAlerts.addAlert',
           userMsg + ' or continue with partial results');
-        $log.warn('XisbnAPI request failed ' + stat +': ' + msg);
+        $log.warn('XisbnApi request failed ' + stat +': ' + msg);
         $scope.remaining_requests--;
       });
     });
@@ -289,7 +289,7 @@
     '$location',
     '$log',
     'BookScraperMaster',
-    'XisbnAPI'
+    'XisbnApi'
   ];
 
 // =============================================================================

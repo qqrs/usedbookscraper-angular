@@ -23,7 +23,7 @@
     return editions;
   }
 
-  var XisbnAPI = function XisbnAPI($resource, $cacheFactory, $log) {
+  var XisbnApi = function XisbnApi($resource, $cacheFactory, $log) {
     var xisbnResource,
         xisbnCache;
 
@@ -76,20 +76,20 @@
   /**
    * Simulate HTTP failures for one in three requests.
    */
-  var XisbnAPITest = function XisbnServiceTest() {
-    var service = XisbnAPI.apply(this, arguments),
+  var XisbnApiTest = function XisbnServiceTest() {
+    var service = XisbnApi.apply(this, arguments),
         fn = service.getEditions;
     service.getEditions = function(isbn, successFn, failureFn) {
       _.sample([fn, fn, function() {
-        (failureFn || _.noop)('', 400, 'XisbnAPITest mock error');
+        (failureFn || _.noop)('', 400, 'XisbnApiTest mock error');
       }]).apply(this, arguments);
     };
     return service;
   }
 
-  XisbnAPI.$inject = ['$resource', '$cacheFactory', '$log'];
-  XisbnAPITest.$inject = XisbnAPI.$inject;
+  XisbnApi.$inject = ['$resource', '$cacheFactory', '$log'];
+  XisbnApiTest.$inject = XisbnApi.$inject;
 
   angular.module('myApp.services.xisbn', ['ngResource'])
-    .factory('XisbnAPI', XisbnAPI)
+    .factory('XisbnApi', XisbnApi)
 })();

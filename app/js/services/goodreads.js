@@ -2,7 +2,7 @@
 
 (function() {
 
-  function GoodreadsAPI($resource, $log) {
+  function GoodreadsApi($resource, $log) {
     var goodreadsProxyResource,
         service;
 
@@ -48,26 +48,26 @@
   /**
    * Simulate HTTP failures for getShelves and getBooks methods, respectively.
    */
-  var GoodreadsAPITestShelves = function GoodreadsAPITestShelves() {
-    var service = GoodreadsAPI.apply(this, arguments);
+  var GoodreadsApiTestShelves = function GoodreadsApiTestShelves() {
+    var service = GoodreadsApi.apply(this, arguments);
     service.getShelves = function(user_id, successFn, failureFn) {
-      (failureFn || _.noop)('', 400, 'GoodreadsAPITest mock error');
+      (failureFn || _.noop)('', 400, 'GoodreadsApiTest mock error');
     };
     return service;
   }
-  var GoodreadsAPITestBooks = function GoodreadsAPITestBooks() {
-    var service = GoodreadsAPI.apply(this, arguments);
+  var GoodreadsApiTestBooks = function GoodreadsApiTestBooks() {
+    var service = GoodreadsApi.apply(this, arguments);
     service.getBooks = function(user_id, shelf_name, successFn, failureFn) {
-      (failureFn || _.noop)('', 400, 'GoodreadsAPITest mock error');
+      (failureFn || _.noop)('', 400, 'GoodreadsApiTest mock error');
     };
     return service;
   }
 
 
-  GoodreadsAPI.$inject = ['$resource', '$log'];
-  GoodreadsAPITestShelves.$inject = GoodreadsAPI.$inject;
-  GoodreadsAPITestBooks.$inject = GoodreadsAPI.$inject;
+  GoodreadsApi.$inject = ['$resource', '$log'];
+  GoodreadsApiTestShelves.$inject = GoodreadsApi.$inject;
+  GoodreadsApiTestBooks.$inject = GoodreadsApi.$inject;
  
   angular.module('myApp.services.goodreads', ['ngResource'])
-    .factory('GoodreadsAPI', GoodreadsAPI);
+    .factory('GoodreadsApi', GoodreadsApi);
 })();
