@@ -47,8 +47,7 @@
     return {
       'getEditions': function(isbn, successFn, failureFn) {
         var cached = xisbnCache.get(isbn),
-            handleSuccess,
-            handleFailure;
+            handleSuccess;
 
         handleSuccess = function(data) {
           if (!cached) {

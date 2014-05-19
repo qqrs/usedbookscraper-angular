@@ -4,7 +4,7 @@
 
 
   //TODO: caching
-  //TODO: get all listings with condition >= cond, maxprice <= xx.xx, all pages
+  //TODO: move progress handling into this module and create a HalfQueryBatch
   function HalfService($rootScope, $resource) {
 
    // =================================
@@ -15,6 +15,15 @@
     var getValueForCondition = function (cond) {
       var val = conditions.indexOf(cond);
       return (val >= 0 ? val : -Infinity);
+    };
+
+    // return array of all conditions better than cond
+    var getBetterConditions = function (cond) {
+      var index = _.indexOf(conditions, cond);
+      if (index < 0) {
+        return [cond];
+      }
+      return _.rest(conditions, index + 1);
     };
 
     // get shipping cost for adding this item to an order
@@ -46,67 +55,63 @@
 
     // half findItems call -- request first page and queue additional
     // requests for more pages and better book conditions if needed
-    function half_findItemsCall(params, successCallback) {
+    var half_findItems = function(params, successFn, failureFn) {
       var condIndex,
           paramsCopy,
           i;
-      // run request for specified parameters
-      halfResource.findItems(
-        params,
-        function(data) {
-          successCallback(data);
-          $rootScope.$broadcast('halfService.findItems.call.response');
-          if (data.total_pages !== undefined && data.total_pages > 1) {
-            for (i = 2; i <= data.total_pages; i++) {
-              paramsCopy = angular.copy(params);
-              paramsCopy.page = i;
-              half_findItemsPage(paramsCopy, successCallback);
-            }
+
+      // call success callback and run additional requests for subsequent pages
+      var handleSuccessFirstPage = function(data) {
+        var paramsCopy,
+            i;
+        successFn(data);
+        $rootScope.$broadcast('halfService.findItems.call.response');
+        if (data.total_pages !== undefined && data.total_pages > 1) {
+          for (i = 2; i <= data.total_pages; i++) {
+            paramsCopy = angular.copy(params);
+            paramsCopy.page = i;
+            halfResource.findItems(paramsCopy, handleSuccessOtherPage, handleFailureOtherPage);
+            $rootScope.$broadcast('halfService.findItems.page.request');
           }
-        },
-        // TODO: failure callback
-        function(data) {
-          $rootScope.$broadcast('halfService.findItems.call.response');
         }
-      );
+      };
+
+      var handleFailureFirstPage = function(response) {
+        failureFn(response);
+        $rootScope.$broadcast('halfService.findItems.call.response');
+      };
+
+      var handleSuccessOtherPage = function(data) {
+        successFn(data);
+        $rootScope.$broadcast('halfService.findItems.page.response');
+      };
+
+      var handleFailureOtherPage = function(response) {
+        failureFn(response);
+        $rootScope.$broadcast('halfService.findItems.page.response');
+      };
+
+
+      // run request for specified parameters
+      halfResource.findItems(params, handleSuccessFirstPage, handleFailureFirstPage);
       $rootScope.$broadcast('halfService.findItems.call.request');
 
-      // recursively run request for next better condition if not best
+      // run requests for better conditions
       if (params.condition) {
-        condIndex = conditions.indexOf(params.condition);
-        if (condIndex !== -1 && condIndex + 1 < conditions.length) {
-          paramsCopy = angular.copy(params);
-          paramsCopy.condition = conditions[condIndex + 1];
-          half_findItemsCall(paramsCopy, successCallback);
-        }
+        _.each(getBetterConditions(params.condition), function (cond) {
+          var paramsCopy = angular.copy(params);
+          paramsCopy.condition = cond;
+          halfResource.findItems(paramsCopy, handleSuccessFirstPage, handleFailureFirstPage);
+          $rootScope.$broadcast('halfService.findItems.call.request');
+        });
       }
-    }
-
-    // half findItems page -- request for results page >= 2
-    function half_findItemsPage(params, successCallback) {
-      var condIndex,
-          paramsCopy,
-          i;
-      // run request for specified parameters
-      halfResource.findItems(
-        params,
-        function(data) {
-          successCallback(data);
-          $rootScope.$broadcast('halfService.findItems.page.response');
-        },
-        // TODO: failure callback
-        function(data) {
-          $rootScope.$broadcast('halfService.findItems.page.response');
-        }
-      );
-      $rootScope.$broadcast('halfService.findItems.page.request');
-    }
+    };
 
    // =================================
    // Half service exposed methods
    // =================================
     return {
-      findItems: half_findItemsCall,
+      findItems: half_findItems,
       bookConditions: function () { return conditions; },
       getValueForCondition: getValueForCondition,
       getListingMarginalShippingCost: getListingMarginalShippingCost
