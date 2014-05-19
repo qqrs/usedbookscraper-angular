@@ -325,6 +325,7 @@
     BookScraperMaster.listings = listings;
     $scope.books = books;
 
+    // TODO: REFACTOR: move progress counter to service
     $scope.apiRequestProgress = {
       call: { requests: 0, responses: 0, percent: 0, finished: false },
       page: { requests: 0, responses: 0, percent: 0 }
