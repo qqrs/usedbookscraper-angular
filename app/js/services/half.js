@@ -51,11 +51,14 @@
         findItems: { method: 'JSONP' }
     });
 
+    function HalfQueryBatch() {
+    }
+
     // TODO: refactor and add failure handler
 
-    // half findItems call -- request first page and queue additional
+    // HalfQueryBatch.findItems -- request first page and queue additional
     // requests for more pages and better book conditions if needed
-    var half_findItems = function(params, successFn, failureFn) {
+    HalfQueryBatch.prototype.findItems = function(params, successFn, failureFn) {
       var condIndex,
           paramsCopy,
           i;
@@ -111,7 +114,8 @@
    // Half service exposed methods
    // =================================
     return {
-      findItems: half_findItems,
+      newQueryBatch: function () { return new HalfQueryBatch(); },
+      //findItems: half_findItems,
       bookConditions: function () { return conditions; },
       getValueForCondition: getValueForCondition,
       getListingMarginalShippingCost: getListingMarginalShippingCost

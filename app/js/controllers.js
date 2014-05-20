@@ -359,6 +359,7 @@
 
     // TODO: cancel requests if leaving controller
 
+    var half = HalfService.newQueryBatch();
     // get Half.com listings for each edition of each book
     angular.forEach(books, function (book, book_index) {
       book.listings = [];
@@ -369,7 +370,7 @@
         }
         console.log('selected ed.isbn: ' + ed.isbn + '; book_index: ' + book_index + '; ed_index: ' + ed_index);
         ed.listings = [];
-        HalfService.findItems(
+        half.findItems(
           //{isbn: ed.isbn, page: '1', condition: 'Good', maxprice: 4.00},
           //{isbn: ed.isbn, page: '1', condition: 'Good', maxprice: ((book.author === "Lauren Slater") ? 8.00 : 4.00)},
           // TODO: maxprice safe if user enters non-number?
