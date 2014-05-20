@@ -316,7 +316,7 @@
 
 // =============================================================================
 
-  function ListingsCtrl($scope, $location, BookScraperMaster, HalfService) {
+  function ListingsCtrl($scope, $rootScope, $location, BookScraperMaster, HalfService) {
     var books = BookScraperMaster.selected_books;
     var editions = BookScraperMaster.editions;
     var selection = BookScraperMaster.edition_selections;
@@ -325,41 +325,11 @@
     BookScraperMaster.listings = listings;
     $scope.books = books;
 
-    // TODO: REFACTOR: move progress counter to service
-    $scope.apiRequestProgress = {
-      call: { requests: 0, responses: 0, percent: 0, finished: false },
-      page: { requests: 0, responses: 0, percent: 0 }
-    };
-
-    // update progress bar
-    $scope.$on('halfService.findItems.call.request', function () {
-      var progress = $scope.apiRequestProgress.call;
-      progress.requests++;
-    });
-    $scope.$on('halfService.findItems.call.response', function () {
-      var progress = $scope.apiRequestProgress.call;
-      progress.responses++;
-      progress.percent = 100 * (progress.responses / progress.requests);
-      if (progress.responses === progress.requests) {
-        progress.finished = true;
-      }
-      $scope.advanceIfFinished();
-    });
-    $scope.$on('halfService.findItems.page.request', function () {
-      var progress = $scope.apiRequestProgress.page;
-      progress.requests++;
-    });
-    $scope.$on('halfService.findItems.page.response', function () {
-      var progress = $scope.apiRequestProgress.page;
-      progress.responses++;
-      progress.percent = 100 * (progress.responses / progress.requests);
-      $scope.advanceIfFinished();
-    });
-    // TODO: advance after all requests complete
-
     // TODO: cancel requests if leaving controller
 
     var half = HalfService.newQueryBatch();
+    $scope.apiRequestProgress = half.progress;
+
     // get Half.com listings for each edition of each book
     angular.forEach(books, function (book, book_index) {
       book.listings = [];
@@ -375,7 +345,7 @@
           //{isbn: ed.isbn, page: '1', condition: 'Good', maxprice: ((book.author === "Lauren Slater") ? 8.00 : 4.00)},
           // TODO: maxprice safe if user enters non-number?
           {isbn: ed.isbn, page: '1', condition: book.options.condition, maxprice: book.options.maxprice},
-          function(response) { 
+          function successFn(response) { 
             ed.half_title = ed.half_title || response.title;
             ed.half_image_url = ed.half_image_url || response.image;
             var ed_listings = _.filter(response.items, function (listing) {
@@ -401,19 +371,19 @@
             Array.prototype.push.apply(book.listings, ed_listings);
             Array.prototype.push.apply(ed.listings, ed_listings);
             console.log(BookScraperMaster);
+          },
+          function failureFn(response) {
+            // TODO: better error msg
+            $rootScope.$broadcast('errorAlerts.addAlert',
+              'half.com item lookup error: try again or continue with partial results');
+            $log.warn('XisbnApi request failed: ' + msg);
           }
         );
       });
     });
-
-    $scope.advanceIfFinished = function () {
-      if (($scope.apiRequestProgress.call.requests ===
-            $scope.apiRequestProgress.call.responses) &&
-          ($scope.apiRequestProgress.page.requests ===
-            $scope.apiRequestProgress.page.responses)) {
-        $scope.finishLoading();
-      }
-    }
+    half.registerCompletionCallback(function () {
+      $scope.finishLoading();
+    });
 
     $scope.finishLoading = function () {
       $location.path('/sellers');
@@ -422,6 +392,7 @@
 
   ListingsCtrl.$inject = [
     '$scope',
+    '$rootScope',
     '$location',
     'BookScraperMaster',
     'HalfService'

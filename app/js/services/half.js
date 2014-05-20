@@ -5,7 +5,7 @@
 
   //TODO: caching
   //TODO: move progress handling into this module and create a HalfQueryBatch
-  function HalfService($rootScope, $resource) {
+  function HalfService($resource) {
 
    // =================================
    // Utility functions and data
@@ -52,7 +52,37 @@
     });
 
     function HalfQueryBatch() {
+      this.completionCallback = null;
+      this.progress = {
+        call: { request: 0, response: 0, percent: 0, finished: false },
+        page: { request: 0, response: 0, percent: 0, finished: false }
+      };
     }
+
+    HalfQueryBatch.prototype.registerCompletionCallback = function(callback) {
+      this.completionCallback = callback;
+      this.checkCompletion();
+    };
+
+    HalfQueryBatch.prototype.updateProgress = function(requestType, eventType) {
+      var count = this.progress[requestType];
+      count[eventType] += 1;
+      count.percent = 100 * (count.response / count.request);
+      this.checkCompletion();
+    };
+
+    HalfQueryBatch.prototype.checkCompletion = function() {
+      if (!this.completionCallback) {
+        return;
+      }
+      this.progress.call.finished =
+        (this.progress.call.request === this.progress.call.response);
+      this.progress.page.finished =
+        (this.progress.page.request === this.progress.page.response);
+      if (this.progress.call.finished && this.progress.page.finished) {
+        this.completionCallback();
+      }
+    };
 
     // TODO: refactor and add failure handler
 
@@ -68,36 +98,36 @@
         var paramsCopy,
             i;
         successFn(data);
-        $rootScope.$broadcast('halfService.findItems.call.response');
         if (data.total_pages !== undefined && data.total_pages > 1) {
           for (i = 2; i <= data.total_pages; i++) {
             paramsCopy = angular.copy(params);
             paramsCopy.page = i;
             halfResource.findItems(paramsCopy, handleSuccessOtherPage, handleFailureOtherPage);
-            $rootScope.$broadcast('halfService.findItems.page.request');
+            this.updateProgress('page', 'request');
           }
         }
-      };
+        this.updateProgress('call', 'response');
+      }.bind(this);
 
       var handleFailureFirstPage = function(response) {
         failureFn(response);
-        $rootScope.$broadcast('halfService.findItems.call.response');
-      };
+        this.updateProgress('call', 'response');
+      }.bind(this);
 
       var handleSuccessOtherPage = function(data) {
         successFn(data);
-        $rootScope.$broadcast('halfService.findItems.page.response');
-      };
+        this.updateProgress('page', 'response');
+      }.bind(this);
 
       var handleFailureOtherPage = function(response) {
         failureFn(response);
-        $rootScope.$broadcast('halfService.findItems.page.response');
-      };
+        this.updateProgress('page', 'response');
+      }.bind(this);
 
 
       // run request for specified parameters
       halfResource.findItems(params, handleSuccessFirstPage, handleFailureFirstPage);
-      $rootScope.$broadcast('halfService.findItems.call.request');
+      this.updateProgress('call', 'request');
 
       // run requests for better conditions
       if (params.condition) {
@@ -105,8 +135,8 @@
           var paramsCopy = angular.copy(params);
           paramsCopy.condition = cond;
           halfResource.findItems(paramsCopy, handleSuccessFirstPage, handleFailureFirstPage);
-          $rootScope.$broadcast('halfService.findItems.call.request');
-        });
+          this.updateProgress('call', 'request');
+        }, this);
       }
     };
 
@@ -115,7 +145,6 @@
    // =================================
     return {
       newQueryBatch: function () { return new HalfQueryBatch(); },
-      //findItems: half_findItems,
       bookConditions: function () { return conditions; },
       getValueForCondition: getValueForCondition,
       getListingMarginalShippingCost: getListingMarginalShippingCost
@@ -124,7 +153,6 @@
   }
 
   HalfService.$inject = [
-    '$rootScope',
     '$resource'
   ];
 
