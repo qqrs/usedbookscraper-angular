@@ -16,7 +16,8 @@
   <form>
     <label class="radio" ng-repeat="listing in sbook.listings">
       <br>
-      <input type="radio" ng-model="sbook.bestListing" ng-value="listing">
+      <input type="radio" ng-model="sbook.bestListing"
+          ng-value="listing" ng-change="onChange()">
       <small>
         <div>
           <a href="{{listing.half_item_url}}" target="_blank">

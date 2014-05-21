@@ -550,12 +550,9 @@
       $scope.showListings = value;
     };
 
-    $scope.$watch('sbook.bestListing', function (newval, oldval) {
-      if (newval !== oldval) {
-        console.log('bestListing changed');
-        $scope.$parent.updateOrderTotalCost();
-      }
-    });
+    $scope.onChange = function () {
+      $scope.$parent.updateOrderTotalCost();
+    };
   }
 
   SellerBookListingsCtrl.$inject = [
