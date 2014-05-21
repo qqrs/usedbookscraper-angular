@@ -406,49 +406,12 @@
         sellers = {},
         listings = BookScraperMaster.listings;
 
-    /*
-    var populateNewSeller = function (listing) {
-      var seller = {
-        name: listing.seller,
-        feedback_count: listing.feedback_count,
-        feedback_rating: listing.feedback_rating,
-        books: [],
-      };
-      return seller;
-    };
-    */
-
     BookScraperMaster.sellers = sellers;
 
     // for each listing, find or create seller, then add sellerbook to seller
     angular.forEach(listings, function (listing) {
-      var seller, 
-          sellerBook;
-
-      seller = BookScraperMaster.findOrCreateSeller(listing.seller, listing);
+      var seller = BookScraperMaster.findOrCreateSeller(listing.seller, listing);
       seller.addListing(listing);
-      /*
-      if (sellers.hasOwnProperty(listing.seller)) {
-        seller = sellers[listing.seller];
-      } else {
-        seller = populateNewSeller(listing);
-        sellers[listing.seller] = seller;
-      }
-      */
-
-      /*
-      sellerBook = _.find(seller.books, {book: listing.book});
-      if (!sellerBook) {
-        sellerBook = {
-          book: listing.book,
-          listings: [listing],
-          //bestListing: listing
-        };
-        seller.books.push(sellerBook);
-      } else {
-        sellerBook.listings.push(listing);
-      }
-      */
       // TODO: sort listings and choose actual best
     });
 
