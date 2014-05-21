@@ -406,6 +406,7 @@
         sellers = {},
         listings = BookScraperMaster.listings;
 
+    /*
     var populateNewSeller = function (listing) {
       var seller = {
         name: listing.seller,
@@ -415,19 +416,27 @@
       };
       return seller;
     };
+    */
 
     BookScraperMaster.sellers = sellers;
 
+    // for each listing, find or create seller, then add sellerbook to seller
     angular.forEach(listings, function (listing) {
       var seller, 
           sellerBook;
+
+      seller = BookScraperMaster.findOrCreateSeller(listing.seller, listing);
+      seller.addListing(listing);
+      /*
       if (sellers.hasOwnProperty(listing.seller)) {
         seller = sellers[listing.seller];
       } else {
         seller = populateNewSeller(listing);
         sellers[listing.seller] = seller;
       }
+      */
 
+      /*
       sellerBook = _.find(seller.books, {book: listing.book});
       if (!sellerBook) {
         sellerBook = {
@@ -439,6 +448,7 @@
       } else {
         sellerBook.listings.push(listing);
       }
+      */
       // TODO: sort listings and choose actual best
     });
 
@@ -511,6 +521,7 @@
   function SellerBooksCtrl($scope, $element, $attrs, $transclude, BookScraperMaster, HalfService) {
     $scope.marginalShippingCost = HalfService.getListingMarginalShippingCost;
 
+    // find total cost for order and identify base shipping cost book
     $scope.updateOrderTotalCost = function () {
       $scope.baseShippingBook = _.max($scope.seller.books, function (sbook) {
         return sbook.bestListing.shipping_cost;
