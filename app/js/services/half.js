@@ -109,8 +109,8 @@
         this.updateProgress('call', 'response');
       }.bind(this);
 
-      var handleFailureFirstPage = function(response) {
-        failureFn(response);
+      var handleFailureFirstPage = function(response, msg) {
+        failureFn(response, msg);
         this.updateProgress('call', 'response');
       }.bind(this);
 
@@ -119,8 +119,8 @@
         this.updateProgress('page', 'response');
       }.bind(this);
 
-      var handleFailureOtherPage = function(response) {
-        failureFn(response);
+      var handleFailureOtherPage = function(response, msg) {
+        failureFn(response, msg);
         this.updateProgress('page', 'response');
       }.bind(this);
 
@@ -140,39 +140,39 @@
       }
     };
 
-   // =================================
-   // Half service exposed methods
-   // =================================
+    // =================================
+    // Testing
+    // =================================
+    // Simulate HTTP failures for one in three requests.
+    /*
+    (function () {
+      var fn = halfResource.findItems,
+          count = 0;
+      halfResource.findItems = function (params, successFn, failureFn) {
+        count += 1;
+        if (count % 3 === 0) {
+          setTimeout(function(){
+            failureFn({}, 'HalfServiceTest mock error')
+          }, _.random(500, 2000));
+        } else {
+          fn.apply(this, arguments);
+        }
+      };
+    }());
+    */
+
+    // =================================
+    // Half service exposed methods
+    // =================================
     return {
       newQueryBatch: function () { return new HalfQueryBatch(); },
       bookConditions: function () { return conditions; },
       getValueForCondition: getValueForCondition,
       getListingMarginalShippingCost: getListingMarginalShippingCost
     };
-
   }
 
-  HalfService.$inject = [
-    '$resource'
-  ];
-
-
-  /*
-  // Simulate HTTP failures for one in three requests.
-  var XisbnApiTest = function XisbnServiceTest() {
-    var service = XisbnApi.apply(this, arguments),
-        fn = service.getEditions;
-    service.getEditions = function(isbn, successFn, failureFn) {
-      _.sample([fn, fn, function() {
-        (failureFn || _.noop)({}, 'XisbnApiTest mock error');
-      }]).apply(this, arguments);
-    };
-    return service;
-  }
-
-  XisbnApi.$inject = ['$resource', '$cacheFactory', '$log'];
-  XisbnApiTest.$inject = XisbnApi.$inject;
-  */
+  HalfService.$inject = ['$resource'];
 
   angular.module('ubsApp.services.half', ['ngResource'])
     .factory('HalfService', HalfService);

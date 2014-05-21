@@ -316,7 +316,7 @@
 
 // =============================================================================
 
-  function ListingsCtrl($scope, $rootScope, $location, BookScraperMaster, HalfService) {
+  function ListingsCtrl($scope, $rootScope, $location, $log, BookScraperMaster, HalfService) {
     var books = BookScraperMaster.selected_books;
     var editions = BookScraperMaster.editions;
     var selection = BookScraperMaster.edition_selections;
@@ -372,11 +372,11 @@
             Array.prototype.push.apply(ed.listings, ed_listings);
             console.log(BookScraperMaster);
           },
-          function failureFn(response) {
+          function failureFn(response, msg) {
             // TODO: better error msg
             $rootScope.$broadcast('errorAlerts.addAlert',
-              'half.com item lookup error: try again or continue with partial results');
-            $log.warn('XisbnApi request failed: ' + msg);
+              'half.com item lookup error: continuing with partial results');
+            $log.warn('half.com request failed: ' + msg);
           }
         );
       });
@@ -394,6 +394,7 @@
     '$scope',
     '$rootScope',
     '$location',
+    '$log',
     'BookScraperMaster',
     'HalfService'
   ];
