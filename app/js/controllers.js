@@ -417,29 +417,40 @@
 
     // TODO: use Array.sort and compare a/b instead of sort key
     // TODO: account for year, -listing.edition.year
+    /*
     var sellerBookListingsSortKey = function (listing) {
       var cond = HalfService.getValueForCondition(listing.condition),
           ship_cost = HalfService.getListingMarginalShippingCost(listing),
           cost = listing.price + ship_cost;
       return (cost - (0.5 * cond));
     };
+    */
+    /*
     var sellerBooksScore = function (sbook) {
       return sbook.book.options.desirability;
     };
+    */
+    /*
     var sellerBooksSortKey = function (sbook) {
       //return _.contains(sbook.book.shelves, 'coffee-table') ? 1 : 0;
       return -sellerBooksScore(sbook);
     };
+    */
 
+    // for each seller, sort seller book listings for each seller book,
+    // find best listing for each seller book, sort seller books, and calculate
+    // score for seller books
     _.each(sellers, function (seller) {
-      var score = 0.0;
-      _.each(seller.books, function (book) {
-        book.listings = _.sortBy(book.listings, sellerBookListingsSortKey);
-        book.bestListing = book.listings[0];
-        score += sellerBooksScore(book);
-      });
-      seller.booksScore = score;
-      seller.books = _.sortBy(seller.books, sellerBooksSortKey);
+      seller.sortBooks();
+      seller.updateScore();
+      //var score = 0.0;
+      //_.each(seller.books, function (book) {
+        //book.listings = _.sortBy(book.listings, sellerBookListingsSortKey);
+        //book.bestListing = book.listings[0];
+        //score += sellerBooksScore(book);
+      //});
+      //seller.booksScore = score;
+      //seller.books = _.sortBy(seller.books, sellerBooksSortKey);
     });
 
     /*

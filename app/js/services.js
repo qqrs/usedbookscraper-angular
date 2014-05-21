@@ -5,7 +5,7 @@
 (function() {
 
   //TODO: make sure this gets reset to defaults when starting over
-  function BookScraperMaster() {
+  function BookScraperMaster(HalfService) {
     function BookScraperSession() {
       angular.extend(this, {
 
@@ -41,6 +41,7 @@
 
     var session = new BookScraperSession();
 
+
     function Seller(listing) {
       this.name = listing.seller;
       this.feedback_count = listing.feedback_count;
@@ -57,17 +58,53 @@
       sellerBook.listings.push(listing);
     };
 
+    Seller.prototype.sortBooks = function() {
+      _.each(this.books, function (book) {
+        book.sortListings();
+      });
+      this.books = _.sortBy(this.books, function (sbook) {
+        return -sbook.getScore();
+      });
+    };
+
+    Seller.prototype.updateScore = function() {
+      var score = 0.0;
+      _.each(this.books, function (book) {
+        score += book.getScore();
+      });
+      this.booksScore = score;
+    };
+
+
     function SellerBook(book) {
       this.book = book;
       this.listings = [];
-      //bestListing: listing
+      this.bestListing = null;
     }
+
+    SellerBook.prototype.getScore = function() {
+      return this.book.options.desirability;
+    };
+
+    SellerBook.prototype.sortListings = function() {
+      // TODO: use Array.sort and compare a/b instead of sort key
+      // TODO: account for year, -listing.edition.year
+      var sellerBookListingsSortKey = function (listing) {
+        var cond = HalfService.getValueForCondition(listing.condition),
+            ship_cost = HalfService.getListingMarginalShippingCost(listing),
+            cost = listing.price + ship_cost;
+        return (cost - (0.5 * cond));
+      };
+      this.listings = _.sortBy(this.listings, sellerBookListingsSortKey);
+      this.bestListing = this.listings[0];
+    };
 
     return session;
 
   }
 
   BookScraperMaster.$inject = [
+    'HalfService'
   ];
 
 // =============================================================================
