@@ -2,9 +2,6 @@
 
 (function() {
 
-
-  //TODO: caching
-  //TODO: move progress handling into this module and create a HalfQueryBatch
   function HalfService($resource) {
 
    // =================================
@@ -83,8 +80,6 @@
         this.completionCallback();
       }
     };
-
-    // TODO: refactor and add failure handler
 
     // HalfQueryBatch.findItems -- request first page and queue additional
     // requests for more pages and better book conditions if needed
