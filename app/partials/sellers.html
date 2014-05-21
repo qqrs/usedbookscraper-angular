@@ -2,11 +2,11 @@
 
 <h1>results</h1><br>
 
-<div ng-show="!sellers.length">
+<div ng-show="!pagedSellers.length">
   <h4>No sellers found.</h4>
 </div>
 
-<div ng-hide="!sellers.length">
+<div ng-hide="!pagedSellers.length">
   <div ubs-pager pager-num-pages="pagedSellers.length" 
     pager-per-page="perPage" pager-current-page="currentPage"></div>
 

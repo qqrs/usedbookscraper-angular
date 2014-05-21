@@ -401,55 +401,33 @@
 
 // =============================================================================
 
-  function SellersCtrl($scope, BookScraperMaster, HalfService) {
-    var bookIndex,
-        sellers = {},
-        listings = BookScraperMaster.listings;
+  function SellersCtrl($scope, BookScraperMaster) {
+    var sellers,
+        pageBreaks;
 
-    BookScraperMaster.sellers = sellers;
-
-    // for each listing, find or create seller, then add sellerbook to seller
-    angular.forEach(listings, function (listing) {
-      var seller = BookScraperMaster.findOrCreateSeller(listing.seller, listing);
-      seller.addListing(listing);
-    });
-
-    _.each(sellers, function (seller) {
-      seller.sortBooks();
-      seller.updateScore();
-    });
-
-    $scope.sellers = _.chain(sellers)
-      .toArray()
-      .sortBy(function (seller) {
-        return -seller.booksScore;
-      }).value();
+    BookScraperMaster.buildSellersFromListings();
+    sellers = BookScraperMaster.getSortedSellers();
 
     // build paginated sellers array
     $scope.currentPage = 0;
     $scope.perPage = 20;
-    $scope.pagedSellers = _.map(
-      _.range(0, $scope.sellers.length, $scope.perPage), 
-      function (start) {
-        return $scope.sellers.slice(start, start + $scope.perPage);
-      }
-    );
+    pageBreaks = _.range(0, sellers.length, $scope.perPage);
+    $scope.pagedSellers = _.map(pageBreaks, function (pageStart) {
+      return sellers.slice(pageStart, pageStart + $scope.perPage);
+    });
 
-    console.log('BookScraperMaster');
     console.log(BookScraperMaster);
-    console.log($scope.sellers);
     console.log($scope.pagedSellers);
   }
 
   SellersCtrl.$inject = [
     '$scope',
-    'BookScraperMaster',
-    'HalfService'
+    'BookScraperMaster'
   ];
 
 // =============================================================================
 
-  function SellerBooksCtrl($scope, $element, $attrs, $transclude, BookScraperMaster, HalfService) {
+  function SellerBooksCtrl($scope, HalfService) {
     $scope.marginalShippingCost = HalfService.getListingMarginalShippingCost;
 
     // find total cost for order and identify base shipping cost book
@@ -461,7 +439,7 @@
 
       // order total = books cost + base ship + marginal ship of other books
       $scope.orderTotalCost = $scope.baseShippingCost;
-      _.forEach($scope.seller.books, function (sbook) {
+      _.each($scope.seller.books, function (sbook) {
         $scope.orderTotalCost += sbook.bestListing.price;
         if ($scope.baseShippingBook !== sbook) {
           $scope.orderTotalCost += 
@@ -477,10 +455,6 @@
 
   SellerBooksCtrl.$inject = [
     '$scope',
-    '$element',
-    '$attrs',
-    '$transclude',
-    'BookScraperMaster',
     'HalfService'
   ];
 

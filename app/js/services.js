@@ -39,6 +39,29 @@
       return this.sellers[name];
     };
 
+    BookScraperSession.prototype.buildSellersFromListings = function() {
+      this.sellers = {};
+
+      _.each(this.listings, function (listing) {
+        var seller = this.findOrCreateSeller(listing.seller, listing);
+        seller.addListing(listing);
+      }, this);
+
+      _.each(this.sellers, function (seller) {
+        seller.sortBooks();
+        seller.updateScore();
+      });
+    };
+
+    BookScraperSession.prototype.getSortedSellers = function() {
+      // TODO: incorporate price as tiebreaker
+      return _.chain(this.sellers)
+        .toArray()
+        .sortBy(function (seller) {
+          return -seller.booksScore;
+        }).value();
+    };
+
     var session = new BookScraperSession();
 
 
