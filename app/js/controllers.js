@@ -317,13 +317,7 @@
 // =============================================================================
 
   function ListingsCtrl($scope, $rootScope, $location, $log, BookScraperMaster, HalfService) {
-    var books = BookScraperMaster.selected_books;
-    //var editions = BookScraperMaster.editions;
-    //var selection = BookScraperMaster.edition_selections;
-    //var listings = [];
-
-    //BookScraperMaster.listings = listings;
-    $scope.books = books;
+    $scope.books = BookScraperMaster.selected_books;
 
     // TODO: cancel requests if leaving controller
 

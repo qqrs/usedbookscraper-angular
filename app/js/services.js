@@ -43,14 +43,10 @@
         book.listings = [];
         angular.forEach(book.editions, function (ed, ed_index) {
           if (!selection[book_index][ed_index]) {
-            console.log('         ed.isbn: ' + ed.isbn + '; book_index: ' + book_index + '; ed_index: ' + ed_index);
             return;
           }
-          console.log('selected ed.isbn: ' + ed.isbn + '; book_index: ' + book_index + '; ed_index: ' + ed_index);
           ed.listings = [];
           half.findItems(
-            //{isbn: ed.isbn, page: '1', condition: 'Good', maxprice: 4.00},
-            //{isbn: ed.isbn, page: '1', condition: 'Good', maxprice: ((book.author === "Lauren Slater") ? 8.00 : 4.00)},
             // TODO: maxprice safe if user enters non-number?
             {isbn: ed.isbn, page: '1', condition: book.options.condition, maxprice: book.options.maxprice},
             function successFn(response) {
