@@ -66,24 +66,17 @@
     };
 
     var handleFetchListingsSuccess = function(book, ed, listings, response) {
+      // save edition-level properties
       ed.half_title = ed.half_title || response.title;
       ed.half_image_url = ed.half_image_url || response.image;
-      var ed_listings = _.filter(response.items, function (listing) {
-        if (book.options.excludeLibrary &&
-            /library/i.test(listing.comments)) {
-          console.log('excluding library');
-          console.log(listing);
-          return false;
-        }
-        if (book.options.excludeCliffsNotes &&
-            /cliff'?s? notes?/i.test(listing.comments)) {
-          console.log('excluding cliffs notes');
-          console.log(listing);
-          return false;
-        }
-        return true;
-      });
-      angular.forEach(ed_listings, function(el) {
+
+      // filter undesireable listings
+      var ed_listings = _.filter(response.items,
+        //TODO: book.checkFilterListing
+        Book.prototype.checkFilterListing.bind(book)
+      );
+
+      _.each(ed_listings, function(el) {
         el.book = book;
         el.edition = ed;
       });
@@ -132,6 +125,27 @@
     };
 
     var session = new BookScraperSession();
+
+    // ========================================
+
+    function Book() {
+    }
+
+    Book.prototype.checkFilterListing = function(listing) {
+      if (this.options.excludeLibrary &&
+          /library/i.test(listing.comments)) {
+        console.log('excluding library');
+        console.log(listing);
+        return false;
+      }
+      if (this.options.excludeCliffsNotes &&
+          /cliff'?s? notes?/i.test(listing.comments)) {
+        console.log('excluding cliffs notes');
+        console.log(listing);
+        return false;
+      }
+      return true;
+    };
 
     // ========================================
 
