@@ -88,6 +88,9 @@
           paramsCopy,
           i;
 
+      successFn = successFn || angular.noop;
+      failureFn = failureFn || angular.noop;
+
       // call success callback and run additional requests for subsequent pages
       var handleSuccessFirstPage = function(data) {
         var paramsCopy,

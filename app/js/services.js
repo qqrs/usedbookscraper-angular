@@ -32,8 +32,9 @@
       });
     }
 
-    BookScraperSession.prototype.fetchListings = function(half) {
-      var books = this.selected_books,
+    BookScraperSession.prototype.fetchListings = function(handleCompletion, handleFailure) {
+      var half = HalfService.newQueryBatch(),
+          books = this.selected_books,
           editions = this.editions,
           selection = this.edition_selections,
           listings = this.listings = [],
@@ -59,10 +60,13 @@
           half.findItems(
             params,
             handleFetchListingsSuccess.bind(null, book, ed, listings),
-            handleFetchListingsFailure
+            handleFailure
           );
         });
       });
+
+      half.registerCompletionCallback(handleCompletion);
+      return half.progress;
     };
 
     var handleFetchListingsSuccess = function(book, ed, listings, response) {
@@ -83,15 +87,6 @@
       Array.prototype.push.apply(listings, ed_listings);
       Array.prototype.push.apply(book.listings, ed_listings);
       Array.prototype.push.apply(ed.listings, ed_listings);
-    };
-
-    var handleFetchListingsFailure = function(response, msg) {
-      // TODO: move back to controller
-      // TODO: better error msg
-      // TODO: need to inject $rootScope
-      //$rootScope.$broadcast('errorAlerts.addAlert',
-        //'half.com item lookup error: continuing with partial results');
-      $log.warn('half.com request failed: ' + msg);
     };
 
     BookScraperSession.prototype.findOrCreateSeller = function(name, listing) {

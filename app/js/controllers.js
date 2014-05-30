@@ -319,20 +319,21 @@
   function ListingsCtrl($scope, $rootScope, $location, $log, BookScraperMaster, HalfService) {
     $scope.books = BookScraperMaster.selected_books;
 
-    // TODO: cancel requests if leaving controller
-
-    var half = HalfService.newQueryBatch();
-    $scope.apiRequestProgress = half.progress;
-
-    BookScraperMaster.fetchListings(half);
-
-    half.registerCompletionCallback(function () {
-      $scope.finishLoading();
-    });
-
-    $scope.finishLoading = function () {
+    var finishLoading = function () {
       $location.path('/sellers');
     };
+    var handleFetchListingsFailure = function(response, msg) {
+      // TODO: better error msg
+      $rootScope.$broadcast('errorAlerts.addAlert',
+        'half.com item lookup error: continuing with partial results');
+      $log.warn('half.com request failed: ' + msg);
+    };
+
+    // TODO: cancel requests if leaving controller
+    $scope.apiRequestProgress = BookScraperMaster.fetchListings(
+      finishLoading,
+      handleFetchListingsFailure
+    );
   }
 
   ListingsCtrl.$inject = [
