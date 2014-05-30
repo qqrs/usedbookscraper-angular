@@ -64,6 +64,20 @@
 
     var session = new BookScraperSession();
 
+    // ========================================
+
+    function Edition() {
+    }
+
+    Edition.prototype.addListing = function(listing, options) {
+      // filter library and cliffs
+
+      // set listing.book and listing.ed
+
+      // push to ed.listings, book.listings, session.listings
+    };
+
+    // ========================================
 
     function Seller(listing) {
       this.name = listing.seller;
@@ -98,6 +112,7 @@
       this.booksScore = score;
     };
 
+    // ========================================
 
     function SellerBook(book) {
       this.book = book;
