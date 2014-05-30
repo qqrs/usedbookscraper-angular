@@ -129,14 +129,10 @@
     Book.prototype.checkFilterListing = function(listing) {
       if (this.options.excludeLibrary &&
           /library/i.test(listing.comments)) {
-        console.log('excluding library');
-        console.log(listing);
         return false;
       }
       if (this.options.excludeCliffsNotes &&
           /cliff'?s? notes?/i.test(listing.comments)) {
-        console.log('excluding cliffs notes');
-        console.log(listing);
         return false;
       }
       return true;
