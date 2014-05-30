@@ -36,19 +36,28 @@
       var books = this.selected_books,
           editions = this.editions,
           selection = this.edition_selections,
-          listings = this.listings = [];
+          listings = this.listings = [],
+          params;
 
       // get Half.com listings for each edition of each book
-      angular.forEach(books, function (book, book_index) {
+      _.each(books, function (book, book_index) {
         book.listings = [];
-        angular.forEach(book.editions, function (ed, ed_index) {
+        _.each(book.editions, function (ed, ed_index) {
+          // skip unselected book editions
           if (!selection[book_index][ed_index]) {
             return;
           }
+
           ed.listings = [];
-          half.findItems(
+          params = {
+            isbn: ed.isbn,
+            page: '1',
+            condition: book.options.condition,
             // TODO: maxprice safe if user enters non-number?
-            {isbn: ed.isbn, page: '1', condition: book.options.condition, maxprice: book.options.maxprice},
+            maxprice: book.options.maxprice
+          };
+          half.findItems(
+            params,
             handleFetchListingsSuccess.bind(null, book, ed, listings),
             handleFetchListingsFailure
           );
