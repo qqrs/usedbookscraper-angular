@@ -32,6 +32,64 @@
       });
     }
 
+    BookScraperSession.prototype.fetchListings = function(half) {
+      var books = this.selected_books,
+          editions = this.editions,
+          selection = this.edition_selections,
+          listings = this.listings = [];
+
+      // get Half.com listings for each edition of each book
+      angular.forEach(books, function (book, book_index) {
+        book.listings = [];
+        angular.forEach(book.editions, function (ed, ed_index) {
+          if (!selection[book_index][ed_index]) {
+            console.log('         ed.isbn: ' + ed.isbn + '; book_index: ' + book_index + '; ed_index: ' + ed_index);
+            return;
+          }
+          console.log('selected ed.isbn: ' + ed.isbn + '; book_index: ' + book_index + '; ed_index: ' + ed_index);
+          ed.listings = [];
+          half.findItems(
+            //{isbn: ed.isbn, page: '1', condition: 'Good', maxprice: 4.00},
+            //{isbn: ed.isbn, page: '1', condition: 'Good', maxprice: ((book.author === "Lauren Slater") ? 8.00 : 4.00)},
+            // TODO: maxprice safe if user enters non-number?
+            {isbn: ed.isbn, page: '1', condition: book.options.condition, maxprice: book.options.maxprice},
+            function successFn(response) {
+              ed.half_title = ed.half_title || response.title;
+              ed.half_image_url = ed.half_image_url || response.image;
+              var ed_listings = _.filter(response.items, function (listing) {
+                if (book.options.excludeLibrary &&
+                    /library/i.test(listing.comments)) {
+                  console.log('excluding library');
+                  console.log(listing);
+                  return false;
+                }
+                if (book.options.excludeCliffsNotes &&
+                    /cliff'?s? notes?/i.test(listing.comments)) {
+                  console.log('excluding cliffs notes');
+                  console.log(listing);
+                  return false;
+                }
+                return true;
+              });
+              angular.forEach(ed_listings, function(el) {
+                el.book = book;
+                el.edition = ed;
+              });
+              Array.prototype.push.apply(listings, ed_listings);
+              Array.prototype.push.apply(book.listings, ed_listings);
+              Array.prototype.push.apply(ed.listings, ed_listings);
+            },
+            function failureFn(response, msg) {
+              // TODO: better error msg
+              $rootScope.$broadcast('errorAlerts.addAlert',
+                'half.com item lookup error: continuing with partial results');
+              $log.warn('half.com request failed: ' + msg);
+            }
+          );
+        });
+      });
+    };
+
     BookScraperSession.prototype.findOrCreateSeller = function(name, listing) {
       if (!this.sellers.hasOwnProperty(name)) {
         this.sellers[name] = new Seller(listing);
