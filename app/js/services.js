@@ -5,7 +5,7 @@
 (function() {
 
   //TODO: make sure this gets reset to defaults when starting over
-  function BookScraperMaster(HalfService) {
+  function BookScraperMaster($log, HalfService) {
     function BookScraperSession() {
       angular.extend(this, {
 
@@ -49,41 +49,47 @@
           half.findItems(
             // TODO: maxprice safe if user enters non-number?
             {isbn: ed.isbn, page: '1', condition: book.options.condition, maxprice: book.options.maxprice},
-            function successFn(response) {
-              ed.half_title = ed.half_title || response.title;
-              ed.half_image_url = ed.half_image_url || response.image;
-              var ed_listings = _.filter(response.items, function (listing) {
-                if (book.options.excludeLibrary &&
-                    /library/i.test(listing.comments)) {
-                  console.log('excluding library');
-                  console.log(listing);
-                  return false;
-                }
-                if (book.options.excludeCliffsNotes &&
-                    /cliff'?s? notes?/i.test(listing.comments)) {
-                  console.log('excluding cliffs notes');
-                  console.log(listing);
-                  return false;
-                }
-                return true;
-              });
-              angular.forEach(ed_listings, function(el) {
-                el.book = book;
-                el.edition = ed;
-              });
-              Array.prototype.push.apply(listings, ed_listings);
-              Array.prototype.push.apply(book.listings, ed_listings);
-              Array.prototype.push.apply(ed.listings, ed_listings);
-            },
-            function failureFn(response, msg) {
-              // TODO: better error msg
-              $rootScope.$broadcast('errorAlerts.addAlert',
-                'half.com item lookup error: continuing with partial results');
-              $log.warn('half.com request failed: ' + msg);
-            }
+            handleFetchListingsSuccess.bind(null, book, ed, listings),
+            handleFetchListingsFailure
           );
         });
       });
+    };
+
+    var handleFetchListingsSuccess = function(book, ed, listings, response) {
+      ed.half_title = ed.half_title || response.title;
+      ed.half_image_url = ed.half_image_url || response.image;
+      var ed_listings = _.filter(response.items, function (listing) {
+        if (book.options.excludeLibrary &&
+            /library/i.test(listing.comments)) {
+          console.log('excluding library');
+          console.log(listing);
+          return false;
+        }
+        if (book.options.excludeCliffsNotes &&
+            /cliff'?s? notes?/i.test(listing.comments)) {
+          console.log('excluding cliffs notes');
+          console.log(listing);
+          return false;
+        }
+        return true;
+      });
+      angular.forEach(ed_listings, function(el) {
+        el.book = book;
+        el.edition = ed;
+      });
+      Array.prototype.push.apply(listings, ed_listings);
+      Array.prototype.push.apply(book.listings, ed_listings);
+      Array.prototype.push.apply(ed.listings, ed_listings);
+    };
+
+    var handleFetchListingsFailure = function(response, msg) {
+      // TODO: move back to controller
+      // TODO: better error msg
+      // TODO: need to inject $rootScope
+      //$rootScope.$broadcast('errorAlerts.addAlert',
+        //'half.com item lookup error: continuing with partial results');
+      $log.warn('half.com request failed: ' + msg);
     };
 
     BookScraperSession.prototype.findOrCreateSeller = function(name, listing) {
@@ -196,6 +202,7 @@
   }
 
   BookScraperMaster.$inject = [
+    '$log',
     'HalfService'
   ];
 
