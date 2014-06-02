@@ -5,7 +5,7 @@
 (function() {
 
   //TODO: make sure this gets reset to defaults when starting over
-  function BookScraperMaster($log, HalfService) {
+  function BookScraperMaster($log, GoodreadsApi, HalfService) {
     function BookScraperSession() {
       angular.extend(this, {
 
@@ -31,6 +31,30 @@
 
       });
     }
+
+    BookScraperSession.prototype.fetchShelfBooks = function(handleCompletion, handleFailure) {
+      var books = this.books = [],
+          remainingRequests = 0;
+
+      // get book isbns for each shelf using GoodreadsApi
+      _.each(this.goodreadsSelectedShelves, function(shelf) {
+        remainingRequests++;
+        GoodreadsApi.getBooks(
+          this.goodreadsUserId,
+          shelf.name,
+          function successFn(shelf_books) {
+            _.each(shelf_books, function(book) {
+              books.push(new Book(book));
+            });
+            remainingRequests--;
+            if (remainingRequests === 0) {
+              handleCompletion();
+            }
+          },
+          handleFailure
+        );
+      }, this);
+    };
 
     BookScraperSession.prototype.fetchListings = function(handleCompletion, handleFailure) {
       var half = HalfService.newQueryBatch(),
@@ -123,7 +147,8 @@
 
     // ========================================
 
-    function Book() {
+    function Book(book) {
+      angular.extend(this, book);
     }
 
     Book.prototype.checkFilterListing = function(listing) {
@@ -140,6 +165,7 @@
 
     // ========================================
 
+    /*
     function Edition() {
     }
 
@@ -150,6 +176,7 @@
 
       // push to ed.listings, book.listings, session.listings
     };
+    */
 
     // ========================================
 
@@ -217,6 +244,7 @@
 
   BookScraperMaster.$inject = [
     '$log',
+    'GoodreadsApi',
     'HalfService'
   ];
 
