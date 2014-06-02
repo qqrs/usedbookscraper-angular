@@ -127,40 +127,10 @@
     };
 
     BookScraperMaster.fetchShelfBooks(finishLoading, failureFn);
-    /*
-    // get book isbns for each shelf using GoodreadsApi
-    angular.forEach(BookScraperMaster.goodreadsSelectedShelves, function(shelf) {
-      $scope.remaining_requests++;
-      GoodreadsApi.getBooks(
-        BookScraperMaster.goodreadsUserId,
-        shelf.name,
-        function successFn(shelf_books) {
-          Array.prototype.push.apply(books, shelf_books);
-          $scope.remaining_requests--;
-        },
-        function failureFn(response, msg) {
-          $rootScope.$broadcast('errorAlerts.addAlert',
-            'error: unable to get goodreads shelf books -- wait and try again');
-          $log.error('GoodreadsApi request failed: ' + msg);
-          $scope.remaining_requests = -1;
-          $scope.loading = false;
-          $scope.failure = true;
-        }
-      );
-    });
-    */
-    /*
-    $scope.$watch('remaining_requests', function () {
-      if ($scope.remaining_requests === 0) {
-        $scope.finishLoading();
-      }
-    }, true);
-    */
 
     // TODO: remove duplicate books
     // TODO: sort results by author?
 
-    //BookScraperMaster.books = books;
     $scope.books = BookScraperMaster.books;
 
     $scope.desirabilityChoices = [
