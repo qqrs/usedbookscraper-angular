@@ -38,13 +38,15 @@
 
       // get book isbns for each shelf using GoodreadsApi
       _.each(this.goodreadsSelectedShelves, function(shelf) {
+        var options = this.book_options_defaults;
         remainingRequests++;
         GoodreadsApi.getBooks(
           this.goodreadsUserId,
           shelf.name,
           function successFn(shelf_books) {
             _.each(shelf_books, function(book) {
-              books.push(new Book(book));
+              //TODO: use the default options and only copy as needed
+              books.push(new Book(book, angular.copy(options)));
             });
             remainingRequests--;
             if (remainingRequests === 0) {
@@ -147,8 +149,12 @@
 
     // ========================================
 
-    function Book(book) {
+    // TODO: book option master defaults
+    // TODO: per-shelf book options defaults
+    // TODO: per-book title search ("rule") options defaults
+    function Book(book, options) {
       angular.extend(this, book);
+      this.options = options;
     }
 
     Book.prototype.checkFilterListing = function(listing) {

@@ -93,37 +93,22 @@
 
   function BooksCtrl($scope, $rootScope, $location, $timeout, $log,
                       BookScraperMaster, GoodreadsApi, HalfService) {
-    //var books = [];
-
-    //console.log(BookScraperMaster);
-
     $scope.loading = true;
     $scope.failure = false;
-    $scope.remaining_requests = 0;
+    $scope.bookConditions = HalfService.bookConditions();
 
-    var failureFn = function(response, msg) {
-      $rootScope.$broadcast('errorAlerts.addAlert',
-        'error: unable to get goodreads shelf books -- wait and try again');
-      $log.error('GoodreadsApi request failed: ' + msg);
-      $scope.remaining_requests = -1;
-      $scope.loading = false;
-      $scope.failure = true;
-    };
     var finishLoading = function () {
-      // TODO: book option master defaults
-      // TODO: per-shelf book options defaults
-      // TODO: per-book filter settings: max price, condition, exclude library and cliffs notes, desirability weight (must-have, normal, add-on only)
-      // per-book search/filter options defaults
-      // TOOD: move to service
-      _.forEach(BookScraperMaster.books, function (book) {
-        //TODO: use the default options and only copy as needed
-        book.options = angular.copy(BookScraperMaster.book_options_defaults);
-      });
-      $scope.bookConditions = HalfService.bookConditions();
       $scope.setAllSelections(true);
       $scope.loading = false;
       // TODO: testing: continue with all books selected
       //$timeout(function () {$scope.submitSelectedBooks($scope.selected_books);});
+    };
+    var failureFn = function(response, msg) {
+      $rootScope.$broadcast('errorAlerts.addAlert',
+        'error: unable to get goodreads shelf books -- wait and try again');
+      $log.error('GoodreadsApi request failed: ' + msg);
+      $scope.loading = false;
+      $scope.failure = true;
     };
 
     BookScraperMaster.fetchShelfBooks(finishLoading, failureFn);
@@ -140,6 +125,7 @@
       ['Add-on', 0.1]
     ];
 
+    // TODO: create directive to handle select all/none functionality
     $scope.selection = [];
     $scope.setAllSelections = function (value) {
       $scope.selection = [];
