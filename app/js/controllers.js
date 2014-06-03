@@ -195,6 +195,7 @@
     $scope.loading = true;
     $scope.remaining_requests = 0;
 
+    // TODO: move to service
     if (isbnList !== null) {
       books = _.map(isbnList, function (isbn) {
         return {
