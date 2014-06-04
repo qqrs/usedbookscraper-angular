@@ -220,20 +220,6 @@
       this.book = book;
     }
 
-    Edition.prototype.sortKey = function() {
-      return ((-Number(this.year)) || 0);
-    };
-
-    /*
-    Edition.prototype.addListing = function(listing, options) {
-      // filter library and cliffs
-
-      // set listing.book and listing.ed
-
-      // push to ed.listings, book.listings, session.listings
-    };
-    */
-
     // ========================================
 
     function Seller(listing) {
