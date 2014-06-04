@@ -183,27 +183,9 @@
 // =============================================================================
 
   function EditionsCtrl($scope, $rootScope, $location, $log, BookScraperMaster) {
-    $scope.loading = true;
-
-    var finishLoading = function () {
-      $scope.setAllSelections(true);
-      $scope.loading = false;
-    };
-    var failureFn = function(response, msg) {
-      // TODO: better error msg
-      if (msg === 'invalidId') {
-        $rootScope.$broadcast('errorAlerts.addAlert',
-          'invalid isbn: fix query or continue with partial results');
-      } else {
-        $rootScope.$broadcast('errorAlerts.addAlert',
-          'editions lookup error: try again or continue with partial results');
-      }
-      $log.warn('XisbnApi request failed: ' + msg);
-    };
-    BookScraperMaster.fetchAltEditions(finishLoading, failureFn);
-
     var books = $scope.books = BookScraperMaster.selected_books;
-    $scope.editions = BookScraperMaster.editions;
+
+    $scope.loading = true;
 
     // TODO: create directive to handle select all/none functionality
     $scope.selection = [];
@@ -222,6 +204,24 @@
       var book = books[book_index];
       $scope.selection[book_index] = buildSelectionsForBook(book, value);
     }
+
+    var finishLoading = function () {
+      $scope.setAllSelections(true);
+      $scope.loading = false;
+    };
+    var failureFn = function(response, msg) {
+      // TODO: better error msg
+      if (msg === 'invalidId') {
+        $rootScope.$broadcast('errorAlerts.addAlert',
+          'invalid isbn: fix query or continue with partial results');
+      } else {
+        $rootScope.$broadcast('errorAlerts.addAlert',
+          'editions lookup error: try again or continue with partial results');
+      }
+      $log.warn('XisbnApi request failed: ' + msg);
+    };
+    BookScraperMaster.fetchAltEditions(finishLoading, failureFn);
+    $scope.editions = BookScraperMaster.editions;
 
     $scope.submitSelectedEditions = function (selection) {
       // TODO: error if too many books or editions
