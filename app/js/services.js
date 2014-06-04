@@ -5,7 +5,7 @@
 (function() {
 
   //TODO: make sure this gets reset to defaults when starting over
-  function BookScraperMaster($log, GoodreadsApi, HalfService) {
+  function BookScraperMaster($log, GoodreadsApi, XisbnApi, HalfService) {
     function BookScraperSession() {
       angular.extend(this, {
 
@@ -35,6 +35,9 @@
     BookScraperSession.prototype.fetchShelfBooks = function(handleCompletion, handleFailure) {
       var books = this.books = [],
           remainingRequests = 0;
+
+      handleCompletion = handleCompletion || angular.noop;
+      handleFailure = handleFailure || angular.noop;
 
       // get book isbns for each shelf using GoodreadsApi
       _.each(this.goodreadsSelectedShelves, function(shelf) {
@@ -66,6 +69,39 @@
         return new Book({isbn: isbn}, angular.copy(options));
       });
       this.selected_books = this.books;
+    };
+
+    BookScraperSession.prototype.fetchAltEditions = function(handleCompletion, handleFailure) {
+      var editions = this.editions = [],
+          remainingRequests = 0;
+
+      handleCompletion = handleCompletion || angular.noop;
+      handleFailure = handleFailure || angular.noop;
+
+      // get alternate editions for each book
+      _.each(this.selected_books, function(book) {
+        remainingRequests++;
+        XisbnApi.getEditions(book.isbn,
+          function successFn(book_editions) {
+            if (!book.title && book_editions.length) {
+              book.title = book_editions[0].title;
+              book.author = book_editions[0].author;
+            }
+            book.editions = _.chain(book_editions).map(function(ed) {
+              return new Edition(book, ed);
+            }).sortBy(book.editions, function (ed) {
+              return ((-Number(ed.year)) || 0);
+            }).value();
+            Array.prototype.push.apply(editions, book.editions);
+
+            remainingRequests--;
+            if (remainingRequests === 0) {
+              handleCompletion();
+            }
+          },
+          handleFailure
+        );
+      }, this);
     };
 
     BookScraperSession.prototype.fetchListings = function(handleCompletion, handleFailure) {
@@ -179,10 +215,16 @@
 
     // ========================================
 
-    /*
-    function Edition() {
+    function Edition(book, ed) {
+      angular.extend(this, ed);
+      this.book = book;
     }
 
+    Edition.prototype.sortKey = function() {
+      return ((-Number(this.year)) || 0);
+    };
+
+    /*
     Edition.prototype.addListing = function(listing, options) {
       // filter library and cliffs
 
@@ -259,6 +301,7 @@
   BookScraperMaster.$inject = [
     '$log',
     'GoodreadsApi',
+    'XisbnApi',
     'HalfService'
   ];
 

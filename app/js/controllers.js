@@ -186,18 +186,18 @@
     console.log(BookScraperMaster);
     var books = BookScraperMaster.selected_books;
     var isbnList = BookScraperMaster.isbnList;
-    var editions = [];
-    var editionSortFn;
+    //var editions = [];
+    //var editionSortFn;
 
-    BookScraperMaster.editions = editions;
-    $scope.editions = editions;
+    //BookScraperMaster.editions = editions;
+    //$scope.editions = editions;
     $scope.books = books;
 
     $scope.loading = true;
     $scope.remaining_requests = 0;
 
     // get alternate editions for each book
-    //TODO: add error handler to decrement remaining requests
+    /*
     angular.forEach(books, function (book) {
       $scope.remaining_requests++;
       XisbnApi.getEditions(book.isbn, function successFn(book_editions) {
@@ -228,11 +228,30 @@
         $scope.remaining_requests--;
       });
     });
+    */
+    BookScraperMaster.fetchAltEditions(function handleCompletion() {
+      finishLoading();
+    }, function failureFn(response, msg) {
+        // TODO: better error msg
+        if (msg === 'invalidId') {
+          $rootScope.$broadcast('errorAlerts.addAlert',
+            'invalid isbn: fix query or continue with partial results');
+        } else {
+          $rootScope.$broadcast('errorAlerts.addAlert',
+            'editions lookup error: try again or continue with partial results');
+        }
+        $log.warn('XisbnApi request failed: ' + msg);
+    });
+
+    $scope.editions = BookScraperMaster.editions;
+
+    /*
     $scope.$watch('remaining_requests', function () {
       if ($scope.remaining_requests === 0) {
         $scope.finishLoading();
       }
     }, true);
+    */
 
     $scope.selection = [];
     var buildSelectionsForBook = function (book, value) {
@@ -257,7 +276,7 @@
       $location.path('/listings');
     };
 
-    $scope.finishLoading = function () {
+    var finishLoading = function () {
       $scope.setAllSelections(true);
       $scope.loading = false;
     };
