@@ -182,77 +182,30 @@
 
 // =============================================================================
 
-  function EditionsCtrl($scope, $rootScope, $location, $log, BookScraperMaster, XisbnApi) {
-    console.log(BookScraperMaster);
-    var books = BookScraperMaster.selected_books;
-    var isbnList = BookScraperMaster.isbnList;
-    //var editions = [];
-    //var editionSortFn;
-
-    //BookScraperMaster.editions = editions;
-    //$scope.editions = editions;
-    $scope.books = books;
-
+  function EditionsCtrl($scope, $rootScope, $location, $log, BookScraperMaster) {
     $scope.loading = true;
-    $scope.remaining_requests = 0;
 
-    // get alternate editions for each book
-    /*
-    angular.forEach(books, function (book) {
-      $scope.remaining_requests++;
-      XisbnApi.getEditions(book.isbn, function successFn(book_editions) {
-        if (isbnList !== null && book_editions) {
-          book.title = book_editions[0].title;
-          book.author = book_editions[0].author;
-        }
+    var finishLoading = function () {
+      $scope.setAllSelections(true);
+      $scope.loading = false;
+    };
+    var failureFn = function(response, msg) {
+      // TODO: better error msg
+      if (msg === 'invalidId') {
+        $rootScope.$broadcast('errorAlerts.addAlert',
+          'invalid isbn: fix query or continue with partial results');
+      } else {
+        $rootScope.$broadcast('errorAlerts.addAlert',
+          'editions lookup error: try again or continue with partial results');
+      }
+      $log.warn('XisbnApi request failed: ' + msg);
+    };
+    BookScraperMaster.fetchAltEditions(finishLoading, failureFn);
 
-        book_editions = _.sortBy(book_editions, function (ed) {
-          return ((-Number(ed.year)) || 0);
-        });
-        book.editions = book_editions;
-        angular.forEach(book_editions, function(ed) { ed.book = book } );
-        Array.prototype.push.apply(editions, book_editions);
-        console.log(BookScraperMaster);
-        $scope.remaining_requests--;
-      },
-      function failureFn(response, msg) {
-        // TODO: better error msg
-        if (msg === 'invalidId') {
-          $rootScope.$broadcast('errorAlerts.addAlert',
-            'invalid isbn: fix query or continue with partial results');
-        } else {
-          $rootScope.$broadcast('errorAlerts.addAlert',
-            'editions lookup error: try again or continue with partial results');
-        }
-        $log.warn('XisbnApi request failed: ' + msg);
-        $scope.remaining_requests--;
-      });
-    });
-    */
-    BookScraperMaster.fetchAltEditions(function handleCompletion() {
-      finishLoading();
-    }, function failureFn(response, msg) {
-        // TODO: better error msg
-        if (msg === 'invalidId') {
-          $rootScope.$broadcast('errorAlerts.addAlert',
-            'invalid isbn: fix query or continue with partial results');
-        } else {
-          $rootScope.$broadcast('errorAlerts.addAlert',
-            'editions lookup error: try again or continue with partial results');
-        }
-        $log.warn('XisbnApi request failed: ' + msg);
-    });
-
+    var books = $scope.books = BookScraperMaster.selected_books;
     $scope.editions = BookScraperMaster.editions;
 
-    /*
-    $scope.$watch('remaining_requests', function () {
-      if ($scope.remaining_requests === 0) {
-        $scope.finishLoading();
-      }
-    }, true);
-    */
-
+    // TODO: create directive to handle select all/none functionality
     $scope.selection = [];
     var buildSelectionsForBook = function (book, value) {
       return _.map(book.editions, function (ed) {
@@ -275,11 +228,6 @@
       BookScraperMaster.edition_selections = selection;
       $location.path('/listings');
     };
-
-    var finishLoading = function () {
-      $scope.setAllSelections(true);
-      $scope.loading = false;
-    };
   }
 
   EditionsCtrl.$inject = [
@@ -287,8 +235,7 @@
     '$rootScope',
     '$location',
     '$log',
-    'BookScraperMaster',
-    'XisbnApi'
+    'BookScraperMaster'
   ];
 
 // =============================================================================
