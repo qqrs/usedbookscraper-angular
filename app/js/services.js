@@ -101,10 +101,7 @@
       ed.half_image_url = ed.half_image_url || response.image;
 
       // filter undesireable listings
-      var ed_listings = _.filter(response.items,
-        //TODO: book.checkFilterListing
-        Book.prototype.checkFilterListing.bind(book)
-      );
+      var ed_listings = _.filter(response.items, book.isListingExcluded, book);
 
       _.each(ed_listings, function(el) {
         el.book = book;
@@ -157,7 +154,7 @@
       this.options = options;
     }
 
-    Book.prototype.checkFilterListing = function(listing) {
+    Book.prototype.isListingExcluded = function(listing) {
       if (this.options.excludeLibrary &&
           /library/i.test(listing.comments)) {
         return false;
