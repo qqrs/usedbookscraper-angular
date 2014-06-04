@@ -58,6 +58,16 @@
       }, this);
     };
 
+    BookScraperSession.prototype.buildIsbnBooks = function(isbns) {
+      var options = this.book_options_defaults;
+
+      this.isbnList = isbns;
+      this.books = _.map(isbns, function (isbn) {
+        return new Book({isbn: isbn}, angular.copy(options));
+      });
+      this.selected_books = this.books;
+    };
+
     BookScraperSession.prototype.fetchListings = function(handleCompletion, handleFailure) {
       var half = HalfService.newQueryBatch(),
           books = this.selected_books,
@@ -150,6 +160,7 @@
     // TODO: per-shelf book options defaults
     // TODO: per-book title search ("rule") options defaults
     function Book(book, options) {
+      angular.extend(this, {isbn: null, title: null, author: null});
       angular.extend(this, book);
       this.options = options;
     }

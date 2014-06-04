@@ -35,7 +35,7 @@
 
     $scope.submitIsbnList = function (isbnText) {
       var isbnList = _.compact(isbnText.replace('-', '').split(/[,;\s]+/));
-      BookScraperMaster.isbnList = isbnList;
+      BookScraperMaster.buildIsbnBooks(isbnList);
       $location.path('/editions');
     }
   }
@@ -183,6 +183,7 @@
 // =============================================================================
 
   function EditionsCtrl($scope, $rootScope, $location, $log, BookScraperMaster, XisbnApi) {
+    console.log(BookScraperMaster);
     var books = BookScraperMaster.selected_books;
     var isbnList = BookScraperMaster.isbnList;
     var editions = [];
@@ -194,21 +195,6 @@
 
     $scope.loading = true;
     $scope.remaining_requests = 0;
-
-    // TODO: move to service
-    if (isbnList !== null) {
-      books = _.map(isbnList, function (isbn) {
-        return {
-          isbn: isbn,
-          title: null,
-          author: null,
-          options: BookScraperMaster.book_options_defaults
-        };
-      });
-      BookScraperMaster.books = books;
-      BookScraperMaster.selected_books = books;
-      $scope.books = books;
-    }
 
     // get alternate editions for each book
     //TODO: add error handler to decrement remaining requests
