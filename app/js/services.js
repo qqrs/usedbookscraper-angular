@@ -56,7 +56,13 @@
               handleCompletion();
             }
           },
-          handleFailure
+          function failureFn(response, msg) {
+            handleFailure(response, msg);
+            remainingRequests--;
+            if (remainingRequests === 0) {
+              handleCompletion();
+            }
+          }
         );
       }, this);
     };
@@ -99,7 +105,13 @@
               handleCompletion();
             }
           },
-          handleFailure
+          function failureFn(response, msg) {
+            handleFailure(response, msg);
+            remainingRequests--;
+            if (remainingRequests === 0) {
+              handleCompletion();
+            }
+          }
         );
       }, this);
     };
