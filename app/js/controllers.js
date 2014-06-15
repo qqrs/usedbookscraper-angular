@@ -184,7 +184,6 @@
 
     $scope.loading = true;
 
-    // TODO: create directive to handle select all/none functionality
     $scope.selection = [];
     var buildSelectionsForBook = function (book, value) {
       return _.map(book.editions, function (ed) {
