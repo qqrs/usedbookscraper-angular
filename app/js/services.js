@@ -48,8 +48,10 @@
           shelf.name,
           function successFn(shelf_books) {
             _.each(shelf_books, function(book) {
-              //TODO: use the default options and only copy as needed
-              books.push(new Book(book, angular.copy(options)));
+              if (book.isbn === null || !_.find(books, {isbn: book.isbn})) {
+                //TODO: use the default options and only copy as needed
+                books.push(new Book(book, angular.copy(options)));
+              }
             });
             remainingRequests--;
             if (remainingRequests === 0) {
