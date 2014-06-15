@@ -12,7 +12,7 @@
   </div>
 
   <div ng-hide="!books.length || failure">
-    <form ng-submit="submitSelectedBooks(selected_books)" ng-disabled="!books.length">
+    <form ng-submit="submitSelectedBooks()" ng-disabled="!books.length">
       <div>
         Select
         <a href="" ng-click="setAllSelections(true)">All</a> / 

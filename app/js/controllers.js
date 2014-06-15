@@ -93,11 +93,17 @@
 
   function BooksCtrl($scope, $rootScope, $location, $timeout, $log,
                       BookScraperMaster, GoodreadsApi, HalfService) {
+    var defaultSelection;
+
     $scope.loading = true;
     $scope.failure = false;
     $scope.bookConditions = HalfService.bookConditions();
 
     var finishLoading = function () {
+      // default selection includes all books with valid isbn
+      defaultSelection = _.map($scope.books, function(book) {
+        return (book.isbn !== null);
+      });
       $scope.setAllSelections(true);
       $scope.loading = false;
       // TODO: testing: continue with all books selected
@@ -114,7 +120,6 @@
     BookScraperMaster.fetchShelfBooks(finishLoading, failureFn);
 
     // TODO: remove duplicate books
-    // TODO: sort results by author?
 
     $scope.books = BookScraperMaster.books;
 
@@ -125,31 +130,25 @@
       ['Add-on', 0.1]
     ];
 
-    // TODO: create directive to handle select all/none functionality
     $scope.selection = [];
+
     $scope.setAllSelections = function (value) {
-      $scope.selection = [];
-      for (var i = 0; i < $scope.books.length; i++) {
-        if ($scope.books[i].isbn === null) {
-          $scope.selection.push(false);
-        } else {
-          $scope.selection.push(value);
-        }
+      if (value) {
+        $scope.selection = angular.copy(defaultSelection);
+      } else {
+        $scope.selection = _.map(defaultSelection, function() {return false;});
       }
     };
 
-    // update $scope.selected_books when selection changes
-    $scope.$watch('selection', function () {
-      $scope.selected_books = [];
-      angular.forEach($scope.selection, function (is_selected, index) {
-        if (is_selected && $scope.books[index].isbn !== null) {
-          $scope.selected_books.push($scope.books[index]);
-        }
+    $scope.submitSelectedBooks = function () {
+      BookScraperMaster.selected_books = _.filter($scope.books, function(book, i) {
+        return $scope.selection[i] && book.isbn !== null;
       });
-    }, true);
-
-    $scope.submitSelectedBooks = function (selected_books) {
-      BookScraperMaster.selected_books = selected_books;
+      if (!BookScraperMaster.selected_books.length) {
+        $rootScope.$broadcast('errorAlerts.addAlert',
+          'no books selected');
+        return;
+      }
       $location.path('/editions');
     };
 
