@@ -70,6 +70,7 @@
     BookScraperSession.prototype.buildIsbnBooks = function(isbns) {
       var options = this.book_options_defaults;
 
+      isbns = _.uniq(isbns);
       this.isbnList = isbns;
       this.books = _.map(isbns, function (isbn) {
         return new Book({isbn: isbn}, angular.copy(options));

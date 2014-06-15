@@ -119,8 +119,6 @@
 
     BookScraperMaster.fetchShelfBooks(finishLoading, failureFn);
 
-    // TODO: remove duplicate books
-
     $scope.books = BookScraperMaster.books;
 
     $scope.desirabilityChoices = [
