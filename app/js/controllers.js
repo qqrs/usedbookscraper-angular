@@ -372,7 +372,7 @@
 
 // =============================================================================
 
-  function ProgressTrackerCtrl($scope, $element, $attrs, $transclude, $location) {
+  function ProgressTrackerCtrl($scope, $rootScope, $location) {
     var splitPath,
         _steps;
 
@@ -383,7 +383,7 @@
     // set default path on app load or page reload
     $location.path('/' + _steps[0]);
 
-    $scope.$on('$routeChangeSuccess', function (event, current) {
+    $rootScope.$on('$routeChangeSuccess', function (event, current) {
       var splitPath,
           currentStep,
           isBeyondCurrent;
@@ -406,16 +406,14 @@
           href = '#' + step;
         }
 
-        return { 'name': step, 'sclass': sclass, 'href': href };
+        return {name: step, sclass: sclass, href: href};
       });
     });
   }
 
   ProgressTrackerCtrl.$inject = [
     '$scope',
-    '$element',
-    '$attrs',
-    '$transclude',
+    '$rootScope',
     '$location'
   ];
 
