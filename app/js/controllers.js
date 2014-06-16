@@ -57,7 +57,11 @@
 // =============================================================================
 
   function ShelvesCtrl($scope, $rootScope, $location, $log, BookScraperMaster, GoodreadsApi) {
-    console.log('ShelvesCtrl: ' + BookScraperMaster.goodreadsUserId);
+    if (!BookScraperMaster.goodreadsUserId) {
+      $location.path('/user');
+      return;
+    }
+
     $scope.selectedShelves = [];
     $scope.loading = true;
 
