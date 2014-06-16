@@ -65,32 +65,47 @@
       return;
     }
 
-    $scope.selectedShelves = [];
-    $scope.loading = true;
-
-    GoodreadsApi.getShelves(BookScraperMaster.goodreadsUserId,
-      function successFn(shelves) {
-        BookScraperMaster.shelves = shelves;
-        $scope.shelves = shelves;
-        $scope.finishLoading();
-      },
-      function failureFn(response, msg) {
-        $rootScope.$broadcast('errorAlerts.addAlert',
-          'error: unable to get goodreads shelves -- check user id/url');
-        $log.error('GoodreadsApi request failed: ' + msg);
+    var init = function() {
+      if (BookScraperMaster.shelves &&
+          BookScraperMaster.goodreadsSelectedShelves) {
+        // show previously loaded data on back-navigation
+        $scope.shelves = BookScraperMaster.shelves;
+        $scope.selectedShelves = BookScraperMaster.goodreadsSelectedShelves;
         $scope.loading = false;
+      } else {
+        $scope.selectedShelves = [];
+        $scope.shelves = null;
+        $scope.loading = true;
+        loadData();
       }
-    );
+    };
+    var loadData = function () {
+      GoodreadsApi.getShelves(BookScraperMaster.goodreadsUserId,
+        function successFn(shelves) {
+          BookScraperMaster.shelves = shelves;
+          $scope.shelves = shelves;
+          finishLoading();
+        },
+        function failureFn(response, msg) {
+          $rootScope.$broadcast('errorAlerts.addAlert',
+            'error: unable to get goodreads shelves -- check user id/url');
+          $log.error('GoodreadsApi request failed: ' + msg);
+          $scope.loading = false;
+        }
+      );
+    };
+    var finishLoading = function () {
+      $scope.loading = false;
+      // TODO: testing: select last shelf
+      //$scope.submitGoodreadsShelves([$scope.shelves[$scope.shelves.length - 1]]);
+    };
 
     $scope.submitGoodreadsShelves = function (shelves) {
       BookScraperMaster.goodreadsSelectedShelves = shelves;
       $location.path('/books');
     };
-    $scope.finishLoading = function () {
-      $scope.loading = false;
-      // TODO: testing: select last shelf
-      //$scope.submitGoodreadsShelves([$scope.shelves[$scope.shelves.length - 1]]);
-    };
+
+    init();
   }
 
   ShelvesCtrl.$inject = [
