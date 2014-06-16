@@ -46,6 +46,8 @@
     $scope.submitIsbnList = function (isbnText) {
       var isbnList = _.compact(isbnText.replace('-', '').split(/[,;\s]+/));
       BookScraperMaster.buildIsbnBooks(isbnList);
+      this.goodreadsUserId = null;
+      this.goodreadsSelectedShelves = null;
       $location.path('/editions');
     }
   }
