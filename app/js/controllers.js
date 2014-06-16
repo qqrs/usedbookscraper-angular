@@ -104,6 +104,8 @@
 
     $scope.submitGoodreadsShelves = function (shelves) {
       BookScraperMaster.goodreadsSelectedShelves = shelves;
+      BookScraperMaster.books = null;
+      BookScraperMaster.selected_books = null;
       $location.path('/books');
     };
 
@@ -124,48 +126,63 @@
 
   function BooksCtrl($scope, $rootScope, $location, $timeout, $log,
                       BookScraperMaster, GoodreadsApi, HalfService) {
-    var defaultSelection;
+    if (!BookScraperMaster.shelves ||
+        !BookScraperMaster.goodreadsSelectedShelves) {
+      $location.path('/shelves');
+      return;
+    }
 
-    $scope.loading = true;
-    $scope.failure = false;
-    $scope.bookConditions = HalfService.bookConditions();
+    var init = function() {
+      $scope.failure = false;
+      $scope.bookConditions = HalfService.bookConditions();
+      $scope.desirabilityChoices = [
+        ['Must-have', 10.0],
+        ['High', 3.0],
+        ['Normal', 1.0],
+        ['Add-on', 0.1]
+      ];
 
-    var finishLoading = function () {
-      // default selection includes all books with valid isbn
-      defaultSelection = _.map($scope.books, function(book) {
-        return (book.isbn !== null);
-      });
+      if (BookScraperMaster.books && BookScraperMaster.selected_books) {
+        // show previously loaded data on back-navigation
+        $scope.books = BookScraperMaster.books;
+        $scope.selection = _.map($scope.books, function(book) {
+          return !!_.find(BookScraperMaster.selected_books, book);
+        });
+        $scope.loading = false;
+      } else {
+        $scope.books = null;
+        $scope.selection = null;
+        $scope.loading = true;
+        loadData();
+      }
+    };
+    var loadData = function() {
+      var failureFn = function(response, msg) {
+        $rootScope.$broadcast('errorAlerts.addAlert',
+          'error: unable to get goodreads shelf books -- wait and try again');
+        $log.error('GoodreadsApi request failed: ' + msg);
+        $scope.loading = false;
+        $scope.failure = true;
+      };
+
+      BookScraperMaster.fetchShelfBooks(finishLoading, failureFn);
+    };
+    var finishLoading = function() {
+      $scope.books = BookScraperMaster.books;
       $scope.setAllSelections(true);
       $scope.loading = false;
       // TODO: testing: continue with all books selected
       //$timeout(function () {$scope.submitSelectedBooks($scope.selected_books);});
     };
-    var failureFn = function(response, msg) {
-      $rootScope.$broadcast('errorAlerts.addAlert',
-        'error: unable to get goodreads shelf books -- wait and try again');
-      $log.error('GoodreadsApi request failed: ' + msg);
-      $scope.loading = false;
-      $scope.failure = true;
-    };
-
-    BookScraperMaster.fetchShelfBooks(finishLoading, failureFn);
-
-    $scope.books = BookScraperMaster.books;
-
-    $scope.desirabilityChoices = [
-      ['Must-have', 10.0],
-      ['High', 3.0],
-      ['Normal', 1.0],
-      ['Add-on', 0.1]
-    ];
-
-    $scope.selection = [];
 
     $scope.setAllSelections = function (value) {
+      // only select books with valid isbn
       if (value) {
-        $scope.selection = angular.copy(defaultSelection);
+        $scope.selection = _.map($scope.books, function(book) {
+          return (book.isbn !== null);
+        });
       } else {
-        $scope.selection = _.map(defaultSelection, function() {return false;});
+        $scope.selection = _.map($scope.books, function() {return false;});
       }
     };
 
@@ -181,6 +198,7 @@
       $location.path('/editions');
     };
 
+    init();
   }
 
   BooksCtrl.$inject = [
