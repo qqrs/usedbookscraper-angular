@@ -6,6 +6,7 @@
 
   //TODO: make sure this gets reset to defaults when starting over
   //TODO: fix reload page and back button
+  //TODO: fix property name styling
   function BookScraperMaster($log, GoodreadsApi, XisbnApi, HalfService) {
     function BookScraperSession() {
       angular.extend(this, {
