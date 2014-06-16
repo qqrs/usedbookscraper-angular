@@ -9,6 +9,12 @@
     // TODO: for testing only
     $scope.goodreadsProfileUrl = 'http://www.goodreads.com/user/show/5123156-russ';
     $scope.isbnText = '0679736662, 9780393326550, 978-0618249060';
+    if (BookScraperMaster.goodreadsUserId) {
+      $scope.goodreadsProfileUrl = '' + BookScraperMaster.goodreadsUserId;
+    }
+    if (BookScraperMaster.isbnList) {
+      $scope.isbnText = BookScraperMaster.isbnList.join(', ');
+    }
 
     $scope.submitGoodreadsProfileUrl = function (profileUrl) {
       var userId = null,
@@ -30,6 +36,7 @@
       }
 
       BookScraperMaster.goodreadsUserId = parseInt(userId, 10);
+      BookScraperMaster.isbnList = null;
       $location.path('/shelves');
     };
 

@@ -79,6 +79,9 @@
         return new Book({isbn: isbn}, angular.copy(options));
       });
       this.selected_books = this.books;
+
+      this.goodreadsUserId = null;
+      this.goodreadsSelectedShelves = null;
     };
 
     BookScraperSession.prototype.fetchAltEditions = function(handleCompletion, handleFailure) {
