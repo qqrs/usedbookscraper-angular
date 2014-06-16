@@ -5,6 +5,9 @@
 (function() {
 
   // TODO: clear alerts message on every view change
+  // TODO: quickstart button
+  // TODO: delete unnecessary deps for all controllers
+  // TODO: function() styling
   function GoodreadsUserCtrl($scope, $rootScope, $location, BookScraperMaster) {
     // TODO: for testing only
     $scope.goodreadsProfileUrl = 'http://www.goodreads.com/user/show/5123156-russ';
