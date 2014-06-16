@@ -380,6 +380,9 @@
       'user', 'shelves', 'books', 'editions', 'listings', 'sellers'
     ];
 
+    // set default path on app load or page reload
+    $location.path('/' + _steps[0]);
+
     $scope.$on('$routeChangeSuccess', function (event, current) {
       var splitPath,
           currentStep,
