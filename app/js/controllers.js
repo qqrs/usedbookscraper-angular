@@ -187,6 +187,7 @@
     };
 
     $scope.submitSelectedBooks = function () {
+      // TODO: error if too many books or editions
       BookScraperMaster.selected_books = _.filter($scope.books, function(book, i) {
         return $scope.selection[i] && book.isbn !== null;
       });
@@ -195,6 +196,8 @@
           'no books selected');
         return;
       }
+      BookScraperMaster.editions = null;
+      BookScraperMaster.edition_selections = null;
       $location.path('/editions');
     };
 
@@ -229,11 +232,51 @@
 // =============================================================================
 
   function EditionsCtrl($scope, $rootScope, $location, $log, BookScraperMaster) {
-    var books = $scope.books = BookScraperMaster.selected_books;
+    var books;
 
-    $scope.loading = true;
+    if (!BookScraperMaster.books ||
+        !BookScraperMaster.selected_books) {
+      $location.path('/books');
+      return;
+    }
 
-    $scope.selection = [];
+    var init = function() {
+      books = $scope.books = BookScraperMaster.selected_books;
+      if (BookScraperMaster.editions && BookScraperMaster.edition_selections) {
+        // show previously loaded data on back-navigation
+        $scope.editions = BookScraperMaster.editions;
+        $scope.selection = BookScraperMaster.edition_selections;
+        $scope.loading = false;
+      } else {
+        $scope.editions = null;
+        _.each(books, function(book) {
+          book.editions = null;
+        });
+        $scope.selection = null;
+        $scope.loading = true;
+        loadData();
+      }
+    };
+    var loadData = function() {
+      var failureFn = function(response, msg) {
+        // TODO: better error msg
+        if (msg === 'invalidId') {
+          $rootScope.$broadcast('errorAlerts.addAlert',
+            'invalid isbn: fix query or continue with partial results');
+        } else {
+          $rootScope.$broadcast('errorAlerts.addAlert',
+            'editions lookup error: try again or continue with partial results');
+        }
+        $log.warn('XisbnApi request failed: ' + msg);
+      };
+      BookScraperMaster.fetchAltEditions(finishLoading, failureFn);
+    };
+    var finishLoading = function () {
+      $scope.editions = BookScraperMaster.editions;
+      $scope.setAllSelections(true);
+      $scope.loading = false;
+    };
+
     var buildSelectionsForBook = function (book, value) {
       return _.map(book.editions, function (ed) {
         // disallow selection of edition if it has no isbn
@@ -250,29 +293,14 @@
       $scope.selection[book_index] = buildSelectionsForBook(book, value);
     }
 
-    var finishLoading = function () {
-      $scope.setAllSelections(true);
-      $scope.loading = false;
-    };
-    var failureFn = function(response, msg) {
-      // TODO: better error msg
-      if (msg === 'invalidId') {
-        $rootScope.$broadcast('errorAlerts.addAlert',
-          'invalid isbn: fix query or continue with partial results');
-      } else {
-        $rootScope.$broadcast('errorAlerts.addAlert',
-          'editions lookup error: try again or continue with partial results');
-      }
-      $log.warn('XisbnApi request failed: ' + msg);
-    };
-    BookScraperMaster.fetchAltEditions(finishLoading, failureFn);
-    $scope.editions = BookScraperMaster.editions;
-
     $scope.submitSelectedEditions = function (selection) {
       // TODO: error if too many books or editions
       BookScraperMaster.edition_selections = selection;
+      BookScraperMaster.listings = null;
       $location.path('/listings');
     };
+
+    init();
   }
 
   EditionsCtrl.$inject = [
