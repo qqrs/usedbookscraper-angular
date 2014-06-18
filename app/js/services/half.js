@@ -2,7 +2,7 @@
 
 (function() {
 
-  function HalfService($resource) {
+  function HalfService($resource, $q) {
 
    // =================================
    // Utility functions and data
@@ -39,21 +39,23 @@
    // =================================
    // Half API calls and helpers
    // =================================
-    var halfResource = $resource(
-      "http://cryptic-ridge-1093.herokuapp.com/api/half/find_items",
-      {
-        callback: 'JSON_CALLBACK',
-      },
-      {
-        findItems: { method: 'JSONP' }
-    });
-
     function HalfQueryBatch() {
       this.completionCallback = null;
       this.progress = {
         call: { request: 0, response: 0, percent: 0, finished: false },
-        page: { request: 0, response: 0, percent: 0, finished: false }
+        page: { request: 0, response: 0, percent: 0, finished: false },
+        cancelRequests: this.cancelRequests.bind(this)
       };
+      this.requestsCanceler = $q.defer();
+      this.halfResource = $resource(
+        "http://cryptic-ridge-1093.herokuapp.com/api/half/find_items", {
+          callback: 'JSON_CALLBACK'
+        }, {
+          findItems: {
+            method: 'JSONP',
+            timeout: this.requestsCanceler.promise
+          }
+      });
     }
 
     HalfQueryBatch.prototype.registerCompletionCallback = function(callback) {
@@ -81,6 +83,11 @@
       }
     };
 
+    HalfQueryBatch.prototype.cancelRequests = function() {
+      console.log('cancelRequests');
+      this.requestsCanceler.resolve();
+    };
+
     // HalfQueryBatch.findItems -- request first page and queue additional
     // requests for more pages and better book conditions if needed
     HalfQueryBatch.prototype.findItems = function(params, successFn, failureFn) {
@@ -100,7 +107,7 @@
           for (i = 2; i <= data.total_pages; i++) {
             paramsCopy = angular.copy(params);
             paramsCopy.page = i;
-            halfResource.findItems(paramsCopy, handleSuccessOtherPage, handleFailureOtherPage);
+            this.halfResource.findItems(paramsCopy, handleSuccessOtherPage, handleFailureOtherPage);
             this.updateProgress('page', 'request');
           }
         }
@@ -124,7 +131,7 @@
 
 
       // run request for specified parameters
-      halfResource.findItems(params, handleSuccessFirstPage, handleFailureFirstPage);
+      this.halfResource.findItems(params, handleSuccessFirstPage, handleFailureFirstPage);
       this.updateProgress('call', 'request');
 
       // run requests for better conditions
@@ -132,7 +139,7 @@
         _.each(getBetterConditions(params.condition), function (cond) {
           var paramsCopy = angular.copy(params);
           paramsCopy.condition = cond;
-          halfResource.findItems(paramsCopy, handleSuccessFirstPage, handleFailureFirstPage);
+          this.halfResource.findItems(paramsCopy, handleSuccessFirstPage, handleFailureFirstPage);
           this.updateProgress('call', 'request');
         }, this);
       }
@@ -143,6 +150,7 @@
     // =================================
     // Simulate HTTP failures for one in three requests.
     /*
+    // TODO: update following addition of requests canceler
     (function () {
       var fn = halfResource.findItems,
           count = 0;
@@ -170,7 +178,7 @@
     };
   }
 
-  HalfService.$inject = ['$resource'];
+  HalfService.$inject = ['$resource', '$q'];
 
   angular.module('ubsApp.services.half', ['ngResource'])
     .factory('HalfService', HalfService);

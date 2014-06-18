@@ -355,6 +355,7 @@
     $scope.$on('$destroy', function() {
       $timeout.cancel(stepChangeTimer);
       if (loading) {
+        $scope.apiRequestProgress.cancelRequests();
         clearListings();
       }
     });
