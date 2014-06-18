@@ -349,6 +349,7 @@
     };
     var finishLoading = function () {
       loading = false;
+      BookScraperMaster.sellers = null;
       $location.path('/sellers');
     };
     $scope.$on('$destroy', function() {
@@ -382,27 +383,44 @@
 
 // =============================================================================
 
-  function SellersCtrl($scope, BookScraperMaster) {
+  function SellersCtrl($scope, $location, BookScraperMaster) {
     var sellers,
         pageBreaks;
 
-    BookScraperMaster.buildSellersFromListings();
-    sellers = BookScraperMaster.getSortedSellers();
+    if (!BookScraperMaster.listings) {
+      $location.path('/listings');
+      return;
+    }
 
-    // build paginated sellers array
-    $scope.currentPage = 0;
-    $scope.perPage = 20;
-    pageBreaks = _.range(0, sellers.length, $scope.perPage);
-    $scope.pagedSellers = _.map(pageBreaks, function (pageStart) {
-      return sellers.slice(pageStart, pageStart + $scope.perPage);
-    });
+    var init = function() {
+      if (BookScraperMaster.sellers) {
+        finishLoading();
+      } else {
+        loadData();
+      }
+    };
+    var loadData = function() {
+      BookScraperMaster.buildSellersFromListings();
+      finishLoading();
+    };
+    var finishLoading = function() {
+      sellers = BookScraperMaster.getSortedSellers();
 
-    console.log(BookScraperMaster);
-    console.log($scope.pagedSellers);
+      // build paginated sellers array
+      $scope.currentPage = 0;
+      $scope.perPage = 20;
+      pageBreaks = _.range(0, sellers.length, $scope.perPage);
+      $scope.pagedSellers = _.map(pageBreaks, function (pageStart) {
+        return sellers.slice(pageStart, pageStart + $scope.perPage);
+      });
+    };
+
+    init();
   }
 
   SellersCtrl.$inject = [
     '$scope',
+    '$location',
     'BookScraperMaster'
   ];
 
