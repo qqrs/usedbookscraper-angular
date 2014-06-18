@@ -441,7 +441,7 @@
 
 // =============================================================================
 
-  function SellerBookListingsCtrl($scope, $element, $attrs, $transclude, BookScraperMaster) {
+  function SellerBookListingsCtrl($scope) {
     $scope.showListings = false;
     $scope.setShowListings = function (value) {
       $scope.showListings = value;
@@ -453,16 +453,12 @@
   }
 
   SellerBookListingsCtrl.$inject = [
-    '$scope',
-    '$element',
-    '$attrs',
-    '$transclude',
-    'BookScraperMaster'
+    '$scope'
   ];
 
 // =============================================================================
 
-  function GiphyEmbedCtrl($scope, $element, $attrs, $transclude, $sce) {
+  function GiphyEmbedCtrl($scope, $sce) {
     var giphyIds,
         giphyUrl;
 
@@ -479,10 +475,7 @@
 
   GiphyEmbedCtrl.$inject = [
     '$scope',
-    '$element',
-    '$attrs',
-    '$transclude',
-    '$sce',
+    '$sce'
   ];
 
 // =============================================================================
@@ -583,11 +576,12 @@
 
   PagerCtrl.$inject = [
     '$scope',
-    '$anchorScroll',
+    '$anchorScroll'
   ];
 
 // =============================================================================
 
+  // TODO: delete this
   function TestCtrl($scope, BookScraperMaster) {
     $scope.msg = 'TESTME';
     $scope.sbook = {
