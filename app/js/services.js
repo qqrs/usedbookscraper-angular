@@ -170,6 +170,7 @@
         el.book = book;
         el.edition = ed;
       });
+      //TODO: cancel requests if leaving controller
       Array.prototype.push.apply(listings, ed_listings);
       Array.prototype.push.apply(book.listings, ed_listings);
       Array.prototype.push.apply(ed.listings, ed_listings);
@@ -213,7 +214,13 @@
     // TODO: per-shelf book options defaults
     // TODO: per-book title search ("rule") options defaults
     function Book(book, options) {
-      angular.extend(this, {isbn: null, title: null, author: null});
+      angular.extend(this, {
+        isbn: null,
+        title: null,
+        author: null,
+        editions: null,
+        listings: null
+      });
       angular.extend(this, book);
       this.options = options;
     }
@@ -235,6 +242,7 @@
     function Edition(book, ed) {
       angular.extend(this, ed);
       this.book = book;
+      this.listings = null;
     }
 
     // ========================================

@@ -313,33 +313,71 @@
 
 // =============================================================================
 
-  function ListingsCtrl($scope, $rootScope, $location, $log, BookScraperMaster, HalfService) {
-    $scope.books = BookScraperMaster.selected_books;
+  function ListingsCtrl($scope, $rootScope, $location, $timeout, $log, BookScraperMaster) {
+    var stepChangeTimer,
+        loading;
 
+    if (!BookScraperMaster.editions || !BookScraperMaster.edition_selections) {
+      $location.path('/editions');
+      return;
+    }
+
+    var init = function() {
+      if (BookScraperMaster.listings) {
+        loading = false;
+        stepChangeTimer = $timeout(function() {
+          $location.path('/sellers');
+        }, 1000);
+      } else {
+        loading = true;
+        clearListings();
+        loadData();
+      }
+    };
+    var loadData = function() {
+      var handleFetchListingsFailure = function(response, msg) {
+        // TODO: better error msg
+        $rootScope.$broadcast('errorAlerts.addAlert',
+          'half.com item lookup error: continuing with partial results');
+        $log.warn('half.com request failed: ' + msg);
+      };
+      // TODO: cancel requests if leaving controller
+      $scope.apiRequestProgress = BookScraperMaster.fetchListings(
+        finishLoading,
+        handleFetchListingsFailure
+      );
+    };
     var finishLoading = function () {
+      loading = false;
       $location.path('/sellers');
     };
-    var handleFetchListingsFailure = function(response, msg) {
-      // TODO: better error msg
-      $rootScope.$broadcast('errorAlerts.addAlert',
-        'half.com item lookup error: continuing with partial results');
-      $log.warn('half.com request failed: ' + msg);
+    $scope.$on('$destroy', function() {
+      $timeout.cancel(stepChangeTimer);
+      if (loading) {
+        clearListings();
+      }
+    });
+
+    var clearListings = function() {
+      BookScraperMaster.listings = null;
+      _.each(BookScraperMaster.books, function(book) {
+        book.listings = null;
+      });
+      _.each(BookScraperMaster.editions, function(ed) {
+        ed.listings = null;
+      });
     };
 
-    // TODO: cancel requests if leaving controller
-    $scope.apiRequestProgress = BookScraperMaster.fetchListings(
-      finishLoading,
-      handleFetchListingsFailure
-    );
+    init();
   }
 
   ListingsCtrl.$inject = [
     '$scope',
     '$rootScope',
     '$location',
+    '$timeout',
     '$log',
-    'BookScraperMaster',
-    'HalfService'
+    'BookScraperMaster'
   ];
 
 // =============================================================================
