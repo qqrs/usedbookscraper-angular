@@ -9,13 +9,9 @@
     service = {};
 
     grResource = $resource(
-      "http://cryptic-ridge-1093.herokuapp.com/api/goodreads/:collection",
-      {
-        callback: 'JSON_CALLBACK',
-      },
-      {
-        getShelves: { method: 'JSONP', params: {collection: 'shelves'} },
-        getBooks: { method: 'JSONP', params: {collection: 'books'} }
+      "http://cryptic-ridge-1093.herokuapp.com/api/goodreads/:collection", {}, {
+        getShelves: { method: 'GET', params: {collection: 'shelves'} },
+        getBooks: { method: 'GET', params: {collection: 'books'} }
     });
 
     service.getShelves = function(user_id, successFn, failureFn) {

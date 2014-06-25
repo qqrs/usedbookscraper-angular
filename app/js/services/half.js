@@ -48,11 +48,9 @@
       };
       this.requestsCanceler = $q.defer();
       this.halfResource = $resource(
-        "http://cryptic-ridge-1093.herokuapp.com/api/half/find_items", {
-          callback: 'JSON_CALLBACK'
-        }, {
+        "http://cryptic-ridge-1093.herokuapp.com/api/half/find_items", {}, {
           findItems: {
-            method: 'JSONP',
+            method: 'GET',
             timeout: this.requestsCanceler.promise
           }
       });
