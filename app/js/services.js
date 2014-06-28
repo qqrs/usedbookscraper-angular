@@ -48,6 +48,7 @@
 
     BookScraperSession.prototype.fetchShelfBooks = function(handleCompletion, handleFailure) {
       var books = this.books = [],
+          defaultOptions = this.book_options_defaults,
           remainingRequests = 0;
 
       handleCompletion = handleCompletion || angular.noop;
@@ -55,16 +56,22 @@
 
       // get book isbns for each shelf using GoodreadsApi
       _.each(this.goodreadsSelectedShelves, function(shelf) {
-        var options = this.book_options_defaults;
         remainingRequests++;
         GoodreadsApi.getBooks(
           this.goodreadsUserId,
           shelf.name,
           function successFn(shelf_books) {
             _.each(shelf_books, function(book) {
-              if (book.isbn === null || !_.find(books, {isbn: book.isbn})) {
-                //TODO: use the default options and only copy as needed
-                books.push(new Book(book, angular.copy(options)));
+              var foundBook = _.find(books, {isbn: book.isbn});
+              if (book.isbn === null || !foundBook) {
+                // add book if not already present
+                books.push(new Book(book, shelf.bookOptions));
+              } else {
+                // use book options for last shelf with non-default options
+                if (shelf.bookOptions !== defaultOptions) {
+                  foundBook.defaultOptions = shelf.bookOptions;
+                  foundBook.options = shelf.bookOptions;
+                }
               }
             });
             remainingRequests--;
@@ -89,7 +96,7 @@
       isbns = _.uniq(isbns);
       this.isbnList = isbns;
       this.books = _.map(isbns, function (isbn) {
-        return new Book({isbn: isbn}, angular.copy(options));
+        return new Book({isbn: isbn}, options);
       });
       this.selected_books = this.books;
     };
@@ -234,6 +241,7 @@
         listings: null
       });
       angular.extend(this, book);
+      this.defaultOptions = options;
       this.options = options;
     }
 
