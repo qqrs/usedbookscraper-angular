@@ -34,6 +34,24 @@
       });
     }
 
+    BookScraperSession.prototype.fetchShelves = function(handleCompletion, handleFailure) {
+      handleCompletion = handleCompletion || angular.noop;
+      handleFailure = handleFailure || angular.noop;
+
+      // get shelves for user id using GoodreadsApi
+      GoodreadsApi.getShelves(this.goodreadsUserId,
+        function successFn(shelves) {
+          _.each(shelves, function(shelf) {
+            shelf.bookOptions = this.book_options_defaults;
+          }, this);
+          this.shelves = shelves;
+          console.log(this.shelves);
+          handleCompletion();
+        }.bind(this),
+        handleFailure
+      );
+    };
+
     BookScraperSession.prototype.fetchShelfBooks = function(handleCompletion, handleFailure) {
       var books = this.books = [],
           remainingRequests = 0;

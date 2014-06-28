@@ -66,7 +66,7 @@
 
 // =============================================================================
 
-  function ShelvesCtrl($scope, $rootScope, $location, $log, BookScraperMaster, GoodreadsApi) {
+  function ShelvesCtrl($scope, $rootScope, $location, $log, BookScraperMaster) {
     if (!BookScraperMaster.goodreadsUserId) {
       $location.path('/user');
       return;
@@ -87,12 +87,8 @@
       }
     };
     var loadData = function () {
-      GoodreadsApi.getShelves(BookScraperMaster.goodreadsUserId,
-        function successFn(shelves) {
-          BookScraperMaster.shelves = shelves;
-          $scope.shelves = shelves;
-          finishLoading();
-        },
+      BookScraperMaster.fetchShelves(
+        finishLoading,
         function failureFn(response, msg) {
           $rootScope.$broadcast('errorAlerts.addAlert',
             'error: unable to get goodreads shelves -- check user id/url');
@@ -102,6 +98,7 @@
       );
     };
     var finishLoading = function () {
+      $scope.shelves = BookScraperMaster.shelves;
       $scope.loading = false;
       // TODO: testing: select last shelf
       //$scope.submitGoodreadsShelves([$scope.shelves[$scope.shelves.length - 1]]);
@@ -122,8 +119,7 @@
     '$rootScope',
     '$location',
     '$log',
-    'BookScraperMaster',
-    'GoodreadsApi'
+    'BookScraperMaster'
   ];
 
 
