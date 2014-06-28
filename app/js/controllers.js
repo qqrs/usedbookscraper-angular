@@ -126,7 +126,7 @@
 // =============================================================================
 
   function BooksCtrl($scope, $rootScope, $location, $timeout, $log,
-                      BookScraperMaster, GoodreadsApi, HalfService) {
+                      BookScraperMaster, GoodreadsApi) {
     if (!BookScraperMaster.shelves ||
         !BookScraperMaster.goodreadsSelectedShelves) {
       $location.path('/shelves');
@@ -135,13 +135,6 @@
 
     var init = function() {
       $scope.failure = false;
-      $scope.bookConditions = HalfService.bookConditions();
-      $scope.desirabilityChoices = [
-        ['Must-have', 10.0],
-        ['High', 3.0],
-        ['Normal', 1.0],
-        ['Add-on', 0.1]
-      ];
 
       if (BookScraperMaster.books && BookScraperMaster.selected_books) {
         // show previously loaded data on back-navigation
@@ -212,21 +205,24 @@
     '$timeout',
     '$log',
     'BookScraperMaster',
-    'GoodreadsApi',
-    'HalfService'
+    'GoodreadsApi'
   ];
 
 // =============================================================================
 
-  function BookOptionsCtrl($scope, $location, $timeout, BookScraperMaster, GoodreadsApi) {
+  function BookOptionsCtrl($scope, HalfService) {
+    $scope.bookConditions = HalfService.bookConditions();
+    $scope.desirabilityChoices = [
+      ['Must-have', 10.0],
+      ['High', 3.0],
+      ['Normal', 1.0],
+      ['Add-on', 0.1]
+    ];
   }
 
   BookOptionsCtrl.$inject = [
     '$scope',
-    '$location',
-    '$timeout',
-    'BookScraperMaster',
-    'GoodreadsApi'
+    'HalfService'
   ];
 
 

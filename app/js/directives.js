@@ -7,7 +7,7 @@
   function BookOptionsDirective() {
     return {
       templateUrl: 'partials/book_options.html',
-      replace: true,
+      replace: false,
       scope: { options: '=ubsBookOptions' },
       controller: 'BookOptionsCtrl'
     };
