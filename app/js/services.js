@@ -23,13 +23,7 @@
       selected_books: null,
       edition_selections: null,
 
-      book_options_defaults: {
-        desirability: 1.0,
-        maxprice: 4.00,
-        condition: 'Good',
-        excludeLibrary: true,
-        excludeCliffsNotes: true
-      }
+      book_options_defaults: new BookOptions()
 
       });
     }
@@ -254,6 +248,17 @@
       }
       return true;
     };
+
+    // book query options, initialized to defaults
+    function BookOptions() {
+      angular.extend(this, {
+        desirability: 1.0,
+        maxprice: 4.00,
+        condition: 'Good',
+        excludeLibrary: true,
+        excludeCliffsNotes: true
+      });
+    }
 
     // ========================================
 
