@@ -101,7 +101,7 @@
       $scope.shelves = BookScraperMaster.shelves;
       $scope.loading = false;
       // TODO: testing: select last shelf
-      //$scope.submitGoodreadsShelves([$scope.shelves[$scope.shelves.length - 1]]);
+      $scope.submitGoodreadsShelves([$scope.shelves[$scope.shelves.length - 1]]);
     };
 
     $scope.submitGoodreadsShelves = function (shelves) {
@@ -218,6 +218,17 @@
       ['Normal', 1.0],
       ['Add-on', 0.1]
     ];
+
+    $scope.edit = (!$scope.defaultOptions || $scope.defaultOptions !== $scope.options);
+    $scope.toggleEdit = function() {
+      $scope.edit = !$scope.edit;
+      if ($scope.edit) {
+        // create a duplicate of the default options object for editing
+        $scope.options = $scope.defaultOptions.clone();
+      } else {
+        $scope.options = $scope.defaultOptions;
+      }
+    };
   }
 
   BookOptionsCtrl.$inject = [

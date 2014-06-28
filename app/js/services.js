@@ -267,6 +267,13 @@
       });
     }
 
+    // return a duplicate BookOptions object
+    BookOptions.prototype.clone = function() {
+      var newOpt = new BookOptions();
+      angular.extend(newOpt, this);
+      return newOpt;
+    };
+
     // ========================================
 
     function Edition(book, ed) {

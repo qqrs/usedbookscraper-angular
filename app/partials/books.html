@@ -27,7 +27,8 @@
             <div><b>{{book.title}}</b></div>
             <div>{{book.author}}</div>
             <!--TODO: click to copy options object and allow editing-->
-            <div ubs-book-options="book.options" 
+            <div ubs-book-options="book.options"
+              ubs-book-options-defaults="book.defaultOptions"
               ng-if="book.isbn" ng-show="selection[$index]">
             </div>
             <span ng-if="!book.isbn" class="label label-important">No ISBN</span>

@@ -1,6 +1,7 @@
 <div>
   <ng-form class="form-inline book-options-form">
-    <fieldset class="book-options-fieldset" ng-disabled="false">
+    <a ng-click="toggleEdit()">{{edit ? 'reset to defaults' : 'edit'}}</a>
+    <fieldset class="book-options-fieldset" ng-disabled="!edit">
       <div>
         desirability:
         <select ng-model="options.desirability" 

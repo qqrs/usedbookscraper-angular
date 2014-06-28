@@ -8,7 +8,10 @@
     return {
       templateUrl: 'partials/book_options.html',
       replace: false,
-      scope: { options: '=ubsBookOptions' },
+      scope: {
+        options: '=ubsBookOptions',
+        defaultOptions: '=ubsBookOptionsDefaults'
+      },
       controller: 'BookOptionsCtrl'
     };
   }
