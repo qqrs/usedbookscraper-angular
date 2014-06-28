@@ -39,7 +39,6 @@
             shelf.bookOptions = this.book_options_defaults;
           }, this);
           this.shelves = shelves;
-          console.log(this.shelves);
           handleCompletion();
         }.bind(this),
         handleFailure

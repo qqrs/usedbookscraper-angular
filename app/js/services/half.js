@@ -46,6 +46,7 @@
       this.progress = {
         call: { request: 0, response: 0, percent: 0, finished: false },
         page: { request: 0, response: 0, percent: 0, finished: false },
+        canceled: false,
         cancelRequests: this.cancelRequests.bind(this)
       };
       this.requestsCanceler = $q.defer();
@@ -84,7 +85,8 @@
     };
 
     HalfQueryBatch.prototype.cancelRequests = function() {
-      console.log('cancelRequests');
+      this.progress.canceled = true;
+      this.completionCallback = angular.noop;
       this.requestsCanceler.resolve();
     };
 
@@ -104,6 +106,7 @@
             i;
         successFn(data);
         if (data.total_pages !== undefined && data.total_pages > 1) {
+          // TODO: set limit on pages
           for (i = 2; i <= data.total_pages; i++) {
             paramsCopy = angular.copy(params);
             paramsCopy.page = i;
@@ -115,6 +118,9 @@
       }.bind(this);
 
       var handleFailureFirstPage = function(response, msg) {
+        if (this.canceled) {
+          return;
+        }
         failureFn(response, msg);
         this.updateProgress('call', 'response');
       }.bind(this);
@@ -125,6 +131,9 @@
       }.bind(this);
 
       var handleFailureOtherPage = function(response, msg) {
+        if (this.canceled) {
+          return;
+        }
         failureFn(response, msg);
         this.updateProgress('page', 'response');
       }.bind(this);

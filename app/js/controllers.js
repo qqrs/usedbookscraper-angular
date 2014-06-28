@@ -340,11 +340,12 @@
     var loadData = function() {
       var handleFetchListingsFailure = function(response, msg) {
         // TODO: better error msg
-        $rootScope.$broadcast('errorAlerts.addAlert',
-          'half.com item lookup error: continuing with partial results');
-        $log.warn('half.com request failed: ' + msg);
+        if (!$scope.apiRequestProgress.canceled) {
+          $rootScope.$broadcast('errorAlerts.addAlert',
+            'half.com item lookup error: continuing with partial results');
+          $log.warn('half.com request failed: ' + msg);
+        }
       };
-      // TODO: cancel requests if leaving controller
       $scope.apiRequestProgress = BookScraperMaster.fetchListings(
         finishLoading,
         handleFetchListingsFailure
