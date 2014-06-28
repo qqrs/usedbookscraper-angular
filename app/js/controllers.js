@@ -8,6 +8,11 @@
   // TODO: quickstart button
   // TODO: delete unnecessary deps for all controllers
   // TODO: function() styling
+  // TODO: new relic
+  // TODO: google analytics
+  // TODO: add books, editions, API results page limits
+  // TODO: rename user step
+  // TOOD: grunt/gulpfile and minified build
   function GoodreadsUserCtrl($scope, $rootScope, $location, BookScraperMaster) {
     // TODO: for testing only
     $scope.goodreadsProfileUrl = 'http://www.goodreads.com/user/show/5123156-russ';
@@ -313,6 +318,7 @@
 
 // =============================================================================
 
+  // TODO: fix back-navigation
   function ListingsCtrl($scope, $rootScope, $location, $timeout, $log, BookScraperMaster) {
     var stepChangeTimer,
         loading;
@@ -325,6 +331,7 @@
     var init = function() {
       if (BookScraperMaster.listings) {
         loading = false;
+        // delay before advancing to allow back navigation
         stepChangeTimer = $timeout(function() {
           $location.path('/sellers');
         }, 1000);

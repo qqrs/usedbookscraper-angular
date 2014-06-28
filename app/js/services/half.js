@@ -4,6 +4,8 @@
 
   function HalfService($resource, $q) {
 
+    // TODO: cache results for 15 min
+
    // =================================
    // Utility functions and data
    // =================================
