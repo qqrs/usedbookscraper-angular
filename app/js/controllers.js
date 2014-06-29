@@ -73,8 +73,8 @@
     }
 
     var init = function() {
-      $scope.showAdvanced = true;
       $scope.defaultBookOptions = BookScraperMaster.book_options_defaults;
+      $scope.showAdvanced = false;
 
       if (BookScraperMaster.shelves &&
           BookScraperMaster.goodreadsSelectedShelves) {
@@ -107,6 +107,9 @@
       //$scope.submitGoodreadsShelves([$scope.shelves[$scope.shelves.length - 1]]);
     };
 
+    $scope.submitShowAdvanced = function() {
+      $scope.showAdvanced = true;
+    };
     $scope.submitGoodreadsShelves = function (shelves) {
       BookScraperMaster.goodreadsSelectedShelves = shelves;
       BookScraperMaster.books = null;
