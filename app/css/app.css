@@ -106,6 +106,27 @@ img.seller-books-img {
   width: 400px;
 }
 
+.book-defaults {
+  max-width: 540px;
+  margin-left: auto;
+}
+.book-defaults > div {
+  text-align: right;
+  font-size: 12px;
+}
+.book-defaults > div > div {
+  display: inline-block;
+  text-align: left;
+}
+.book-defaults > div > div:first-child {
+  width: 90px;
+  overflow-x: hidden;
+  vertical-align: top;
+  padding-top: 11px;
+  padding-right: 4px;
+}
+
+
 .book-options-form {
   position: relative;
   font-size: 12px;

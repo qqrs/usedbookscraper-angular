@@ -14,11 +14,29 @@
   <div ng-hide="!books.length || failure">
     <form ng-submit="submitSelectedBooks()" ng-disabled="!books.length">
       <div>
-        Select
-        <a href="" ng-click="setAllSelections(true)">All</a> / 
-        <a href="" ng-click="setAllSelections(false)">None</a>
+        select
+        <a href="" ng-click="setAllSelections(true)">all</a> /
+        <a href="" ng-click="setAllSelections(false)">none</a>
+        <a href="" ng-click="showAdvanced = !showAdvanced" style="padding-left: 20px">
+          {{showAdvanced ? 'hide' : 'show'}} advanced options
+        </a>
         <button type="submit" class="btn btn-primary pull-right">continue &gt;&gt;</button>
       </div><br>
+
+      <div ng-if="showAdvanced" class="well well-small book-defaults">
+        book search options
+        <div>
+          <div>defaults</div>
+          <div ubs-book-options="defaultBookOptions"></div>
+        </div>
+        <div ng-repeat="shelf in selectedShelves">
+          <div>shelf:<br>{{shelf.name}}</div>
+          <div ubs-book-options="shelf.bookOptions"
+            ubs-book-options-defaults="defaultBookOptions">
+          </div>
+        </div>
+      </div>
+
       <div ng-repeat="book in books">
         <div class="well well-small">
           <label ng-disabled="!book.isbn" class="books-label">
@@ -31,10 +49,9 @@
               <div><b>{{book.title}}</b></div>
               <div>{{book.author}}</div>
             </label>
-            <!--TODO: click to copy options object and allow editing-->
             <div ubs-book-options="book.options"
               ubs-book-options-defaults="book.defaultOptions"
-              ng-if="book.isbn" ng-show="selection[$index]">
+              ng-if="showAdvanced && book.isbn" ng-show="selection[$index]">
             </div>
             <span ng-if="!book.isbn" class="label label-important">No ISBN</span>
           </div>
