@@ -17,25 +17,8 @@
         select
         <a href="" ng-click="setAllSelections(true)">all</a> /
         <a href="" ng-click="setAllSelections(false)">none</a>
-        <a href="" ng-click="showAdvanced = !showAdvanced" style="padding-left: 20px">
-          {{showAdvanced ? 'hide' : 'show'}} advanced options
-        </a>
         <button type="submit" class="btn btn-primary pull-right">continue &gt;&gt;</button>
       </div><br>
-
-      <div ng-if="showAdvanced" class="well well-small book-defaults">
-        book search options
-        <div>
-          <div>defaults</div>
-          <div ubs-book-options="defaultBookOptions"></div>
-        </div>
-        <div ng-repeat="shelf in selectedShelves">
-          <div>shelf:<br>{{shelf.name}}</div>
-          <div ubs-book-options="shelf.bookOptions"
-            ubs-book-options-defaults="defaultBookOptions">
-          </div>
-        </div>
-      </div>
 
       <div ng-repeat="book in books">
         <div class="well well-small">

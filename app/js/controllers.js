@@ -73,6 +73,9 @@
     }
 
     var init = function() {
+      $scope.showAdvanced = true;
+      $scope.defaultBookOptions = BookScraperMaster.book_options_defaults;
+
       if (BookScraperMaster.shelves &&
           BookScraperMaster.goodreadsSelectedShelves) {
         // show previously loaded data on back-navigation
@@ -101,13 +104,14 @@
       $scope.shelves = BookScraperMaster.shelves;
       $scope.loading = false;
       // TODO: testing: select last shelf
-      $scope.submitGoodreadsShelves([$scope.shelves[$scope.shelves.length - 1]]);
+      //$scope.submitGoodreadsShelves([$scope.shelves[$scope.shelves.length - 1]]);
     };
 
     $scope.submitGoodreadsShelves = function (shelves) {
       BookScraperMaster.goodreadsSelectedShelves = shelves;
       BookScraperMaster.books = null;
       BookScraperMaster.selected_books = null;
+      BookScraperMaster.showAdvancedOptions = $scope.showAdvanced;
       $location.path('/books');
     };
 
@@ -135,9 +139,7 @@
 
     var init = function() {
       $scope.failure = false;
-      $scope.showAdvanced = true;
-      $scope.defaultBookOptions = BookScraperMaster.book_options_defaults;
-      $scope.selectedShelves = BookScraperMaster.goodreadsSelectedShelves;
+      $scope.showAdvanced = BookScraperMaster.showAdvancedOptions;
 
       if (BookScraperMaster.books && BookScraperMaster.selected_books) {
         // show previously loaded data on back-navigation

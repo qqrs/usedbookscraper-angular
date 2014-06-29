@@ -14,6 +14,24 @@
     </select><br><br>
     <button type="submit" class="btn btn-primary">continue &gt;&gt;</button>
   </form>
+
+  <a href="" ng-click="showAdvanced = !showAdvanced" style="padding-left: 20px">
+    {{showAdvanced ? 'hide' : 'show'}} advanced options
+  </a>
+  <div ng-if="showAdvanced" class="well well-small book-defaults">
+    book search options
+    <div>
+      <div>defaults</div>
+      <div ubs-book-options="defaultBookOptions"></div>
+    </div>
+    <div ng-repeat="shelf in selectedShelves">
+      <div>shelf:<br>{{shelf.name}}</div>
+      <div ubs-book-options="shelf.bookOptions"
+        ubs-book-options-defaults="defaultBookOptions">
+      </div>
+    </div>
+  </div>
+
 </div>
 
 </div>
