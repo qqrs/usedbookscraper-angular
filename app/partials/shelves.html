@@ -8,6 +8,7 @@
 </div>
 <div ng-hide="loading">
 
+<div style="display: inline-block">
 <form ng-submit="submitGoodreadsShelves(selectedShelves)">
   <select multiple autofocus class="shelves-select" size="20"
     ng-model="selectedShelves" 
@@ -15,6 +16,19 @@
   </select><br><br>
   <button type="submit" class="btn btn-primary">continue &gt;&gt;</button>
 </form>
+</div>
+<div style="display: inline-block; margin-left: 60px; vertical-align: top">
+  <div class="well well-small" style="margin-bottom: 60px">
+    default book search options
+    <div ubs-book-options="defaultBookOptions"></div>
+  </div>
+  <div ng-repeat="shelf in selectedShelves" class="well well-small">
+    shelf: {{shelf.name}}
+    <div ubs-book-options="shelf.bookOptions"
+      ubs-book-options-defaults="defaultBookOptions">
+    </div>
+  </div>
+</div>
 
 </div>
 </div>

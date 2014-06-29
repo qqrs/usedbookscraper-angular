@@ -73,6 +73,7 @@
     }
 
     var init = function() {
+      $scope.defaultBookOptions = BookScraperMaster.book_options_defaults;
       if (BookScraperMaster.shelves &&
           BookScraperMaster.goodreadsSelectedShelves) {
         // show previously loaded data on back-navigation
