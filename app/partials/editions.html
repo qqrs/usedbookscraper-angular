@@ -14,9 +14,9 @@
   <div ng-hide="!editions.length">
     <form ng-submit="submitSelectedEditions(selection)" ng-disabled="!books.length">
       <div>
-        Select
-        <a href="" ng-click="setAllSelections(true)">All</a> / 
-        <a href="" ng-click="setAllSelections(false)">None</a>
+        select
+        <a href="" ng-click="setAllSelections(true)">all</a> /
+        <a href="" ng-click="setAllSelections(false)">none</a>
         <button type="submit" class="btn btn-primary pull-right">continue &gt;&gt;</button>
       </div><br>
       <div ng-repeat="book in books">
@@ -38,9 +38,9 @@
 
           </div>
           <br> <div><small>
-            Select
-            <a href="" ng-click="setAllSelectionsForBook($index, true)">All</a> / 
-            <a href="" ng-click="setAllSelectionsForBook($index, false)">None</a>
+            select
+            <a href="" ng-click="setAllSelectionsForBook($index, true)">all</a> /
+            <a href="" ng-click="setAllSelectionsForBook($index, false)">none</a>
           </small></div>
         </div>
       </div>
