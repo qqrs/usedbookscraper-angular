@@ -23,8 +23,7 @@
       selected_books: null,
       edition_selections: null,
 
-      book_options_defaults: new BookOptions(),
-      showAdvancedOptions: false
+      book_options_defaults: new BookOptions()
 
       });
     }

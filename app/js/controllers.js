@@ -111,7 +111,6 @@
       BookScraperMaster.goodreadsSelectedShelves = shelves;
       BookScraperMaster.books = null;
       BookScraperMaster.selected_books = null;
-      BookScraperMaster.showAdvancedOptions = $scope.showAdvanced;
       $location.path('/books');
     };
 
@@ -139,7 +138,7 @@
 
     var init = function() {
       $scope.failure = false;
-      $scope.showAdvanced = BookScraperMaster.showAdvancedOptions;
+      $scope.showAdvanced = true;
 
       if (BookScraperMaster.books && BookScraperMaster.selected_books) {
         // show previously loaded data on back-navigation

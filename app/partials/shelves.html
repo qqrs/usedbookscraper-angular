@@ -1,4 +1,4 @@
-<div class="inner-content">
+<div class="inner-content wide">
 
 <h1>select shelves</h1><br>
 
@@ -7,27 +7,34 @@
   Loading shelves...
 </div>
 <div ng-hide="loading">
-  <form ng-submit="submitGoodreadsShelves(selectedShelves)">
-    <select multiple autofocus class="shelves-select" size="20"
-      ng-model="selectedShelves"
-      ng-options="shelf.name for shelf in shelves">
-    </select><br><br>
-    <button type="submit" class="btn btn-primary">continue &gt;&gt;</button>
-  </form>
-
-  <a href="" ng-click="showAdvanced = !showAdvanced" style="padding-left: 20px">
+  <div class="show-advanced">
+  <a href="" ng-click="showAdvanced = !showAdvanced">
     {{showAdvanced ? 'hide' : 'show'}} advanced options
   </a>
-  <div ng-if="showAdvanced" class="well well-small book-defaults">
-    book search options
-    <div>
-      <div>defaults</div>
-      <div ubs-book-options="defaultBookOptions"></div>
-    </div>
-    <div ng-repeat="shelf in selectedShelves">
-      <div>shelf:<br>{{shelf.name}}</div>
-      <div ubs-book-options="shelf.bookOptions"
-        ubs-book-options-defaults="defaultBookOptions">
+  </div>
+
+  <div class="shelves-column">
+    <form ng-submit="submitGoodreadsShelves(selectedShelves)">
+      <select multiple autofocus class="shelves-select" size="20"
+        ng-model="selectedShelves"
+        ng-options="shelf.name for shelf in shelves">
+      </select><br><br>
+      <button type="submit" class="btn btn-primary">continue &gt;&gt;</button>
+    </form>
+  </div>
+
+  <div class="shelves-column">
+    <div ng-if="showAdvanced" class="well well-small book-defaults">
+      advanced book search options
+      <div>
+        <div>defaults</div>
+        <div ubs-book-options="defaultBookOptions"></div>
+      </div>
+      <div ng-repeat="shelf in selectedShelves">
+        <div>shelf: {{shelf.name}}</div>
+        <div ubs-book-options="shelf.bookOptions"
+          ubs-book-options-defaults="defaultBookOptions">
+        </div>
       </div>
     </div>
   </div>
