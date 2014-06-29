@@ -4,8 +4,6 @@
 
 (function() {
 
-  //TODO: make sure this gets reset to defaults when starting over
-  //TODO: fix reload page and back button
   //TODO: fix property name styling
   function BookScraperMaster($log, GoodreadsApi, XisbnApi, HalfService) {
     function BookScraperSession() {
@@ -181,14 +179,13 @@
       ed.half_title = ed.half_title || response.title;
       ed.half_image_url = ed.half_image_url || response.image;
 
-      // filter undesireable listings
+      // filter undesirable listings
       var ed_listings = _.filter(response.items, book.isListingExcluded, book);
 
       _.each(ed_listings, function(el) {
         el.book = book;
         el.edition = ed;
       });
-      //TODO: cancel requests if leaving controller
       Array.prototype.push.apply(listings, ed_listings);
       Array.prototype.push.apply(book.listings, ed_listings);
       Array.prototype.push.apply(ed.listings, ed_listings);
@@ -228,9 +225,6 @@
 
     // ========================================
 
-    // TODO: book option master defaults
-    // TODO: per-shelf book options defaults
-    // TODO: per-book title search ("rule") options defaults
     function Book(book, options) {
       angular.extend(this, {
         isbn: null,
@@ -256,6 +250,7 @@
       return true;
     };
 
+    // TODO: per-book title search ("rule") options defaults
     // book query options, initialized to defaults
     function BookOptions() {
       angular.extend(this, {
@@ -330,8 +325,6 @@
     };
 
     SellerBook.prototype.sortListings = function() {
-      // TODO: use Array.sort and compare a/b instead of sort key
-      // TODO: account for year, -listing.edition.year
       var sellerBookListingsSortKey = function (listing) {
         var cond = HalfService.getValueForCondition(listing.condition),
             ship_cost = HalfService.getListingMarginalShippingCost(listing),

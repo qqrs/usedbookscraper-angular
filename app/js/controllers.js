@@ -325,7 +325,6 @@
 
 // =============================================================================
 
-  // TODO: fix back-navigation
   function ListingsCtrl($scope, $rootScope, $location, $timeout, $log, BookScraperMaster) {
     var stepChangeTimer,
         loading;
