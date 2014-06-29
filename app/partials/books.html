@@ -20,12 +20,17 @@
         <button type="submit" class="btn btn-primary pull-right">continue &gt;&gt;</button>
       </div><br>
       <div ng-repeat="book in books">
-        <label class="well well-small" ng-disabled="!book.isbn" >
-          <input ng-model="selection[$index]" type="checkbox" ng-disabled="!book.isbn" class="books-checkbox">
-          <img ng-src="{{book.small_image_url}}" class="books-img">
-          <div class="books-label">
-            <div><b>{{book.title}}</b></div>
-            <div>{{book.author}}</div>
+        <div class="well well-small">
+          <label ng-disabled="!book.isbn" class="books-label">
+            <input ng-model="selection[$index]" type="checkbox" class="books-checkbox"
+              id="{{'selbook_' + $index}}" ng-disabled="!book.isbn">
+            <img ng-src="{{book.small_image_url}}" class="books-img">
+          </label>
+          <div class="books-title">
+            <label ng-disabled="!book.isbn" for="{{'selbook_' + $index}}">
+              <div><b>{{book.title}}</b></div>
+              <div>{{book.author}}</div>
+            </label>
             <!--TODO: click to copy options object and allow editing-->
             <div ubs-book-options="book.options"
               ubs-book-options-defaults="book.defaultOptions"
@@ -33,7 +38,7 @@
             </div>
             <span ng-if="!book.isbn" class="label label-important">No ISBN</span>
           </div>
-        </label>
+        </div>
       </div>
       <button type="submit" class="btn btn-primary pull-right">continue &gt;&gt;</button>
     </form>

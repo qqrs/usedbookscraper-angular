@@ -97,6 +97,11 @@ img.seller-books-img {
 
 
 .books-label {
+  vertical-align: top;
+  display: inline-block;
+}
+
+.books-title {
   display: inline-block;
   width: 400px;
 }
@@ -116,6 +121,7 @@ img.seller-books-img {
   position: absolute;
   right: 4px;
   top: 0;
+  cursor: pointer;
 }
 
 .book-options-fieldset {
