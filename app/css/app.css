@@ -102,12 +102,44 @@ img.seller-books-img {
 }
 
 .book-options-form {
-  height: 20px;
+  position: relative;
   font-size: 12px;
+  min-width: 440px;
+  margin-top: 8px;
+  border: 1px solid #e3e3e3;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+
+.book-options-form a.edit {
+  position: absolute;
+  right: 4px;
+  top: 0;
 }
 
 .book-options-fieldset {
-  margin-top: 8px;
+  padding: 2px 4px;
+}
+
+.book-options-fieldset:disabled {
+  color: #999;
+  cursor: not-allowed;
+}
+.book-options-fieldset:disabled select {
+  color: #999;
+  cursor: not-allowed;
+}
+.book-options-fieldset:disabled input {
+  color: #999;
+  cursor: not-allowed;
+}
+.book-options-fieldset:disabled label {
+  color: #999;
+  cursor: not-allowed;
+}
+.book-options-fieldset:disabled input[type="checkbox"] {
+  cursor: not-allowed;
 }
 
 .book-options-select {

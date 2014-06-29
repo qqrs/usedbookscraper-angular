@@ -1,6 +1,8 @@
-<div>
-  <ng-form class="form-inline book-options-form">
-    <a ng-click="toggleEdit()">{{edit ? 'reset to defaults' : 'edit'}}</a>
+<div class="book-options-form">
+  <ng-form class="form-inline">
+    <a class="edit" ng-click="toggleEdit()">
+      {{edit ? 'reset to defaults' : 'edit search options'}}
+    </a>
     <fieldset class="book-options-fieldset" ng-disabled="!edit">
       <div>
         desirability:
