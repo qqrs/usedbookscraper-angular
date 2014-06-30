@@ -4,7 +4,6 @@
 
 (function() {
 
-  // TODO: clear alerts message on every view change
   // TODO: delete unnecessary deps for all controllers
   // TODO: function() styling
   // TODO: new relic
@@ -13,7 +12,7 @@
   // TODO: rename user step
   // TODO: grunt/gulpfile and minified build
   // TODO: organize controllers into multiple files
-  function GoodreadsUserCtrl($scope, $rootScope, $location, BookScraperMaster) {
+  function GoodreadsUserCtrl($scope, $location, BookScraperMaster, errorAlert) {
     // TESTING: for testing only
     $scope.goodreadsProfileUrl = 'http://www.goodreads.com/user/show/5123156-russ';
     $scope.isbnText = '0679736662, 9780393326550, 978-0618249060';
@@ -39,7 +38,7 @@
       }
 
       if (!userId) {
-        $rootScope.$broadcast('errorAlerts.addAlert', 'error: invalid goodreads profile url');
+        errorAlert('error: invalid goodreads profile url');
         return;
       }
 
@@ -59,15 +58,15 @@
 
   GoodreadsUserCtrl.$inject = [
     '$scope',
-    '$rootScope',
     '$location',
-    'BookScraperMaster'
+    'BookScraperMaster',
+    'errorAlert'
   ];
 
 // =============================================================================
 
   // FUTURE: quickstart button
-  function ShelvesCtrl($scope, $rootScope, $location, $log, BookScraperMaster) {
+  function ShelvesCtrl($scope, $location, $log, BookScraperMaster, errorAlert) {
     if (!BookScraperMaster.goodreadsUserId) {
       $location.path('/user');
       return;
@@ -94,8 +93,7 @@
       BookScraperMaster.fetchShelves(
         finishLoading,
         function failureFn(response, msg) {
-          $rootScope.$broadcast('errorAlerts.addAlert',
-            'error: unable to get goodreads shelves -- check user id/url');
+          errorAlert('error: unable to get goodreads shelves -- check user id/url');
           $log.error('GoodreadsApi request failed: ' + msg);
           $scope.loading = false;
         }
@@ -120,17 +118,16 @@
 
   ShelvesCtrl.$inject = [
     '$scope',
-    '$rootScope',
     '$location',
     '$log',
-    'BookScraperMaster'
+    'BookScraperMaster',
+    'errorAlert'
   ];
 
 
 // =============================================================================
 
-  function BooksCtrl($scope, $rootScope, $location, $timeout, $log,
-                      BookScraperMaster, GoodreadsApi) {
+  function BooksCtrl($scope, $location, $timeout, $log, BookScraperMaster, errorAlert) {
     if (!BookScraperMaster.shelves ||
         !BookScraperMaster.goodreadsSelectedShelves) {
       $location.path('/shelves');
@@ -157,8 +154,7 @@
     };
     var loadData = function() {
       var failureFn = function(response, msg) {
-        $rootScope.$broadcast('errorAlerts.addAlert',
-          'error: unable to get goodreads shelf books -- wait and try again');
+        errorAlert('error: unable to get goodreads shelf books -- wait and try again');
         $log.error('GoodreadsApi request failed: ' + msg);
         $scope.loading = false;
         $scope.failure = true;
@@ -191,8 +187,7 @@
         return $scope.selection[i] && book.isbn !== null;
       });
       if (!BookScraperMaster.selected_books.length) {
-        $rootScope.$broadcast('errorAlerts.addAlert',
-          'no books selected');
+        errorAlert('no books selected');
         return;
       }
       BookScraperMaster.editions = null;
@@ -205,12 +200,11 @@
 
   BooksCtrl.$inject = [
     '$scope',
-    '$rootScope',
     '$location',
     '$timeout',
     '$log',
     'BookScraperMaster',
-    'GoodreadsApi'
+    'errorAlert'
   ];
 
 // =============================================================================
@@ -244,7 +238,7 @@
 
 // =============================================================================
 
-  function EditionsCtrl($scope, $rootScope, $location, $log, BookScraperMaster) {
+  function EditionsCtrl($scope, $location, $log, BookScraperMaster, errorAlert) {
     var books;
 
     if (!BookScraperMaster.books ||
@@ -274,11 +268,9 @@
       var failureFn = function(response, msg) {
         // TODO: better error msg
         if (msg === 'invalidId') {
-          $rootScope.$broadcast('errorAlerts.addAlert',
-            'invalid isbn: fix query or continue with partial results');
+          errorAlert('invalid isbn: fix query or continue with partial results');
         } else {
-          $rootScope.$broadcast('errorAlerts.addAlert',
-            'editions lookup error: try again or continue with partial results');
+          errorAlert('editions lookup error: try again or continue with partial results');
         }
         $log.warn('XisbnApi request failed: ' + msg);
       };
@@ -318,15 +310,15 @@
 
   EditionsCtrl.$inject = [
     '$scope',
-    '$rootScope',
     '$location',
     '$log',
-    'BookScraperMaster'
+    'BookScraperMaster',
+    'errorAlert'
   ];
 
 // =============================================================================
 
-  function ListingsCtrl($scope, $rootScope, $location, $timeout, $log, BookScraperMaster) {
+  function ListingsCtrl($scope, $location, $timeout, $log, BookScraperMaster, errorAlert) {
     var stepChangeTimer,
         loading;
 
@@ -352,8 +344,7 @@
       var handleFetchListingsFailure = function(response, msg) {
         // TODO: better error msg
         if (!$scope.apiRequestProgress.canceled) {
-          $rootScope.$broadcast('errorAlerts.addAlert',
-            'half.com item lookup error: continuing with partial results');
+          errorAlert('half.com item lookup error: continuing with partial results');
           $log.warn('half.com request failed: ' + msg);
         }
       };
@@ -390,11 +381,11 @@
 
   ListingsCtrl.$inject = [
     '$scope',
-    '$rootScope',
     '$location',
     '$timeout',
     '$log',
-    'BookScraperMaster'
+    'BookScraperMaster',
+    'errorAlert'
   ];
 
 // =============================================================================
@@ -561,6 +552,21 @@
 
 // =============================================================================
 
+  function ErrorAlertsService($rootScope) {
+    var addAlert = function(msg) {
+      $rootScope.$broadcast('errorAlerts.addAlert', msg);
+    };
+
+    addAlert.clearAlerts = function() {
+      $rootScope.$broadcast('errorAlerts.clearAlerts');
+    };
+
+    return addAlert;
+  }
+
+  ErrorAlertsService.$inject = ['$rootScope'];
+
+
   function ErrorAlertsCtrl($scope, $rootScope, $anchorScroll) {
     $scope.alertsList = [];
 
@@ -652,6 +658,7 @@
     .controller('SellerBookListingsCtrl', SellerBookListingsCtrl)
     .controller('GiphyEmbedCtrl', GiphyEmbedCtrl)
     .controller('ProgressTrackerCtrl', ProgressTrackerCtrl)
+    .factory('errorAlert', ErrorAlertsService)
     .controller('ErrorAlertsCtrl', ErrorAlertsCtrl)
     .controller('PagerCtrl', PagerCtrl)
     .controller('TestCtrl', TestCtrl);
