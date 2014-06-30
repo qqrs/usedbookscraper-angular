@@ -159,7 +159,6 @@
             isbn: ed.isbn,
             page: '1',
             condition: book.options.condition,
-            // TODO: maxprice safe if user enters non-number?
             maxprice: book.options.maxprice
           };
           half.findItems(
@@ -213,7 +212,7 @@
     };
 
     BookScraperSession.prototype.getSortedSellers = function() {
-      // TODO: incorporate price as tiebreaker
+      // FUTURE: incorporate price as tiebreaker
       return _.chain(this.sellers)
         .toArray()
         .sortBy(function (seller) {
@@ -250,7 +249,7 @@
       return true;
     };
 
-    // TODO: per-book title search ("rule") options defaults
+    // FUTURE: per-book title search ("rule") options defaults
     // book query options, initialized to defaults
     function BookOptions() {
       angular.extend(this, {
