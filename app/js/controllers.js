@@ -5,7 +5,6 @@
 (function() {
 
   // TODO: delete unnecessary deps for all controllers
-  // TODO: function() styling
   // TODO: new relic
   // TODO: google analytics
   // TODO: add books, editions, API results page limits
@@ -23,7 +22,7 @@
       $scope.isbnText = BookScraperMaster.isbnList.join(', ');
     }
 
-    $scope.submitGoodreadsProfileUrl = function (profileUrl) {
+    $scope.submitGoodreadsProfileUrl = function(profileUrl) {
       var userId = null,
           matches;
           
@@ -47,7 +46,7 @@
       $location.path('/shelves');
     };
 
-    $scope.submitIsbnList = function (isbnText) {
+    $scope.submitIsbnList = function(isbnText) {
       var isbnList = _.compact(isbnText.replace('-', '').split(/[,;\s]+/));
       BookScraperMaster.buildIsbnBooks(isbnList);
       this.goodreadsUserId = null;
@@ -89,7 +88,7 @@
         loadData();
       }
     };
-    var loadData = function () {
+    var loadData = function() {
       BookScraperMaster.fetchShelves(
         finishLoading,
         function failureFn(response, msg) {
@@ -99,14 +98,14 @@
         }
       );
     };
-    var finishLoading = function () {
+    var finishLoading = function() {
       $scope.shelves = BookScraperMaster.shelves;
       $scope.loading = false;
       // TESTING: testing: select last shelf
       //$scope.submitGoodreadsShelves([$scope.shelves[$scope.shelves.length - 1]]);
     };
 
-    $scope.submitGoodreadsShelves = function (shelves) {
+    $scope.submitGoodreadsShelves = function(shelves) {
       BookScraperMaster.goodreadsSelectedShelves = shelves;
       BookScraperMaster.books = null;
       BookScraperMaster.selected_books = null;
@@ -167,10 +166,10 @@
       $scope.setAllSelections(true);
       $scope.loading = false;
       // TESTING: testing: continue with all books selected
-      //$timeout(function () {$scope.submitSelectedBooks($scope.selected_books);});
+      //$timeout(function() {$scope.submitSelectedBooks($scope.selected_books);});
     };
 
-    $scope.setAllSelections = function (value) {
+    $scope.setAllSelections = function(value) {
       // only select books with valid isbn
       if (value) {
         $scope.selection = _.map($scope.books, function(book) {
@@ -181,7 +180,7 @@
       }
     };
 
-    $scope.submitSelectedBooks = function () {
+    $scope.submitSelectedBooks = function() {
       // TODO: error if too many books or editions
       BookScraperMaster.selected_books = _.filter($scope.books, function(book, i) {
         return $scope.selection[i] && book.isbn !== null;
@@ -276,29 +275,29 @@
       };
       BookScraperMaster.fetchAltEditions(finishLoading, failureFn);
     };
-    var finishLoading = function () {
+    var finishLoading = function() {
       $scope.editions = BookScraperMaster.editions;
       $scope.setAllSelections(true);
       $scope.loading = false;
     };
 
-    var buildSelectionsForBook = function (book, value) {
-      return _.map(book.editions, function (ed) {
+    var buildSelectionsForBook = function(book, value) {
+      return _.map(book.editions, function(ed) {
         // disallow selection of edition if it has no isbn
         return (!ed.isbn) ? false : value;
       });
     };
-    $scope.setAllSelections = function (value) {
-      $scope.selection = _.map(books, function (book) {
+    $scope.setAllSelections = function(value) {
+      $scope.selection = _.map(books, function(book) {
         return buildSelectionsForBook(book, value);
       });
     };
-    $scope.setAllSelectionsForBook = function (book_index, value) {
+    $scope.setAllSelectionsForBook = function(book_index, value) {
       var book = books[book_index];
       $scope.selection[book_index] = buildSelectionsForBook(book, value);
     }
 
-    $scope.submitSelectedEditions = function (selection) {
+    $scope.submitSelectedEditions = function(selection) {
       // TODO: error if too many books or editions
       BookScraperMaster.edition_selections = selection;
       BookScraperMaster.listings = null;
@@ -353,7 +352,7 @@
         handleFetchListingsFailure
       );
     };
-    var finishLoading = function () {
+    var finishLoading = function() {
       loading = false;
       BookScraperMaster.sellers = null;
       $location.path('/sellers');
@@ -417,7 +416,7 @@
       $scope.currentPage = 0;
       $scope.perPage = 20;
       pageBreaks = _.range(0, sellers.length, $scope.perPage);
-      $scope.pagedSellers = _.map(pageBreaks, function (pageStart) {
+      $scope.pagedSellers = _.map(pageBreaks, function(pageStart) {
         return sellers.slice(pageStart, pageStart + $scope.perPage);
       });
     };
@@ -437,15 +436,15 @@
     $scope.marginalShippingCost = HalfService.getListingMarginalShippingCost;
 
     // find total cost for order and identify base shipping cost book
-    $scope.updateOrderTotalCost = function () {
-      $scope.baseShippingBook = _.max($scope.seller.books, function (sbook) {
+    $scope.updateOrderTotalCost = function() {
+      $scope.baseShippingBook = _.max($scope.seller.books, function(sbook) {
         return sbook.bestListing.shipping_cost;
       });
       $scope.baseShippingCost = $scope.baseShippingBook.bestListing.shipping_cost;
 
       // order total = books cost + base ship + marginal ship of other books
       $scope.orderTotalCost = $scope.baseShippingCost;
-      _.each($scope.seller.books, function (sbook) {
+      _.each($scope.seller.books, function(sbook) {
         $scope.orderTotalCost += sbook.bestListing.price;
         if ($scope.baseShippingBook !== sbook) {
           $scope.orderTotalCost += 
@@ -468,11 +467,11 @@
 
   function SellerBookListingsCtrl($scope) {
     $scope.showListings = false;
-    $scope.setShowListings = function (value) {
+    $scope.setShowListings = function(value) {
       $scope.showListings = value;
     };
 
-    $scope.onChange = function () {
+    $scope.onChange = function() {
       $scope.$parent.updateOrderTotalCost();
     };
   }
@@ -516,7 +515,7 @@
     // set default path on app load or page reload
     $location.path('/' + _steps[0]);
 
-    $rootScope.$on('$routeChangeSuccess', function (event, current) {
+    $rootScope.$on('$routeChangeSuccess', function(event, current) {
       var splitPath,
           currentStep,
           isBeyondCurrent;
@@ -525,7 +524,7 @@
       currentStep = ((splitPath.length >= 2) ? splitPath[1] : '');
       isBeyondCurrent = (currentStep === '' || !_.contains(_steps, currentStep));
 
-      $scope.progressSteps = _.map(_steps, function (step) {
+      $scope.progressSteps = _.map(_steps, function(step) {
         var href = '',
             sclass;
 
@@ -571,17 +570,17 @@
     $scope.alertsList = [];
 
     var deregAddAlert = $rootScope.$on('errorAlerts.addAlert', 
-      function (event, msg) {
+      function(event, msg) {
         if (!_.contains($scope.alertsList, msg)) {
           $scope.alertsList.push(msg);
           $anchorScroll();
         }
       }
     );
-    var deregClearAlerts = $rootScope.$on('errorAlerts.clearAlerts', function () {
+    var deregClearAlerts = $rootScope.$on('errorAlerts.clearAlerts', function() {
       $scope.alertsList = [];
     });
-    var deregRouteChange = $rootScope.$on('$routeChangeStart', function () {
+    var deregRouteChange = $rootScope.$on('$routeChangeStart', function() {
       $scope.alertsList = [];
     });
 
@@ -599,15 +598,15 @@
 // =============================================================================
 
   function PagerCtrl($scope, $anchorScroll) {
-    $scope.pagePrev = function () {
+    $scope.pagePrev = function() {
       $scope.currentPage = Math.max($scope.currentPage - 1, 0);
       $anchorScroll();
     };
-    $scope.pageNext = function () {
+    $scope.pageNext = function() {
       $scope.currentPage = Math.min($scope.currentPage + 1, $scope.numPages - 1);
       $anchorScroll();
     };
-    $scope.setPage = function (pageNum) {
+    $scope.setPage = function(pageNum) {
       $scope.currentPage = pageNum;
       $anchorScroll();
     };
@@ -631,7 +630,7 @@
     var perPage = 5;
     $scope.perPage = perPage;
     $scope.pagedSellers = _.map(_.range(0, $scope.sellers.length, perPage), 
-      function (start) {
+      function(start) {
         return $scope.sellers.slice(start, start + perPage);
       }
     );

@@ -2,7 +2,7 @@
 
 /* Directives */
 
-(function () {
+(function() {
 
   function BookOptionsDirective() {
     return {

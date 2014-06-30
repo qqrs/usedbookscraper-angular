@@ -11,13 +11,13 @@
    // =================================
     var conditions = ['Acceptable', 'Good', 'VeryGood', 'LikeNew', 'BrandNew'];
 
-    var getValueForCondition = function (cond) {
+    var getValueForCondition = function(cond) {
       var val = conditions.indexOf(cond);
       return (val >= 0 ? val : -Infinity);
     };
 
     // return array of all conditions better than cond
-    var getBetterConditions = function (cond) {
+    var getBetterConditions = function(cond) {
       var index = _.indexOf(conditions, cond);
       if (index < 0) {
         return [cond];
@@ -26,7 +26,7 @@
     };
 
     // get shipping cost for adding this item to an order
-    var getListingMarginalShippingCost = function (listing) {
+    var getListingMarginalShippingCost = function(listing) {
       if (listing.shipping_cost === 3.99) {         // hardback
         return 2.49;
       } else if (listing.shipping_cost === 3.49) {  // paperback
@@ -145,7 +145,7 @@
 
       // run requests for better conditions
       if (params.condition) {
-        _.each(getBetterConditions(params.condition), function (cond) {
+        _.each(getBetterConditions(params.condition), function(cond) {
           var paramsCopy = angular.copy(params);
           paramsCopy.condition = cond;
           this.halfResource.findItems(paramsCopy, handleSuccessFirstPage, handleFailureFirstPage);
@@ -160,10 +160,10 @@
     // Simulate HTTP failures for one in three requests.
     /*
     // TODO: update following addition of requests canceler
-    (function () {
+    (function() {
       var fn = halfResource.findItems,
           count = 0;
-      halfResource.findItems = function (params, successFn, failureFn) {
+      halfResource.findItems = function(params, successFn, failureFn) {
         count += 1;
         if (count % 3 === 0) {
           setTimeout(function(){
@@ -180,8 +180,8 @@
     // Half service exposed methods
     // =================================
     return {
-      newQueryBatch: function () { return new HalfQueryBatch(); },
-      bookConditions: function () { return conditions; },
+      newQueryBatch: function() { return new HalfQueryBatch(); },
+      bookConditions: function() { return conditions; },
       getValueForCondition: getValueForCondition,
       getListingMarginalShippingCost: getListingMarginalShippingCost
     };

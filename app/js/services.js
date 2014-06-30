@@ -92,7 +92,7 @@
 
       isbns = _.uniq(isbns);
       this.isbnList = isbns;
-      this.books = _.map(isbns, function (isbn) {
+      this.books = _.map(isbns, function(isbn) {
         return new Book({isbn: isbn}, options);
       });
       this.selected_books = this.books;
@@ -116,7 +116,7 @@
             }
             book.editions = _.chain(book_editions).map(function(ed) {
               return new Edition(book, ed);
-            }).sortBy(book.editions, function (ed) {
+            }).sortBy(book.editions, function(ed) {
               return ((-Number(ed.year)) || 0);
             }).value();
             Array.prototype.push.apply(editions, book.editions);
@@ -146,9 +146,9 @@
           params;
 
       // get Half.com listings for each edition of each book
-      _.each(books, function (book, book_index) {
+      _.each(books, function(book, book_index) {
         book.listings = [];
-        _.each(book.editions, function (ed, ed_index) {
+        _.each(book.editions, function(ed, ed_index) {
           // skip unselected book editions
           if (!selection[book_index][ed_index]) {
             return;
@@ -200,12 +200,12 @@
     BookScraperSession.prototype.buildSellersFromListings = function() {
       this.sellers = {};
 
-      _.each(this.listings, function (listing) {
+      _.each(this.listings, function(listing) {
         var seller = this.findOrCreateSeller(listing.seller, listing);
         seller.addListing(listing);
       }, this);
 
-      _.each(this.sellers, function (seller) {
+      _.each(this.sellers, function(seller) {
         seller.sortBooks();
         seller.updateScore();
       });
@@ -215,7 +215,7 @@
       // FUTURE: incorporate price as tiebreaker
       return _.chain(this.sellers)
         .toArray()
-        .sortBy(function (seller) {
+        .sortBy(function(seller) {
           return -seller.booksScore;
         }).value();
     };
@@ -295,17 +295,17 @@
     };
 
     Seller.prototype.sortBooks = function() {
-      _.each(this.books, function (book) {
+      _.each(this.books, function(book) {
         book.sortListings();
       });
-      this.books = _.sortBy(this.books, function (sbook) {
+      this.books = _.sortBy(this.books, function(sbook) {
         return -sbook.getScore();
       });
     };
 
     Seller.prototype.updateScore = function() {
       var score = 0.0;
-      _.each(this.books, function (book) {
+      _.each(this.books, function(book) {
         score += book.getScore();
       });
       this.booksScore = score;
@@ -324,7 +324,7 @@
     };
 
     SellerBook.prototype.sortListings = function() {
-      var sellerBookListingsSortKey = function (listing) {
+      var sellerBookListingsSortKey = function(listing) {
         var cond = HalfService.getValueForCondition(listing.condition),
             ship_cost = HalfService.getListingMarginalShippingCost(listing),
             cost = listing.price + ship_cost;
