@@ -5,16 +5,16 @@
 (function() {
 
   // TODO: clear alerts message on every view change
-  // TODO: quickstart button
   // TODO: delete unnecessary deps for all controllers
   // TODO: function() styling
   // TODO: new relic
   // TODO: google analytics
   // TODO: add books, editions, API results page limits
   // TODO: rename user step
-  // TOOD: grunt/gulpfile and minified build
+  // TODO: grunt/gulpfile and minified build
+  // TODO: organize controllers into multiple files
   function GoodreadsUserCtrl($scope, $rootScope, $location, BookScraperMaster) {
-    // TODO: for testing only
+    // TESTING: for testing only
     $scope.goodreadsProfileUrl = 'http://www.goodreads.com/user/show/5123156-russ';
     $scope.isbnText = '0679736662, 9780393326550, 978-0618249060';
     if (BookScraperMaster.goodreadsUserId) {
@@ -66,6 +66,7 @@
 
 // =============================================================================
 
+  // FUTURE: quickstart button
   function ShelvesCtrl($scope, $rootScope, $location, $log, BookScraperMaster) {
     if (!BookScraperMaster.goodreadsUserId) {
       $location.path('/user');
@@ -103,7 +104,7 @@
     var finishLoading = function () {
       $scope.shelves = BookScraperMaster.shelves;
       $scope.loading = false;
-      // TODO: testing: select last shelf
+      // TESTING: testing: select last shelf
       //$scope.submitGoodreadsShelves([$scope.shelves[$scope.shelves.length - 1]]);
     };
 
@@ -169,7 +170,7 @@
       $scope.books = BookScraperMaster.books;
       $scope.setAllSelections(true);
       $scope.loading = false;
-      // TODO: testing: continue with all books selected
+      // TESTING: testing: continue with all books selected
       //$timeout(function () {$scope.submitSelectedBooks($scope.selected_books);});
     };
 
@@ -614,7 +615,7 @@
 
 // =============================================================================
 
-  // TODO: delete this
+  // TESTING: delete this
   function TestCtrl($scope, BookScraperMaster) {
     $scope.msg = 'TESTME';
     $scope.sbook = {
