@@ -1,0 +1,35 @@
+{
+  "name": "usedbookscraper-angular",
+  "version": "0.0.0",
+  "description": "This project is an application skeleton for a typical [AngularJS](http://angularjs.org/) web app. You can use it to quickly bootstrap your angular webapp projects and dev environment for these projects.",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "del": "^0.1.1",
+    "gulp": "^3.8.5",
+    "gulp-angular-templatecache": "^1.2.1",
+    "gulp-clean": "^0.3.1",
+    "gulp-concat": "^2.2.0",
+    "gulp-minify-css": "^0.3.6",
+    "gulp-ngtemplates": "^0.1.2",
+    "gulp-rename": "^1.2.0",
+    "gulp-rimraf": "^0.1.0",
+    "gulp-uglify": "^0.3.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/qqrs/usedbookscraper-angular.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/qqrs/usedbookscraper-angular/issues"
+  },
+  "homepage": "https://github.com/qqrs/usedbookscraper-angular"
+}
