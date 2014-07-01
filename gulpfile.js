@@ -35,8 +35,10 @@ gulp.task('scripts', function() {
 
 gulp.task('templates', function () {
     gulp.src(paths.templates)
-        .pipe(templateCache())
-        .pipe(rename(projectName + '-templates.js'))
+        .pipe(templateCache(projectName + '-templates.js', {
+          root: 'partials',
+          module: 'ubsApp'
+        }))
         .pipe(gulp.dest('dist'));
 });
 
