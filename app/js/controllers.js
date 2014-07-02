@@ -5,11 +5,8 @@
 (function() {
 
   // TODO: delete unnecessary deps for all controllers
-  // TODO: new relic
-  // TODO: google analytics
   // TODO: add books, editions, API results page limits
   // TODO: rename user step
-  // TODO: grunt/gulpfile and minified build
   // TODO: organize controllers into multiple files
   function GoodreadsUserCtrl($scope, $location, BookScraperMaster, errorAlert) {
     // TESTING: for testing only
