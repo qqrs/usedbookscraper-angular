@@ -1,6 +1,6 @@
 <div class="inner-content" style="max-width: 370px">
 
-<h3><center>querying half.com...</center></h3><br>
+<h3 style="text-align: center">querying half.com...</h3><br>
 
 <div class="progress" ng-hide="apiRequestProgress.call.finished">
   <div class="bar" style="width: {{apiRequestProgress.call.percent}}%;"></div>
@@ -15,5 +15,13 @@
 <div class="row inner-content" style="max-width: 570px; text-align: center; padding-top: 40px">
 
 <div giphy-embed></div>
+
+<p class="muted listings-wait-note" style="">
+(be patient, you're making hundreds of requests to the half.com api right now
+&mdash; they're unfortunately not set up to
+<a href="http://en.wikipedia.org/wiki/Cross-origin_resource_sharing" target="_blank">accept requests directly</a>
+so everything has to go through my underpowered free web host &mdash; if you're
+seeing errors or timeouts <a href="#about">drop me a message</a> and try again later)
+</p>
 
 </div>
