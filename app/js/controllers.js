@@ -4,9 +4,7 @@
 
 (function() {
 
-  // TODO: delete unnecessary deps for all controllers
   // TODO: add books, editions, API results page limits
-  // TODO: rename user step
   // TODO: organize controllers into multiple files
   function GoodreadsUserCtrl($scope, $location, BookScraperMaster, errorAlert) {
     // TESTING: for testing only
@@ -506,11 +504,13 @@
         _steps;
 
     _steps = [
-      'user', 'shelves', 'books', 'editions', 'listings', 'sellers'
+      'start', 'shelves', 'books', 'editions', 'listings', 'sellers'
     ];
 
     // set default path on app load or page reload
-    $location.path('/' + _steps[0]);
+    // TODO: delete?
+    //$location.path('/' + _steps[0]);
+    $location.path('/');
 
     $rootScope.$on('$routeChangeSuccess', function(event, current) {
       var splitPath,
@@ -525,7 +525,10 @@
         var href = '',
             sclass;
 
-        if (step === currentStep) {
+        if (isBeyondCurrent && step === _steps[0]) {
+          sclass = '';
+          href = '#' + step;
+        } else if (step === currentStep) {
           sclass = 'current';
           isBeyondCurrent = true;
         } else if (isBeyondCurrent) {
