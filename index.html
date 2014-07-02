@@ -44,31 +44,6 @@
   </script>
 </head>
 <body>
-  <div class="navbar navbar-inverse navbar-fixed-top">
-    <div class="navbar-inner">
-      <div class="container">
-        <a class="brand" href="#">usedbookscraper</a>
-
-        <ul class="nav pull-left">
-          <li><a href="#">Home</a></li>
-          <li><a href="#">About</a></li>
-          <li><a href="#user">Begin</a></li>
-        </ul>
-
-        <div class="nav pull-right" ubs-progress-tracker>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <div class="container well well-large main-content">
-
-      <div class="row span7" ubs-error-alerts></div>
-
-      <div class="row" ng-view></div>
-
-  </div> <!-- /container -->
-
+  <div ng-include="'partials/body.html'"></div>
 </body>
 </html>
