@@ -16,12 +16,16 @@ body {
 
 .main-content {
   background-color: rgba(245,245,245, 0.95);
-  border-color: rgb(227,227,227);
   min-height: 500px;
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
-  float: none;
+
+  /*well well-large*/
+  padding: 24px;
+  margin-bottom: 20px;
+  border: 1px solid #e3e3e3;
+  border-radius: 6px;
 }
 
 .inner-content {
