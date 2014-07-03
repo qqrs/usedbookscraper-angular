@@ -27,6 +27,11 @@ body {
   border: 1px solid #e3e3e3;
   border-radius: 6px;
 }
+.main-content.no-pad {
+  border-width: 0px;
+  max-width: 850px;
+  padding: 0;
+}
 
 .inner-content {
   max-width: 600px;
@@ -39,6 +44,24 @@ body {
 .inner-content.wide h1 {
   padding-left: 50px;
 }
+
+.home-text {
+  margin: 0;
+  width: auto;
+  padding: 48px;
+}
+.home-text.top-slide {
+  border-radius: 6px 6px 0 0;
+  /*background-color: lightgreen;*/
+}
+.home-text.mid-slide {
+  background-color: lightblue;
+}
+.home-text.bot-slide {
+  /*background-color: orange;*/
+  border-radius: 0 0 6px 6px;
+}
+
 
 .about-text {
   line-height: 18px;

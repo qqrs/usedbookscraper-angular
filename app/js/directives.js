@@ -73,6 +73,21 @@
     };
   }
 
+  // remove padding from main content div on home.html
+  function MainContentHideHomePaddingDirective($route) {
+    return {
+      controller: ['$rootScope', '$element', function($rootScope, $element) {
+        $rootScope.$on('$routeChangeSuccess', function(event, currentRoute) {
+          if (currentRoute.loadedTemplateUrl === "partials/home.html") {
+            $element.addClass('no-pad');
+          } else {
+            $element.removeClass('no-pad');
+          }
+        });
+      }]
+    };
+  }
+
   angular.module('ubsApp.directives', [])
     .directive('ubsBookOptions', BookOptionsDirective)
     .directive('ubsSellerBookListings', SellerBookListingsDirective)
@@ -80,6 +95,7 @@
     .directive('giphyEmbed', GiphyEmbedDirective)
     .directive('ubsProgressTracker', ProgressTrackerDirective)
     .directive('ubsErrorAlerts', ErrorAlertsDirective)
-    .directive('ubsPager', PagerDirective);
+    .directive('ubsPager', PagerDirective)
+    .directive('ubsMainContentHideHomePadding', MainContentHideHomePaddingDirective);
   }
 )();
