@@ -11,6 +11,7 @@ angular.module('ubsApp', [
     'ubsApp.services.half',
     'ubsApp.directives',
     'ubsApp.controllers',
+    'ubsApp.progressTracker',
     'ubsApp.giphyEmbed'
     ])
   /*

@@ -34,15 +34,6 @@
     };
   }
 
-  function ProgressTrackerDirective() {
-    return {
-      replace: false,
-      controller: 'ProgressTrackerCtrl',
-      template: '<div class="wizard"><a ng-repeat="step in progressSteps" ' +
-        'ng-href="{{step.href}}" ng-class="step.sclass">{{step.name}}</a></div>'
-    };
-  }
-
   function ErrorAlertsDirective() {
     return {
       replace: false,
@@ -84,7 +75,6 @@
     .directive('ubsBookOptions', BookOptionsDirective)
     .directive('ubsSellerBookListings', SellerBookListingsDirective)
     .directive('ubsSellerBooks', SellerBooksDirective)
-    .directive('ubsProgressTracker', ProgressTrackerDirective)
     .directive('ubsErrorAlerts', ErrorAlertsDirective)
     .directive('ubsPager', PagerDirective)
     .directive('ubsMainContentHideHomePadding', MainContentHideHomePaddingDirective);
