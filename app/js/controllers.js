@@ -131,6 +131,7 @@
     var init = function() {
       $scope.failure = false;
       $scope.showAdvanced = true;
+      $scope.ignoreTooMany = false;
 
       if (BookScraperMaster.books && BookScraperMaster.selected_books) {
         // show previously loaded data on back-navigation
@@ -182,6 +183,13 @@
       });
       if (!BookScraperMaster.selected_books.length) {
         errorAlert('no books selected');
+        return;
+      } else if (!$scope.ignoreTooMany &&
+                  BookScraperMaster.selected_books.length > 25) {
+        errorAlert(BookScraperMaster.selected_books.length +
+            ' books selected — queries of > 25 may be very slow — click '
+            + 'continue again if you still want to proceed');
+        $scope.ignoreTooMany = true;
         return;
       }
       BookScraperMaster.editions = null;
