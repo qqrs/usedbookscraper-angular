@@ -611,8 +611,8 @@
       function(event, msg) {
         if (!_.contains($scope.alertsList, msg)) {
           $scope.alertsList.push(msg);
-          $anchorScroll();
         }
+        $anchorScroll();
       }
     );
     var deregClearAlerts = $rootScope.$on('errorAlerts.clearAlerts', function() {
