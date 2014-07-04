@@ -513,29 +513,6 @@
 
 // =============================================================================
 
-  function PagerCtrl($scope, $anchorScroll) {
-    $scope.pagePrev = function() {
-      $scope.currentPage = Math.max($scope.currentPage - 1, 0);
-      $anchorScroll();
-    };
-    $scope.pageNext = function() {
-      $scope.currentPage = Math.min($scope.currentPage + 1, $scope.numPages - 1);
-      $anchorScroll();
-    };
-    $scope.setPage = function(pageNum) {
-      $scope.currentPage = pageNum;
-      $anchorScroll();
-    };
-    $scope.pageNumbers = _.range(0, $scope.numPages);
-  }
-
-  PagerCtrl.$inject = [
-    '$scope',
-    '$anchorScroll'
-  ];
-
-// =============================================================================
-
   angular.module('ubsApp.controllers', ['ngResource'])
     .controller('GoodreadsUserCtrl', GoodreadsUserCtrl)
     .controller('ShelvesCtrl', ShelvesCtrl)
@@ -545,6 +522,5 @@
     .controller('ListingsCtrl', ListingsCtrl)
     .controller('SellersCtrl', SellersCtrl)
     .controller('SellerBooksCtrl', SellerBooksCtrl)
-    .controller('SellerBookListingsCtrl', SellerBookListingsCtrl)
-    .controller('PagerCtrl', PagerCtrl);
+    .controller('SellerBookListingsCtrl', SellerBookListingsCtrl);
 })();

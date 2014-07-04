@@ -13,6 +13,7 @@ angular.module('ubsApp', [
     'ubsApp.controllers',
     'ubsApp.progressTracker',
     'ubsApp.errorAlert',
+    'ubsApp.pager',
     'ubsApp.giphyEmbed'
     ])
   /*

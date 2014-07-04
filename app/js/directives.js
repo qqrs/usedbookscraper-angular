@@ -34,19 +34,6 @@
     };
   }
 
-  function PagerDirective() {
-    return {
-      templateUrl: 'partials/pager.html',
-      replace: false,
-      scope: {
-        numPages: '=pagerNumPages',
-        perPage: '=pagerPerPage',
-        currentPage: '=pagerCurrentPage'
-      },
-      controller: 'PagerCtrl'
-    };
-  }
-
   // remove padding from main content div on home.html
   function MainContentHideHomePaddingDirective($route) {
     return {
@@ -66,7 +53,6 @@
     .directive('ubsBookOptions', BookOptionsDirective)
     .directive('ubsSellerBookListings', SellerBookListingsDirective)
     .directive('ubsSellerBooks', SellerBooksDirective)
-    .directive('ubsPager', PagerDirective)
     .directive('ubsMainContentHideHomePadding', MainContentHideHomePaddingDirective);
   }
 )();
