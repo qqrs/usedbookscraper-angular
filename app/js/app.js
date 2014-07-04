@@ -5,10 +5,7 @@
 angular.module('ubsApp', [
     'ngRoute',
     'ubsApp.filters',
-    'ubsApp.services',
-    'ubsApp.directives',
-    'ubsApp.controllers',
-
+    'ubsApp.bookScraperSession',
     'ubsApp.services.goodreads',
     'ubsApp.services.xisbn',
     'ubsApp.services.half',
@@ -30,12 +27,12 @@ angular.module('ubsApp', [
     $routeProvider.when('/', {templateUrl: 'partials/home.html'});
     $routeProvider.when('/about', {templateUrl: 'partials/about.html'});
 
-    $routeProvider.when('/start', {templateUrl: 'partials/user.html', controller: 'GoodreadsUserCtrl'});
-    $routeProvider.when('/shelves', {templateUrl: 'partials/shelves.html', controller: 'ShelvesCtrl'});
-    $routeProvider.when('/books', {templateUrl: 'partials/books.html', controller: 'BooksCtrl'});
-    $routeProvider.when('/editions', {templateUrl: 'partials/editions.html', controller: 'EditionsCtrl'});
-    $routeProvider.when('/listings', {templateUrl: 'partials/listings.html', controller: 'ListingsCtrl'});
-    $routeProvider.when('/sellers', {templateUrl: 'partials/sellers.html', controller: 'SellersCtrl'});
+    $routeProvider.when('/start', {templateUrl: 'bookscrapersession/partials/user.html', controller: 'GoodreadsUserCtrl'});
+    $routeProvider.when('/shelves', {templateUrl: 'bookscrapersession/partials/shelves.html', controller: 'ShelvesCtrl'});
+    $routeProvider.when('/books', {templateUrl: 'bookscrapersession/partials/books.html', controller: 'BooksCtrl'});
+    $routeProvider.when('/editions', {templateUrl: 'bookscrapersession/partials/editions.html', controller: 'EditionsCtrl'});
+    $routeProvider.when('/listings', {templateUrl: 'bookscrapersession/partials/listings.html', controller: 'ListingsCtrl'});
+    $routeProvider.when('/sellers', {templateUrl: 'bookscrapersession/partials/sellers.html', controller: 'SellersCtrl'});
 
     $routeProvider.otherwise({redirectTo: '/'});
   }])

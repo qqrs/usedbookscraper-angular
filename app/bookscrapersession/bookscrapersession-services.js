@@ -347,7 +347,7 @@
 
 // =============================================================================
 
-  angular.module('ubsApp.services', ['ngResource'])
+  angular.module('ubsApp.bookScraperSession.services', ['ngResource'])
     .factory('BookScraperMaster', BookScraperMaster);
 
 })();

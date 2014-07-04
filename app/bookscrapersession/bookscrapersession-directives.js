@@ -6,7 +6,7 @@
 
   function BookOptionsDirective() {
     return {
-      templateUrl: 'partials/book_options.html',
+      templateUrl: 'bookscrapersession/partials/book_options.html',
       replace: false,
       scope: {
         options: '=ubsBookOptions',
@@ -18,7 +18,7 @@
 
   function SellerBooksDirective() {
     return {
-      templateUrl: 'partials/seller_books.html',
+      templateUrl: 'bookscrapersession/partials/seller_books.html',
       replace: true,
       scope: { seller: '=ubsSellerBooks' },
       controller: 'SellerBooksCtrl'
@@ -27,14 +27,14 @@
 
   function SellerBookListingsDirective() {
     return {
-      templateUrl: 'partials/seller_book_listings.html',
+      templateUrl: 'bookscrapersession/partials/seller_book_listings.html',
       replace: false,
       scope: { sbook: '=ubsSellerBookListings' },
       controller: 'SellerBookListingsCtrl'
     };
   }
 
-  angular.module('ubsApp.directives', [])
+  angular.module('ubsApp.bookScraperSession.directives', [])
     .directive('ubsBookOptions', BookOptionsDirective)
     .directive('ubsSellerBookListings', SellerBookListingsDirective)
     .directive('ubsSellerBooks', SellerBooksDirective);

@@ -513,7 +513,7 @@
 
 // =============================================================================
 
-  angular.module('ubsApp.controllers', ['ngResource'])
+  angular.module('ubsApp.bookScraperSession.controllers', ['ngResource'])
     .controller('GoodreadsUserCtrl', GoodreadsUserCtrl)
     .controller('ShelvesCtrl', ShelvesCtrl)
     .controller('BooksCtrl', BooksCtrl)
