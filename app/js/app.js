@@ -30,7 +30,5 @@ angular.module('ubsApp', [
     $routeProvider.when('/sellers', {templateUrl: 'partials/sellers.html', controller: 'SellersCtrl'});
 
     $routeProvider.otherwise({redirectTo: '/'});
-    //$routeProvider.when('/test', {templateUrl: 'partials/test.html', controller: 'TestCtrl'});
-    //$routeProvider.otherwise({redirectTo: '/test'});
   }])
   .run(['$route', angular.noop]);

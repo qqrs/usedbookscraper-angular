@@ -655,31 +655,6 @@
 
 // =============================================================================
 
-  // TESTING: delete this
-  function TestCtrl($scope, BookScraperMaster) {
-    $scope.msg = 'TESTME';
-    $scope.sbook = {
-      listings: [null, null, null]
-    };
-    $scope.sellers = [1,2,3,4,5,6,7,8,9,10,11,12];
-    var perPage = 5;
-    $scope.perPage = perPage;
-    $scope.pagedSellers = _.map(_.range(0, $scope.sellers.length, perPage), 
-      function(start) {
-        return $scope.sellers.slice(start, start + perPage);
-      }
-    );
-
-    $scope.currentPage = 0;
-  }
-
-  TestCtrl.$inject = [
-    '$scope',
-    'BookScraperMaster'
-  ];
-
-// =============================================================================
-
   angular.module('ubsApp.controllers', ['ngResource'])
     .controller('GoodreadsUserCtrl', GoodreadsUserCtrl)
     .controller('ShelvesCtrl', ShelvesCtrl)
@@ -694,6 +669,5 @@
     .controller('ProgressTrackerCtrl', ProgressTrackerCtrl)
     .factory('errorAlert', ErrorAlertsService)
     .controller('ErrorAlertsCtrl', ErrorAlertsCtrl)
-    .controller('PagerCtrl', PagerCtrl)
-    .controller('TestCtrl', TestCtrl);
+    .controller('PagerCtrl', PagerCtrl);
 })();
