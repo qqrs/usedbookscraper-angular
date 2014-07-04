@@ -103,11 +103,13 @@
       // call success callback and run additional requests for subsequent pages
       var handleSuccessFirstPage = function(data) {
         var paramsCopy,
+            lastPage,
             i;
         successFn(data);
         if (data.total_pages !== undefined && data.total_pages > 1) {
-          // TODO: set limit on pages
-          for (i = 2; i <= data.total_pages; i++) {
+          // only retrieve first 100 offers per edition
+          lastPage = Math.min(data.total_pages, 5);
+          for (i = 2; i <= lastPage; i++) {
             paramsCopy = angular.copy(params);
             paramsCopy.page = i;
             this.halfResource.findItems(paramsCopy, handleSuccessOtherPage, handleFailureOtherPage);
