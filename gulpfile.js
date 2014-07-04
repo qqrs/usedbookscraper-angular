@@ -10,9 +10,9 @@ var del = require('del');
 var projectName = 'usedbookscraper';
 
 var paths = {
-  scripts: 'app/js/**/*.js',
+  scripts: 'app/**/*.js',
   styles: 'app/css/app.css',
-  templates:  'app/partials/**/*.html'
+  templates:  ['app/**/*.html', '!app/index.html']
 };
 
 gulp.task('clean', function(cb) {
@@ -36,7 +36,6 @@ gulp.task('scripts', function() {
 gulp.task('templates', function () {
     gulp.src(paths.templates)
         .pipe(templateCache(projectName + '-templates.js', {
-          root: 'partials',
           module: 'ubsApp'
         }))
         .pipe(gulp.dest('dist'));
