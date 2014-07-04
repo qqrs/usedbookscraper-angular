@@ -207,6 +207,6 @@
 
   HalfService.$inject = ['$resource', '$q', '$cacheFactory'];
 
-  angular.module('ubsApp.services.half', ['ngResource'])
+  angular.module('ubsApp.services.half', ['ngResource', 'ubsApp.services.half.filters'])
     .factory('HalfService', HalfService);
 })();

@@ -4,7 +4,6 @@
 // Declare app level module which depends on filters, and services
 angular.module('ubsApp', [
     'ngRoute',
-    'ubsApp.filters',
     'ubsApp.bookScraperSession',
     'ubsApp.services.goodreads',
     'ubsApp.services.xisbn',
