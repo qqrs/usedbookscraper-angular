@@ -6,9 +6,9 @@
 
     // TODO: cache results for 15 min
 
-   // =================================
-   // Utility functions and data
-   // =================================
+    // =================================
+    // Utility functions and data
+    // =================================
     var conditions = ['Acceptable', 'Good', 'VeryGood', 'LikeNew', 'BrandNew'];
 
     var getValueForCondition = function(cond) {
@@ -38,9 +38,9 @@
       }
     };
 
-   // =================================
-   // Half API calls and helpers
-   // =================================
+    // =================================
+    // Half API calls and helpers
+    // =================================
     function HalfQueryBatch() {
       this.completionCallback = null;
       this.progress = {
