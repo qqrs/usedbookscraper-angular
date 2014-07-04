@@ -6,11 +6,13 @@ angular.module('ubsApp', [
     'ngRoute',
     'ubsApp.filters',
     'ubsApp.services',
+    'ubsApp.directives',
+    'ubsApp.controllers',
+
     'ubsApp.services.goodreads',
     'ubsApp.services.xisbn',
     'ubsApp.services.half',
-    'ubsApp.directives',
-    'ubsApp.controllers',
+
     'ubsApp.progressTracker',
     'ubsApp.errorAlert',
     'ubsApp.pager',
