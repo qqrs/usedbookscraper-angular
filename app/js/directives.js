@@ -34,15 +34,6 @@
     };
   }
 
-  function ErrorAlertsDirective() {
-    return {
-      replace: false,
-      controller: 'ErrorAlertsCtrl',
-      template: '<div class="alert alert-error" ng-show="alertsList.length">' +
-            '<ul><li ng-repeat="alert in alertsList">{{alert}}</li></ul></div>'
-    };
-  }
-
   function PagerDirective() {
     return {
       templateUrl: 'partials/pager.html',
@@ -75,7 +66,6 @@
     .directive('ubsBookOptions', BookOptionsDirective)
     .directive('ubsSellerBookListings', SellerBookListingsDirective)
     .directive('ubsSellerBooks', SellerBooksDirective)
-    .directive('ubsErrorAlerts', ErrorAlertsDirective)
     .directive('ubsPager', PagerDirective)
     .directive('ubsMainContentHideHomePadding', MainContentHideHomePaddingDirective);
   }
