@@ -62,7 +62,7 @@
   // FUTURE: quickstart button
   function ShelvesCtrl($scope, $location, $log, BookScraperMaster, errorAlert) {
     if (!BookScraperMaster.goodreadsUserId) {
-      $location.path('/user');
+      $location.path('/start');
       return;
     }
 
@@ -510,7 +510,7 @@
     // set default path on app load or page reload
     // TODO: delete?
     //$location.path('/' + _steps[0]);
-    $location.path('/');
+    //$location.path('/');
 
     $rootScope.$on('$routeChangeSuccess', function(event, current) {
       var splitPath,
