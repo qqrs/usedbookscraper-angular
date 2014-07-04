@@ -4,7 +4,7 @@
 
   function PagerDirective() {
     return {
-      templateUrl: 'partials/pager.html',
+      templateUrl: 'components/pager/pager.html',
       replace: false,
       scope: {
         numPages: '=pagerNumPages',
