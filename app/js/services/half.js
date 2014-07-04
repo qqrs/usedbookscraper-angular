@@ -2,9 +2,10 @@
 
 (function() {
 
-  function HalfService($resource, $q) {
+  function HalfService($resource, $q, $cacheFactory) {
 
     // TODO: cache results for 15 min
+    var halfItemsCache = $cacheFactory('halfFindItems');
 
     // =================================
     // Utility functions and data
@@ -90,6 +91,21 @@
       this.requestsCanceler.resolve();
     };
 
+    HalfQueryBatch.prototype.runFindItemsRequest = function(params, successFn, failureFn) {
+      var paramsJson = JSON.stringify(params),
+          data = halfItemsCache.get(paramsJson);
+
+      if (data) {
+        successFn(data);
+      } else {
+        var handleSuccess = function(data) {
+          halfItemsCache.put(paramsJson, data);
+          successFn(data);
+        };
+        this.halfResource.findItems(params, handleSuccess, failureFn);
+      }
+    };
+
     // HalfQueryBatch.findItems -- request first page and queue additional
     // requests for more pages and better book conditions if needed
     HalfQueryBatch.prototype.findItems = function(params, successFn, failureFn) {
@@ -112,7 +128,7 @@
           for (i = 2; i <= lastPage; i++) {
             paramsCopy = angular.copy(params);
             paramsCopy.page = i;
-            this.halfResource.findItems(paramsCopy, handleSuccessOtherPage, handleFailureOtherPage);
+            this.runFindItemsRequest(paramsCopy, handleSuccessOtherPage, handleFailureOtherPage);
             this.updateProgress('page', 'request');
           }
         }
@@ -142,7 +158,7 @@
 
 
       // run request for specified parameters
-      this.halfResource.findItems(params, handleSuccessFirstPage, handleFailureFirstPage);
+      this.runFindItemsRequest(params, handleSuccessFirstPage, handleFailureFirstPage);
       this.updateProgress('call', 'request');
 
       // run requests for better conditions
@@ -150,7 +166,7 @@
         _.each(getBetterConditions(params.condition), function(cond) {
           var paramsCopy = angular.copy(params);
           paramsCopy.condition = cond;
-          this.halfResource.findItems(paramsCopy, handleSuccessFirstPage, handleFailureFirstPage);
+          this.runFindItemsRequest(paramsCopy, handleSuccessFirstPage, handleFailureFirstPage);
           this.updateProgress('call', 'request');
         }, this);
       }
@@ -189,7 +205,7 @@
     };
   }
 
-  HalfService.$inject = ['$resource', '$q'];
+  HalfService.$inject = ['$resource', '$q', '$cacheFactory'];
 
   angular.module('ubsApp.services.half', ['ngResource'])
     .factory('HalfService', HalfService);
