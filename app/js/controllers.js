@@ -184,11 +184,16 @@
       if (!BookScraperMaster.selected_books.length) {
         errorAlert('no books selected');
         return;
+      } else if (BookScraperMaster.selected_books.length > 50) {
+        errorAlert(BookScraperMaster.selected_books.length +
+            ' books selected — queries of > 25 may be very slow — ' +
+            'select ≤ 50 and try again');
+        return;
       } else if (!$scope.ignoreTooMany &&
                   BookScraperMaster.selected_books.length > 25) {
         errorAlert(BookScraperMaster.selected_books.length +
-            ' books selected — queries of > 25 may be very slow — click '
-            + 'continue again if you still want to proceed');
+            ' books selected — queries of > 25 may be very slow — ' +
+            'click continue again if you still want to proceed');
         $scope.ignoreTooMany = true;
         return;
       }
@@ -250,6 +255,7 @@
     }
 
     var init = function() {
+      $scope.ignoreTooMany = false;
       books = $scope.books = BookScraperMaster.selected_books;
       if (BookScraperMaster.editions && BookScraperMaster.edition_selections) {
         // show previously loaded data on back-navigation
@@ -290,6 +296,17 @@
         return (!ed.isbn) ? false : value;
       });
     };
+    var countSelectedEditions = function() {
+      var count = 0;
+      _.each($scope.selection, function(bookSel) {
+        _.each(bookSel, function(edSel) {
+          if (edSel) {
+            count += 1;
+          }
+        });
+      });
+      return count;
+    };
     $scope.setAllSelections = function(value) {
       $scope.selection = _.map(books, function(book) {
         return buildSelectionsForBook(book, value);
@@ -301,6 +318,19 @@
     }
 
     $scope.submitSelectedEditions = function(selection) {
+      var count = countSelectedEditions();
+      if (count > 1000) {
+        errorAlert(count +
+            ' editions selected — queries of > 500 may be very slow — ' +
+            'select ≤ 1000 and try again');
+        return;
+      } else if (!$scope.ignoreTooMany && count > 500) {
+        errorAlert(count +
+            ' editions selected — queries of > 500 may be very slow — ' +
+            'click continue again if you still want to proceed');
+        $scope.ignoreTooMany = true;
+        return;
+      }
       // TODO: error if too many books or editions
       BookScraperMaster.edition_selections = selection;
       BookScraperMaster.listings = null;
