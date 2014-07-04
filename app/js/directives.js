@@ -34,14 +34,6 @@
     };
   }
 
-  function GiphyEmbedDirective() {
-    return {
-      templateUrl: 'partials/giphy_embed.html',
-      replace: true,
-      controller: 'GiphyEmbedCtrl'
-    };
-  }
-
   function ProgressTrackerDirective() {
     return {
       replace: false,
@@ -92,7 +84,6 @@
     .directive('ubsBookOptions', BookOptionsDirective)
     .directive('ubsSellerBookListings', SellerBookListingsDirective)
     .directive('ubsSellerBooks', SellerBooksDirective)
-    .directive('giphyEmbed', GiphyEmbedDirective)
     .directive('ubsProgressTracker', ProgressTrackerDirective)
     .directive('ubsErrorAlerts', ErrorAlertsDirective)
     .directive('ubsPager', PagerDirective)

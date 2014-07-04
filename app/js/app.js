@@ -10,7 +10,9 @@ angular.module('ubsApp', [
     'ubsApp.services.xisbn',
     'ubsApp.services.half',
     'ubsApp.directives',
-    'ubsApp.controllers'])
+    'ubsApp.controllers',
+    'ubsApp.giphyEmbed'
+    ])
   /*
   .config(['$locationProvider',
     function($locationProvider) {
