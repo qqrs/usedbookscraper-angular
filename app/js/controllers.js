@@ -4,7 +4,6 @@
 
 (function() {
 
-  // TODO: add books, editions, API results page limits
   // TODO: organize controllers into multiple files
   function GoodreadsUserCtrl($scope, $location, BookScraperMaster, errorAlert) {
     // TESTING: for testing only
@@ -177,7 +176,6 @@
     };
 
     $scope.submitSelectedBooks = function() {
-      // TODO: error if too many books or editions
       BookScraperMaster.selected_books = _.filter($scope.books, function(book, i) {
         return $scope.selection[i] && book.isbn !== null;
       });
@@ -331,7 +329,6 @@
         $scope.ignoreTooMany = true;
         return;
       }
-      // TODO: error if too many books or editions
       BookScraperMaster.edition_selections = selection;
       BookScraperMaster.listings = null;
       $location.path('/listings');
