@@ -14,6 +14,7 @@ angular.module('ubsApp', [
     'ubsApp.progressTracker',
     'ubsApp.errorAlert',
     'ubsApp.pager',
+    'ubsApp.hidePadding',
     'ubsApp.giphyEmbed'
     ])
   /*
