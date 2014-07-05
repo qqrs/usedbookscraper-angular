@@ -176,11 +176,10 @@
     // =================================
     // Simulate HTTP failures for one in three requests.
     /*
-    // TODO: update following addition of requests canceler
-    (function() {
-      var fn = halfResource.findItems,
+    var patchBatchTest = function(batch) {
+      var fn = batch.halfResource.findItems,
           count = 0;
-      halfResource.findItems = function(params, successFn, failureFn) {
+      batch.halfResource.findItems = function(params, successFn, failureFn) {
         count += 1;
         if (count % 3 === 0) {
           setTimeout(function(){
@@ -190,7 +189,13 @@
           fn.apply(this, arguments);
         }
       };
-    }());
+    }
+    return {
+      newQueryBatch: function() { var batch = new HalfQueryBatch(); patchBatchTest(batch); return batch;},
+      bookConditions: function() { return conditions; },
+      getValueForCondition: getValueForCondition,
+      getListingMarginalShippingCost: getListingMarginalShippingCost
+    };
     */
 
     // =================================
