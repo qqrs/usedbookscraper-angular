@@ -66,7 +66,7 @@
 
     var init = function() {
       $scope.showAdvanced = true;
-      $scope.defaultBookOptions = BookScraperMaster.book_options_defaults;
+      $scope.defaultBookOptions = BookScraperMaster.bookOptionsDefaults;
 
       if (BookScraperMaster.shelves &&
           BookScraperMaster.goodreadsSelectedShelves) {
@@ -105,7 +105,7 @@
       }
       BookScraperMaster.goodreadsSelectedShelves = shelves;
       BookScraperMaster.books = null;
-      BookScraperMaster.selected_books = null;
+      BookScraperMaster.selectedBooks = null;
       $location.path('/books');
     };
 
@@ -135,11 +135,11 @@
       $scope.showAdvanced = true;
       $scope.ignoreTooMany = false;
 
-      if (BookScraperMaster.books && BookScraperMaster.selected_books) {
+      if (BookScraperMaster.books && BookScraperMaster.selectedBooks) {
         // show previously loaded data on back-navigation
         $scope.books = BookScraperMaster.books;
         $scope.selection = _.map($scope.books, function(book) {
-          return !!_.find(BookScraperMaster.selected_books, book);
+          return !!_.find(BookScraperMaster.selectedBooks, book);
         });
         $scope.loading = false;
       } else {
@@ -164,7 +164,7 @@
       $scope.setAllSelections(true);
       $scope.loading = false;
       // TESTING: testing: continue with all books selected
-      //$timeout(function() {$scope.submitSelectedBooks($scope.selected_books);});
+      //$timeout(function() {$scope.submitSelectedBooks($scope.selectedBooks);});
     };
 
     $scope.setAllSelections = function(value) {
@@ -179,27 +179,27 @@
     };
 
     $scope.submitSelectedBooks = function() {
-      BookScraperMaster.selected_books = _.filter($scope.books, function(book, i) {
+      BookScraperMaster.selectedBooks = _.filter($scope.books, function(book, i) {
         return $scope.selection[i] && book.isbn !== null;
       });
-      if (!BookScraperMaster.selected_books.length) {
+      if (!BookScraperMaster.selectedBooks.length) {
         errorAlert('no books selected');
         return;
-      } else if (BookScraperMaster.selected_books.length > 50) {
-        errorAlert(BookScraperMaster.selected_books.length +
+      } else if (BookScraperMaster.selectedBooks.length > 50) {
+        errorAlert(BookScraperMaster.selectedBooks.length +
             ' books selected — queries of > 25 may be very slow — ' +
             'select ≤ 50 and try again');
         return;
       } else if (!$scope.ignoreTooMany &&
-                  BookScraperMaster.selected_books.length > 25) {
-        errorAlert(BookScraperMaster.selected_books.length +
+                  BookScraperMaster.selectedBooks.length > 25) {
+        errorAlert(BookScraperMaster.selectedBooks.length +
             ' books selected — queries of > 25 may be very slow — ' +
             'click continue again if you still want to proceed');
         $scope.ignoreTooMany = true;
         return;
       }
       BookScraperMaster.editions = null;
-      BookScraperMaster.edition_selections = null;
+      BookScraperMaster.editionSelections = null;
       $location.path('/editions');
     };
 
@@ -250,18 +250,18 @@
     var books;
 
     if (!BookScraperMaster.books ||
-        !BookScraperMaster.selected_books) {
+        !BookScraperMaster.selectedBooks) {
       $location.path('/books');
       return;
     }
 
     var init = function() {
       $scope.ignoreTooMany = false;
-      books = $scope.books = BookScraperMaster.selected_books;
-      if (BookScraperMaster.editions && BookScraperMaster.edition_selections) {
+      books = $scope.books = BookScraperMaster.selectedBooks;
+      if (BookScraperMaster.editions && BookScraperMaster.editionSelections) {
         // show previously loaded data on back-navigation
         $scope.editions = BookScraperMaster.editions;
-        $scope.selection = BookScraperMaster.edition_selections;
+        $scope.selection = BookScraperMaster.editionSelections;
         $scope.loading = false;
       } else {
         $scope.editions = null;
@@ -335,7 +335,7 @@
         $scope.ignoreTooMany = true;
         return;
       }
-      BookScraperMaster.edition_selections = selection;
+      BookScraperMaster.editionSelections = selection;
       BookScraperMaster.listings = null;
       $location.path('/listings');
     };
@@ -357,7 +357,7 @@
     var stepChangeTimer,
         loading;
 
-    if (!BookScraperMaster.editions || !BookScraperMaster.edition_selections) {
+    if (!BookScraperMaster.editions || !BookScraperMaster.editionSelections) {
       $location.path('/editions');
       return;
     }

@@ -18,10 +18,10 @@
       goodreadsUserId: null,            // Goodreads user ID as string
       goodreadsSelectedShelves: null,   // Goodreads shelves selected for search
       isbnList: null,                   // ISBNs entered directly by user
-      selected_books: null,
-      edition_selections: null,
+      selectedBooks: null,
+      editionSelections: null,
 
-      book_options_defaults: new BookOptions()
+      bookOptionsDefaults: new BookOptions()
 
       });
     }
@@ -34,7 +34,7 @@
       GoodreadsApi.getShelves(this.goodreadsUserId,
         function successFn(shelves) {
           _.each(shelves, function(shelf) {
-            shelf.bookOptions = this.book_options_defaults;
+            shelf.bookOptions = this.bookOptionsDefaults;
           }, this);
           this.shelves = shelves;
           handleCompletion();
@@ -45,7 +45,7 @@
 
     BookScraperSession.prototype.fetchShelfBooks = function(handleCompletion, handleFailure) {
       var books = this.books = [],
-          defaultOptions = this.book_options_defaults,
+          defaultOptions = this.bookOptionsDefaults,
           remainingRequests = 0;
 
       handleCompletion = handleCompletion || angular.noop;
@@ -88,14 +88,14 @@
     };
 
     BookScraperSession.prototype.buildIsbnBooks = function(isbns) {
-      var options = this.book_options_defaults;
+      var options = this.bookOptionsDefaults;
 
       isbns = _.uniq(isbns);
       this.isbnList = isbns;
       this.books = _.map(isbns, function(isbn) {
         return new Book({isbn: isbn}, options);
       });
-      this.selected_books = this.books;
+      this.selectedBooks = this.books;
     };
 
     BookScraperSession.prototype.fetchAltEditions = function(handleCompletion, handleFailure) {
@@ -106,7 +106,7 @@
       handleFailure = handleFailure || angular.noop;
 
       // get alternate editions for each book
-      _.each(this.selected_books, function(book) {
+      _.each(this.selectedBooks, function(book) {
         remainingRequests++;
         XisbnApi.getEditions(book.isbn,
           function successFn(book_editions) {
@@ -139,9 +139,9 @@
 
     BookScraperSession.prototype.fetchListings = function(handleCompletion, handleFailure) {
       var half = HalfService.newQueryBatch(),
-          books = this.selected_books,
+          books = this.selectedBooks,
           editions = this.editions,
-          selection = this.edition_selections,
+          selection = this.editionSelections,
           listings = this.listings = [],
           params;
 
