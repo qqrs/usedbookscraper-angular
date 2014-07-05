@@ -99,7 +99,10 @@
     };
 
     $scope.submitGoodreadsShelves = function(shelves) {
-      // TODO: handle no shelves selected
+      if (!shelves.length) {
+        errorAlert('no shelves selected');
+        return;
+      }
       BookScraperMaster.goodreadsSelectedShelves = shelves;
       BookScraperMaster.books = null;
       BookScraperMaster.selected_books = null;
