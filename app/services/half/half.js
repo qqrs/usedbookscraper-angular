@@ -4,7 +4,6 @@
 
   function HalfService($resource, $q, $cacheFactory) {
 
-    // TODO: cache results for 15 min
     var halfItemsCache = $cacheFactory('halfFindItems');
 
     // =================================

@@ -4,7 +4,6 @@
 
 (function() {
 
-  // TODO: fix gulp file following reorganization
   function GoodreadsUserCtrl($scope, $location, BookScraperMaster, errorAlert) {
     // TESTING: for testing only
     $scope.goodreadsProfileUrl = 'http://www.goodreads.com/user/show/5123156-russ';
