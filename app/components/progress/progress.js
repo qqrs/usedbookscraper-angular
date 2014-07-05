@@ -19,11 +19,6 @@
       'start', 'shelves', 'books', 'editions', 'listings', 'sellers'
     ];
 
-    // set default path on app load or page reload
-    // TODO: delete?
-    //$location.path('/' + _steps[0]);
-    //$location.path('/');
-
     $rootScope.$on('$routeChangeSuccess', function(event, current) {
       var splitPath,
           currentStep,
