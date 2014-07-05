@@ -320,7 +320,10 @@
 
     $scope.submitSelectedEditions = function(selection) {
       var count = countSelectedEditions();
-      if (count > 1000) {
+      if (!count) {
+        errorAlert('no editions selected');
+        return;
+      } else if (count > 1000) {
         errorAlert(count +
             ' editions selected — queries of > 500 may be very slow — ' +
             'select ≤ 1000 and try again');
