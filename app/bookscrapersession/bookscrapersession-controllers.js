@@ -41,6 +41,10 @@
 
     $scope.submitIsbnList = function(isbnText) {
       var isbnList = _.compact(isbnText.replace('-', '').split(/[,;\s]+/));
+      if (!isbnList.length) {
+        errorAlert('no isbns entered');
+        return;
+      }
       BookScraperMaster.buildIsbnBooks(isbnList);
       this.goodreadsUserId = null;
       this.goodreadsSelectedShelves = null;
