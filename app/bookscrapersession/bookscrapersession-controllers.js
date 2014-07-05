@@ -313,9 +313,9 @@
         return buildSelectionsForBook(book, value);
       });
     };
-    $scope.setAllSelectionsForBook = function(book_index, value) {
-      var book = books[book_index];
-      $scope.selection[book_index] = buildSelectionsForBook(book, value);
+    $scope.setAllSelectionsForBook = function(bookIndex, value) {
+      var book = books[bookIndex];
+      $scope.selection[bookIndex] = buildSelectionsForBook(book, value);
     }
 
     $scope.submitSelectedEditions = function(selection) {

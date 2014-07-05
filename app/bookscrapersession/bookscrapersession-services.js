@@ -4,7 +4,6 @@
 
 (function() {
 
-  //TODO: fix property name styling
   function BookScraperMaster($log, GoodreadsApi, XisbnApi, HalfService) {
     function BookScraperSession() {
       angular.extend(this, {
@@ -57,8 +56,8 @@
         GoodreadsApi.getBooks(
           this.goodreadsUserId,
           shelf.name,
-          function successFn(shelf_books) {
-            _.each(shelf_books, function(book) {
+          function successFn(shelfBooks) {
+            _.each(shelfBooks, function(book) {
               var foundBook = _.find(books, {isbn: book.isbn});
               if (book.isbn === null || !foundBook) {
                 // add book if not already present
@@ -109,12 +108,12 @@
       _.each(this.selectedBooks, function(book) {
         remainingRequests++;
         XisbnApi.getEditions(book.isbn,
-          function successFn(book_editions) {
-            if (!book.title && book_editions.length) {
-              book.title = book_editions[0].title;
-              book.author = book_editions[0].author;
+          function successFn(bookEditions) {
+            if (!book.title && bookEditions.length) {
+              book.title = bookEditions[0].title;
+              book.author = bookEditions[0].author;
             }
-            book.editions = _.chain(book_editions).map(function(ed) {
+            book.editions = _.chain(bookEditions).map(function(ed) {
               return new Edition(book, ed);
             }).sortBy(book.editions, function(ed) {
               return ((-Number(ed.year)) || 0);
@@ -146,11 +145,11 @@
           params;
 
       // get Half.com listings for each edition of each book
-      _.each(books, function(book, book_index) {
+      _.each(books, function(book, bookIndex) {
         book.listings = [];
-        _.each(book.editions, function(ed, ed_index) {
+        _.each(book.editions, function(ed, edIndex) {
           // skip unselected book editions
-          if (!selection[book_index][ed_index]) {
+          if (!selection[bookIndex][edIndex]) {
             return;
           }
 
@@ -179,15 +178,15 @@
       ed.half_image_url = ed.half_image_url || response.image;
 
       // filter undesirable listings
-      var ed_listings = _.filter(response.items, book.isListingExcluded, book);
+      var edListings = _.filter(response.items, book.isListingExcluded, book);
 
-      _.each(ed_listings, function(el) {
+      _.each(edListings, function(el) {
         el.book = book;
         el.edition = ed;
       });
-      Array.prototype.push.apply(listings, ed_listings);
-      Array.prototype.push.apply(book.listings, ed_listings);
-      Array.prototype.push.apply(ed.listings, ed_listings);
+      Array.prototype.push.apply(listings, edListings);
+      Array.prototype.push.apply(book.listings, edListings);
+      Array.prototype.push.apply(ed.listings, edListings);
     };
 
     BookScraperSession.prototype.findOrCreateSeller = function(name, listing) {
@@ -326,8 +325,8 @@
     SellerBook.prototype.sortListings = function() {
       var sellerBookListingsSortKey = function(listing) {
         var cond = HalfService.getValueForCondition(listing.condition),
-            ship_cost = HalfService.getListingMarginalShippingCost(listing),
-            cost = listing.price + ship_cost;
+            shipCost = HalfService.getListingMarginalShippingCost(listing),
+            cost = listing.price + shipCost;
         return (cost - (0.5 * cond));
       };
       this.listings = _.sortBy(this.listings, sellerBookListingsSortKey);
