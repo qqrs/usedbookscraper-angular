@@ -275,11 +275,10 @@
     };
     var loadData = function() {
       var failureFn = function(response, msg) {
-        // TODO: better error msg
         if (msg === 'invalidId') {
-          errorAlert('invalid isbn: fix query or continue with partial results');
+          errorAlert('invalid isbn: go back and fix query or continue with partial results');
         } else {
-          errorAlert('editions lookup error: try again or continue with partial results');
+          errorAlert('editions lookup error: go back and try again or continue with partial results');
         }
         $log.warn('XisbnApi request failed: ' + msg);
       };
@@ -377,7 +376,6 @@
     };
     var loadData = function() {
       var handleFetchListingsFailure = function(response, msg) {
-        // TODO: better error msg
         if (!$scope.apiRequestProgress.canceled) {
           errorAlert('half.com item lookup error: continuing with partial results');
           $log.warn('half.com request failed: ' + msg);
