@@ -12,17 +12,25 @@
 
   function GiphyEmbedCtrl($scope, $sce) {
     var giphyIds,
-        giphyUrl;
+        giphyHeights,
+        giphyUrl,
+        randIndex;
 
     giphyIds = [
       'ft9uGbxZvIGM8', 'OQxmEv6imvBdu', 'PwUEE2fhR00xi', 'ZCmDhIFeF1s2c',
       'r8wQTzXr7xia4', 'SEN2Ho9K96BHy', 'Mj1QjRKM14ifC', 'g0gepFYqKiYqQ',
       'GA4FHsS2tE8ta', 'CX1dZhBXfSQU0', 'imzbK7mXHqV6E', 'SCnmKSVG4zdQc',
       '11gYYbySTvUC2s'];
+    giphyHeights = [
+      244, 373, 281, 311,
+      295, 253, 281, 375,
+      328, 389, 375, 256,
+      288];
 
-    // TODO: use giphy api to get width and height
-    giphyUrl = 'http://giphy.com/embed/' + _.sample(giphyIds);
+    randIndex = _.random(0, giphyIds.length - 1);
+    giphyUrl = 'http://giphy.com/embed/' + giphyIds[randIndex];
     $scope.safeGiphyUrl = $sce.trustAsResourceUrl(giphyUrl);
+    $scope.giphyHeight = giphyHeights[randIndex];
   }
 
   GiphyEmbedCtrl.$inject = [
