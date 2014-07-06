@@ -233,7 +233,7 @@
       ['Must-have', 10.0],
       ['High', 3.0],
       ['Normal', 1.0],
-      ['Add-on', 0.1]
+      ['Low', 0.1]
     ];
 
     $scope.edit = (!$scope.defaultOptions || $scope.defaultOptions !== $scope.options);
