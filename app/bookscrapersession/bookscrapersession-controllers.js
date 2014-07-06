@@ -97,6 +97,12 @@
     };
     var finishLoading = function() {
       $scope.shelves = BookScraperMaster.shelves;
+
+      var toRead = _.find($scope.shelves, {name: 'to-read'});
+      if (toRead) {
+        $scope.selectedShelves.push(toRead);
+      }
+
       $scope.loading = false;
       // TESTING: testing: select last shelf
       //$scope.submitGoodreadsShelves([$scope.shelves[$scope.shelves.length - 1]]);
