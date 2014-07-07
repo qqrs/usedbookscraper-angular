@@ -33,6 +33,11 @@ body {
   max-width: 850px;
   padding: 0;
 }
+@media all and (min-height: 800px) {
+  .main-content {
+    margin-top: 100px
+  }
+}
 
 .inner-content {
   max-width: 600px;
