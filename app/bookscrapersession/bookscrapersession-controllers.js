@@ -6,7 +6,7 @@
 
   function GoodreadsUserCtrl($scope, $location, BookScraperMaster, errorAlert) {
     // TESTING: for testing only
-    $scope.goodreadsProfileUrl = 'http://www.goodreads.com/user/show/5123156-russ';
+    $scope.goodreadsProfileUrl = 'http://www.goodreads.com/user/show/32853571-usedbookscraper';
     $scope.isbnText = '0679736662, 9780393326550, 978-0618249060';
     if (BookScraperMaster.goodreadsUserId) {
       $scope.goodreadsProfileUrl = '' + BookScraperMaster.goodreadsUserId;
