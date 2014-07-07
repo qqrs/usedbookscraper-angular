@@ -5,7 +5,6 @@
 (function() {
 
   function GoodreadsUserCtrl($scope, $location, BookScraperMaster, errorAlert) {
-    // TESTING: for testing only
     $scope.goodreadsProfileUrl = 'http://www.goodreads.com/user/show/32853571-usedbookscraper';
     $scope.isbnText = '';
     if (BookScraperMaster.goodreadsUserId) {
