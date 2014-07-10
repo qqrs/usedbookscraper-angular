@@ -33,16 +33,11 @@ body {
   max-width: 850px;
   padding: 0;
 }
-.main-content.topmargin {
-  margin-top: 100px
-}
-/*
-@media all and (min-height: 1000px) {
+@media all and (min-height: 800px) {
   .main-content {
-    margin-top: 80px
+    margin-top: 100px
   }
 }
-*/
 
 .inner-content {
   max-width: 600px;
