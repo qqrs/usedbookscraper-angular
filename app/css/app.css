@@ -33,9 +33,9 @@ body {
   max-width: 850px;
   padding: 0;
 }
-@media all and (min-height: 800px) {
+@media all and (min-height: 1000px) {
   .main-content {
-    margin-top: 100px
+    margin-top: 80px
   }
 }
 
