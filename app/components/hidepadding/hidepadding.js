@@ -7,7 +7,8 @@
     return {
       controller: ['$rootScope', '$element', function($rootScope, $element) {
         $rootScope.$on('$routeChangeSuccess', function(event, currentRoute) {
-          if (currentRoute.loadedTemplateUrl === "partials/home.html") {
+          if (currentRoute.loadedTemplateUrl === "partials/home.html" ||
+              currentRoute.loadedTemplateUrl === "partials/example.html") {
             $element.addClass('no-pad');
           } else {
             $element.removeClass('no-pad');
