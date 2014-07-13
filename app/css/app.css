@@ -271,6 +271,7 @@ img.seller-books-img {
   height: 20px;
   width: auto;
   font-size: 12px;
+  padding: 0;
 }
 
 input[type=number].book-options-input {
