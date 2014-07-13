@@ -1,84 +1,106 @@
 <div class="clearfix"></div>
 
-<div class="home-text top-slide lightbg">
-  hello
-</div>
-
-<div class="home-text mid-slide darkbg">
-  hello
+<div class="home-text top-slide lightbg" style="padding-bottom: 0">
+  <h1>example search</h1><br>
 </div>
 
 <div class="home-text mid-slide lightbg">
   <img src="/static/example/step_start.png" class="example">
-  <p class="example-text">
-    Some explanatory text goes here.  Some explanatory text goes here.  Some 
-    explanatory text goes here.  Some explanatory text goes here.  Some 
-    explanatory text goes here. 
-  </p>
+  <div class="example-text">
+    <p><code>/me</code> pastes Goodreads profile URL.</p>
+    <p>(Alternatively, enter a list of ISBNs and skip forward to picking
+    editions).</p>
+  </div>
 </div>
 
 <div class="home-text mid-slide darkbg">
-  <img src="/static/example/step_shelves.png" class="example">
-  <p class="example-text">
-    Some explanatory text goes here.  Some explanatory text goes here.  Some 
-    explanatory text goes here.  Some explanatory text goes here.  Some 
-    explanatory text goes here. 
-  </p>
-</div>
-
-<div class="home-text mid-slide lightbg">
   <img src="/static/example/step_shelves_coffeetable_low.png" class="example">
-</div>
-
-<div class="home-text mid-slide darkbg">
-  <img src="/static/example/advanced_options_shelves.png" class="example" style="width: 472px">
-</div>
-
-<div class="home-text mid-slide lightbg">
-  <img src="/static/example/step_books.png" class="example">
+  <div class="example-text">
+    <p><code>/me</code> selects two shelves to use for the book search.</p>
+    <p><code>/me</code> does not change the 'defaults' search options, which
+    are used for all books unless overridden.</p>
+    <p><code>/me</code> clicks 'edit search options' for the 'coffee-table'
+    shelf and sets the desirability to low. (Perhaps 'bathroom-shelf' would be
+    a better name?)</p>
+  </div>
 </div>
 
 <div class="home-text mid-slide darkbg">
   <img src="/static/example/advanced_options_books.png" class="example">
+  <div class="example-text">
+    <p><b>desirability</b>: sellers with must-have and high desirability books
+    will be ranked higher</p>
+    <!--low desirability books will only count as tiebreakers-->
+    <p><b>condition</b>: minimum acceptable condition under the
+      <a href="http://pages.half.ebay.com/help/buyer/checkout.html#toc-13"
+        target="_blank">
+        half.com guidelines
+      </a>
+    </p>
+    <p><b>max price</b>: max acceptable cost to add the book to the order
+    (including shipping cost)</p>
+    <p><b>exclude library</b>: attempt to exclude ex&#8209;library books</p>
+    <p><b>exclude cliff's notes</b>: attempt to exclude Cliff's Notes
+    (which in rare cases may be miscategorized under the ISBN of the real book)</p>
+  </div>
 </div>
 
 <div class="home-text mid-slide lightbg">
-  <img src="/static/example/advanced_options_books_full.png" class="example">
+  <img src="/static/example/step_books.png" class="example">
+  <div class="example-text">
+    <p><code>/me</code> leaves all 14 books selected (not all shown here).</p>
+    <p>(Picking 5 &mdash; 25 well-known and widely-available books is about right
+    to get good results without requiring too much time to run the search.)</p>
+  </div>
 </div>
 
 <div class="home-text mid-slide darkbg">
   <img src="/static/example/advanced_options_books_pynchon_musthave.png" class="example">
+  <div class="example-text">
+    <p><code>/me</code> sets <em>Gravity's Rainbow</em> as must-have.</p>
+    (This will bring any sellers who carry it to the top of the results.)</p>
+  </div>
 </div>
 
 <div class="home-text mid-slide lightbg">
   <img src="/static/example/step_editions.png" class="example">
+  <div class="example-text">
+    <p><code>/me</code> looks over alternate ISBNs found for
+    <em>The Brothers Karamazov</em> to ensure that each is an edition of the
+    Pevear & Volokhonsky translation.</p>
+  </div>
 </div>
 
-<div class="home-text mid-slide darkbg">
+<div class="home-text mid-slide lightbg">
   <img src="/static/example/step_editions_alice_tenniel.png" class="example">
-</div>
-
-<div class="home-text mid-slide lightbg">
-  <img src="/static/example/step_listings.png" class="example">
-</div>
-
-<div class="home-text mid-slide darkbg">
-  <img src="/static/example/step_listings_progress_only.png" class="example">
-</div>
-
-<div class="home-text mid-slide lightbg">
-  <img src="/static/example/step_results_heading.png" class="example">
+  <div class="example-text">
+    <p><code>/me</code> looks over alternates found for
+    <em>Alice's Adventures</em> and deselects any that don't explicitly mention
+    the Tenniel illustrations.</p>
+  </div>
 </div>
 
 <div class="home-text mid-slide darkbg">
-  <img src="/static/example/step_results_free_state.png" class="example">
+  <div class="example" style="width: 60%; border: none; text-align: center">
+  <img src="/static/example/step_listings_progress_only.png" class="example" width="276">
+  </div>
+  <div class="example-text">
+    <p><code>/me</code> twiddles thumbs</p>
+  </div>
 </div>
 
-<div class="home-text mid-slide lightbg">
-  <img src="/static/example/step_results_yankee_clipper.png" class="example">
-</div>
-
-
-<div class="home-text bot-slide darkbg">
-  The quick brown fox jumped over the lazy dog.
+<div class="home-text bot-slide lightbg">
+  <div class="example" style="padding-bottom: 4px; margin-right: 18px">
+    <img src="/static/example/step_results_heading.png"><br>
+    <img src="/static/example/step_results_yankee_clipper.png" width="432">
+  </div>
+  <div class="example-text">
+    <p><code>/me</code> scrolls through the first few sellers and picks one to
+    order from.</p>
+    <p><code>/me</code> looks at some of the 'more listings' dropdowns to check
+    for newer editions and book listings in better condition.</p>
+    <p><code>/me</code> clicks 'Buy Now' for each book, adds each one to the
+    half.com shopping cart, and places the order.</p>
+    <p><code>/me</code> says 12 books at $2.98 per book ain't bad.</p>
+  </div>
 </div>
