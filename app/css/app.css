@@ -109,6 +109,24 @@ body {
   margin-left: 24px;
   margin-bottom: 40px;
 }
+
+img.example {
+  display: inline-block;
+  border: 1px #999 dotted;
+  border-radius: 4px;
+  max-width: 60%;
+  height: auto;
+}
+p.example-text {
+  display: inline-block;
+  overflow: hidden;
+  width: 280px;
+  margin-left: 10px;
+  vertical-align: top;
+  /*text-align: justify;*/
+  float: right;
+}
+
 /*
 .menu {
   list-style: none;
