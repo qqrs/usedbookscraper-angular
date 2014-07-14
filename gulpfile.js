@@ -12,8 +12,10 @@ var projectName = 'usedbookscraper';
 var paths = {
   scripts: 'app/**/*.js',
   styles: 'app/css/app.css',
-  templates:  ['app/**/*.html', '!app/index.html']
+  templates:  ['app/**/*.html', '!app/index.html'],
+  prod: '../heroku_threadtest/public/'
 };
+
 
 gulp.task('clean', function(cb) {
   del(['dist'], cb);
@@ -33,7 +35,7 @@ gulp.task('scripts', function() {
     .pipe(gulp.dest('dist'));
 });
 
-gulp.task('templates', function () {
+gulp.task('templates', function() {
     gulp.src(paths.templates)
         .pipe(templateCache(projectName + '-templates.js', {
           module: 'ubsApp'
@@ -42,3 +44,10 @@ gulp.task('templates', function () {
 });
 
 gulp.task('default', ['clean', 'scripts', 'styles', 'templates']);
+
+// copy to production repo for pushing to heroku
+gulp.task('copy', function() {
+  gulp.src('dist/*').pipe(gulp.dest(paths.prod));
+  gulp.src('prod/*').pipe(gulp.dest(paths.prod));
+  gulp.src('static/**').pipe(gulp.dest(paths.prod + 'static/'));
+});
