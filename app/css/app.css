@@ -2,9 +2,6 @@
 
 body { 
   background-color: 0xfff;
-  /*background: url('http://image.shutterstock.com/display_pic_with_logo/54561/127064891/stock-photo-sarajevo-bosnia-august-bookshelves-on-street-market-on-august-in-sarajevo-bosnia-127064891.jpg') no-repeat center center fixed; */
-/*http://www.flickr.com/photos/rfduck/4905424782/sizes/o/*/
-  /*background: url('http://farm5.staticflickr.com/4082/4905424782_167b33e4b7_o.jpg') no-repeat center center fixed; */
   background: url('/static/bookstore.jpg') no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
