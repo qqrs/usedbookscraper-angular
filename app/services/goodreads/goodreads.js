@@ -2,14 +2,14 @@
 
 (function() {
 
-  function GoodreadsApi($resource, $log) {
+  function GoodreadsApi($resource, $log, baseApiUrl) {
     var grResource,
         service;
 
     service = {};
 
     grResource = $resource(
-      "http://cryptic-ridge-1093.herokuapp.com/api/goodreads/:collection", {}, {
+      baseApiUrl + 'goodreads/:collection', {}, {
         getShelves: { method: 'GET', params: {collection: 'shelves'} },
         getBooks: { method: 'GET', params: {collection: 'books'} }
     });
@@ -74,7 +74,7 @@
   }
 
 
-  GoodreadsApi.$inject = ['$resource', '$log'];
+  GoodreadsApi.$inject = ['$resource', '$log', 'baseApiUrl'];
   GoodreadsApiTestShelves.$inject = GoodreadsApi.$inject;
   GoodreadsApiTestBooks.$inject = GoodreadsApi.$inject;
 

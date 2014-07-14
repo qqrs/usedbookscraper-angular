@@ -36,4 +36,12 @@ angular.module('ubsApp', [
 
     $routeProvider.otherwise({redirectTo: '/'});
   }])
-  .run(['$route', angular.noop]);
+  .run(['$route', angular.noop])
+
+  .factory('baseApiUrl', ['$location', function($location) {
+    if ($location.host() === 'usedbookscraper.herokuapp.com') {
+      return 'http://usedbookscraper.herokuapp.com/api/';
+    } else {
+      return 'http://cryptic-ridge-1093.herokuapp.com/api/';
+    }
+  }]);
