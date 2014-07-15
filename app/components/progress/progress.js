@@ -11,7 +11,7 @@
     };
   }
 
-  function ProgressTrackerCtrl($scope, $rootScope, $location) {
+  function ProgressTrackerCtrl($scope, $rootScope, $location, $window) {
     var splitPath,
         _steps;
 
@@ -23,6 +23,9 @@
       var splitPath,
           currentStep,
           isBeyondCurrent;
+
+      // Google analytics
+      $window.ga('send', 'pageview', { page: $location.path() });
 
       splitPath = $location.path().split('/');
       currentStep = ((splitPath.length >= 2) ? splitPath[1] : '');
@@ -53,7 +56,8 @@
   ProgressTrackerCtrl.$inject = [
     '$scope',
     '$rootScope',
-    '$location'
+    '$location',
+    '$window'
   ];
 
 
