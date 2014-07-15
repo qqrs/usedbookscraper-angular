@@ -4,7 +4,7 @@
 
 (function() {
 
-  function GoodreadsUserCtrl($scope, $location, BookScraperMaster, errorAlert) {
+  function GoodreadsUserCtrl($scope, $location, $window, BookScraperMaster, errorAlert) {
     $scope.goodreadsProfileUrl = 'http://www.goodreads.com/user/show/32853571-usedbookscraper';
     $scope.isbnText = '';
     if (BookScraperMaster.goodreadsUserId) {
@@ -35,6 +35,7 @@
 
       BookScraperMaster.goodreadsUserId = parseInt(userId, 10);
       BookScraperMaster.isbnList = null;
+      $window.ga('send', 'event', 'step', 'submit', 'user', BookScraperMaster.goodreadsUserId);
       $location.path('/shelves');
     };
 
@@ -47,6 +48,7 @@
       BookScraperMaster.buildIsbnBooks(isbnList);
       this.goodreadsUserId = null;
       this.goodreadsSelectedShelves = null;
+      $window.ga('send', 'event', 'step', 'submit', 'isbns', isbnList.length);
       $location.path('/editions');
     }
   }
@@ -54,6 +56,7 @@
   GoodreadsUserCtrl.$inject = [
     '$scope',
     '$location',
+    '$window',
     'BookScraperMaster',
     'errorAlert'
   ];
@@ -89,6 +92,7 @@
         finishLoading,
         function failureFn(response, msg) {
           errorAlert('error: unable to get goodreads shelves -- check user id/url');
+          errorAlert.ga('request', 'goodreads_shelves');
           $log.error('GoodreadsApi request failed: ' + msg);
           $scope.loading = false;
         }
@@ -132,7 +136,7 @@
 
 // =============================================================================
 
-  function BooksCtrl($scope, $location, $timeout, $log, BookScraperMaster, errorAlert) {
+  function BooksCtrl($scope, $location, $window, $timeout, $log, BookScraperMaster, errorAlert) {
     if (!BookScraperMaster.shelves ||
         !BookScraperMaster.goodreadsSelectedShelves) {
       $location.path('/shelves');
@@ -161,6 +165,7 @@
     var loadData = function() {
       var failureFn = function(response, msg) {
         errorAlert('error: unable to get goodreads shelf books -- wait and try again');
+        errorAlert.ga('request', 'goodreads_books');
         $log.error('GoodreadsApi request failed: ' + msg);
         $scope.loading = false;
         $scope.failure = true;
@@ -209,6 +214,7 @@
       }
       BookScraperMaster.editions = null;
       BookScraperMaster.editionSelections = null;
+      $window.ga('send', 'event', 'step', 'submit', 'books', BookScraperMaster.selectedBooks.length);
       $location.path('/editions');
     };
 
@@ -218,6 +224,7 @@
   BooksCtrl.$inject = [
     '$scope',
     '$location',
+    '$window',
     '$timeout',
     '$log',
     'BookScraperMaster',
@@ -255,7 +262,7 @@
 
 // =============================================================================
 
-  function EditionsCtrl($scope, $location, $log, BookScraperMaster, errorAlert) {
+  function EditionsCtrl($scope, $location, $window, $log, BookScraperMaster, errorAlert) {
     var books;
 
     if (!BookScraperMaster.books ||
@@ -286,8 +293,10 @@
       var failureFn = function(response, msg) {
         if (msg === 'invalidId') {
           errorAlert('invalid isbn: go back and fix query or continue with partial results');
+          errorAlert.ga('request', 'xisbn_invalid');
         } else {
           errorAlert('editions lookup error: go back and try again or continue with partial results');
+          errorAlert.ga('request', 'xisbn');
         }
         $log.warn('XisbnApi request failed: ' + msg);
       };
@@ -345,6 +354,7 @@
       }
       BookScraperMaster.editionSelections = selection;
       BookScraperMaster.listings = null;
+      $window.ga('send', 'event', 'step', 'submit', 'editions', count);
       $location.path('/listings');
     };
 
@@ -354,6 +364,7 @@
   EditionsCtrl.$inject = [
     '$scope',
     '$location',
+    '$window',
     '$log',
     'BookScraperMaster',
     'errorAlert'
@@ -387,6 +398,7 @@
       var handleFetchListingsFailure = function(response, msg) {
         if (!$scope.apiRequestProgress.canceled) {
           errorAlert('half.com item lookup error: continuing with partial results');
+          errorAlert.ga('request', 'half_listings');
           $log.warn('half.com request failed: ' + msg);
         }
       };
@@ -432,7 +444,7 @@
 
 // =============================================================================
 
-  function SellersCtrl($scope, $location, BookScraperMaster) {
+  function SellersCtrl($scope, $location, $window, BookScraperMaster) {
     var sellers,
         pageBreaks;
 
@@ -464,12 +476,17 @@
       });
     };
 
+    $scope.handleBuyNowClick = function() {
+      $window.ga('send', 'event', 'button', 'click', 'buynow');
+    };
+
     init();
   }
 
   SellersCtrl.$inject = [
     '$scope',
     '$location',
+    '$window',
     'BookScraperMaster'
   ];
 

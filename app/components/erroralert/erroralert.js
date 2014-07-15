@@ -40,7 +40,7 @@
     '$anchorScroll'
   ];
 
-  function ErrorAlertsService($rootScope) {
+  function ErrorAlertsService($rootScope, $window) {
     var addAlert = function(msg) {
       $rootScope.$broadcast('errorAlerts.addAlert', msg);
     };
@@ -49,10 +49,15 @@
       $rootScope.$broadcast('errorAlerts.clearAlerts');
     };
 
+    // Google analytics
+    addAlert.ga = function(action, label, value) {
+      $window.ga('send', 'event', 'error', action, label, value);
+    };
+
     return addAlert;
   }
 
-  ErrorAlertsService.$inject = ['$rootScope'];
+  ErrorAlertsService.$inject = ['$rootScope', '$window'];
 
 
   angular.module('ubsApp.errorAlert', [])
