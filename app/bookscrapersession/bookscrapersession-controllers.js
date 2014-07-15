@@ -35,7 +35,7 @@
 
       BookScraperMaster.goodreadsUserId = parseInt(userId, 10);
       BookScraperMaster.isbnList = null;
-      $window.ga('send', 'event', 'step', 'submit', 'user', BookScraperMaster.goodreadsUserId);
+      $window.ga('send', 'event', 'submit', 'user', userId);
       $location.path('/shelves');
     };
 
@@ -48,7 +48,7 @@
       BookScraperMaster.buildIsbnBooks(isbnList);
       this.goodreadsUserId = null;
       this.goodreadsSelectedShelves = null;
-      $window.ga('send', 'event', 'step', 'submit', 'isbns', isbnList.length);
+      $window.ga('send', 'event', 'submit', 'isbns', ''+isbnList.length);
       $location.path('/editions');
     }
   }
@@ -214,7 +214,7 @@
       }
       BookScraperMaster.editions = null;
       BookScraperMaster.editionSelections = null;
-      $window.ga('send', 'event', 'step', 'submit', 'books', BookScraperMaster.selectedBooks.length);
+      $window.ga('send', 'event', 'submit', 'books', ''+BookScraperMaster.selectedBooks.length);
       $location.path('/editions');
     };
 
@@ -354,7 +354,7 @@
       }
       BookScraperMaster.editionSelections = selection;
       BookScraperMaster.listings = null;
-      $window.ga('send', 'event', 'step', 'submit', 'editions', count);
+      $window.ga('send', 'event', 'submit', 'editions', ''+count);
       $location.path('/listings');
     };
 
@@ -477,7 +477,7 @@
     };
 
     $scope.handleBuyNowClick = function() {
-      $window.ga('send', 'event', 'button', 'click', 'buynow');
+      $window.ga('send', 'event', 'click', 'buynow');
     };
 
     init();
