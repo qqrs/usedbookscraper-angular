@@ -14,6 +14,18 @@
       $scope.isbnText = BookScraperMaster.isbnList.join(', ');
     }
 
+    var resetSession = function() {
+      angular.extend(BookScraperMaster, {
+        goodreadsUserId: null,
+        shelves: null,
+        goodreadsSelectedShelves: null,
+
+        isbnList: null,
+        editions: null,
+        editionSelections: null
+      });
+    };
+
     $scope.submitGoodreadsProfileUrl = function(profileUrl) {
       var userId = null,
           matches;
@@ -33,8 +45,9 @@
         return;
       }
 
+      resetSession();
       BookScraperMaster.goodreadsUserId = parseInt(userId, 10);
-      BookScraperMaster.isbnList = null;
+
       $window.ga('send', 'event', 'submit', 'user', userId);
       $location.path('/shelves');
     };
@@ -45,9 +58,9 @@
         errorAlert('no isbns entered');
         return;
       }
+      resetSession();
       BookScraperMaster.buildIsbnBooks(isbnList);
-      this.goodreadsUserId = null;
-      this.goodreadsSelectedShelves = null;
+
       $window.ga('send', 'event', 'submit', 'isbns', ''+isbnList.length);
       $location.path('/editions');
     }
