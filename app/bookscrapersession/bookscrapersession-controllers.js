@@ -478,7 +478,17 @@
       finishLoading();
     };
     var finishLoading = function() {
+      var truncated;
+
       sellers = BookScraperMaster.getSortedSellers();
+      truncated = _.filter(sellers, function(seller) {
+        return (seller.booksScore > 1.01);
+      });
+
+      // hide sellers with a single listing if there are plenty of results
+      if (truncated.length > 30) {
+        sellers = truncated;
+      }
 
       // build paginated sellers array
       $scope.currentPage = 0;
