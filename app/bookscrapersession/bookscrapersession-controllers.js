@@ -317,14 +317,16 @@
     };
     var finishLoading = function() {
       $scope.editions = BookScraperMaster.editions;
-      $scope.setAllSelections(true);
+      $scope.setAllSelections(true, 20);
       $scope.loading = false;
     };
 
-    var buildSelectionsForBook = function(book, value) {
+    var buildSelectionsForBook = function(book, value, max) {
+      var count = 0;
       return _.map(book.editions, function(ed) {
         // disallow selection of edition if it has no isbn
-        return (!ed.isbn) ? false : value;
+        count += 1;
+        return ((max && count > max) || !ed.isbn) ? false : value;
       });
     };
     var countSelectedEditions = function() {
@@ -338,9 +340,9 @@
       });
       return count;
     };
-    $scope.setAllSelections = function(value) {
+    $scope.setAllSelections = function(value, max) {
       $scope.selection = _.map(books, function(book) {
-        return buildSelectionsForBook(book, value);
+        return buildSelectionsForBook(book, value, max);
       });
     };
     $scope.setAllSelectionsForBook = function(bookIndex, value) {
