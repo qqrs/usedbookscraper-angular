@@ -13,7 +13,7 @@ var paths = {
   scripts: 'app/**/*.js',
   styles: 'app/css/app.css',
   templates:  ['app/**/*.html', '!app/index.html'],
-  prod: '../heroku_threadtest/public/'
+  prod: '../usedbookscraper-heroku/public/'
 };
 
 
