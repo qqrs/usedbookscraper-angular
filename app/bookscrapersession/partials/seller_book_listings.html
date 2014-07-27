@@ -20,7 +20,7 @@
           ng-value="listing" ng-change="onChange()">
       <small>
         <div>
-          <a href="{{listing.half_item_url}}" target="_blank">
+          <a ng-href="{{buildHalfReferralUrl(listing.half_item_url)}}" target="_blank">
           <b>{{listing.edition.half_title}}</b></a>
         </div>
         <div class="pull-right">{{listing.price | currency}}</div>

@@ -38,6 +38,16 @@
       }
     };
 
+    // build a referral link url from a half.com url
+    var buildReferralUrl = function(url) {
+      var base = "http://rover.ebay.com/rover/1/8971-56017-19255-0/1?ff3=8&pub=5575092710&toolid=10001&campid=5337535591&customid=&mpre=";
+      if (!url) {
+        return '';
+      }
+      return base + encodeURIComponent(url);
+    };
+
+
     // =================================
     // Half API calls and helpers
     // =================================
@@ -205,7 +215,8 @@
       newQueryBatch: function() { return new HalfQueryBatch(); },
       bookConditions: function() { return conditions; },
       getValueForCondition: getValueForCondition,
-      getListingMarginalShippingCost: getListingMarginalShippingCost
+      getListingMarginalShippingCost: getListingMarginalShippingCost,
+      buildReferralUrl: buildReferralUrl
     };
   }
 
