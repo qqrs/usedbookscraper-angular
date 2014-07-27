@@ -48,10 +48,11 @@
           <div ubs-seller-book-listings="sbook"></div>
         </td>
         <td class="text-right">
-          <a href="{{sbook.bestListing.half_item_url}}" target="_blank"
-              ng-click="handleBuyNowClick()"
+          <a target="_blank" ng-click="handleBuyNowClick()"
+              ng-href="{{buildHalfReferralUrl(sbook.bestListing.half_item_url)}}"
               class="btn btn-primary" style="white-space: nowrap">
-            buy now >></a>
+            buy now >>
+          </a>
         </td>
       </tr>
 

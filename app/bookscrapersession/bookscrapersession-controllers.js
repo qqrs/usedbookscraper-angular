@@ -518,6 +518,11 @@
   function SellerBooksCtrl($scope, HalfService) {
     $scope.marginalShippingCost = HalfService.getListingMarginalShippingCost;
 
+    $scope.buildHalfReferralUrl = function(url) {
+      var base = "http://rover.ebay.com/rover/1/8971-56017-19255-0/1?ff3=8&pub=5575092710&toolid=10001&campid=5337535591&customid=&mpre=";
+      return base + encodeURIComponent(url);
+    };
+
     // find total cost for order and identify base shipping cost book
     $scope.updateOrderTotalCost = function() {
       $scope.baseShippingBook = _.max($scope.seller.books, function(sbook) {
