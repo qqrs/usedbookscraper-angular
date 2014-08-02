@@ -133,6 +133,16 @@ div.example-text {
   color: #aaa;
 }
 
+.advanced-search-button {
+  width: 150px;
+  position: absolute;
+  right: -100px;
+  top: 10px;
+}
+.advanced-search-button label {
+  margin-bottom: 0px;
+  margin-left: 4px;
+}
 .shelves-column {
   display: inline-block;
   vertical-align: top;

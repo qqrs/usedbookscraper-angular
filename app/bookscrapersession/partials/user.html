@@ -1,4 +1,11 @@
-<div class="inner-content">
+<div class="inner-content" style="position: relative">
+
+<button type="button" class="btn btn-small advanced-search-button"
+  ng-class="{active: advancedSearch}" ng-click="advancedSearch = !advancedSearch">
+    advanced options
+    <label class="label" ng-hide="advancedSearch">off</label>
+    <label class="label label-success" ng-show="advancedSearch">on</label>
+</button>
 
 <h1>enter goodreads profile url</h1><br>
 

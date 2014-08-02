@@ -7,11 +7,16 @@
   function GoodreadsUserCtrl($scope, $location, $window, BookScraperMaster, errorAlert) {
     $scope.goodreadsProfileUrl = 'http://www.goodreads.com/user/show/32853571-usedbookscraper';
     $scope.isbnText = '';
+    $scope.advancedSearch = false;
+
     if (BookScraperMaster.goodreadsUserId) {
       $scope.goodreadsProfileUrl = '' + BookScraperMaster.goodreadsUserId;
     }
     if (BookScraperMaster.isbnList) {
       $scope.isbnText = BookScraperMaster.isbnList.join(', ');
+    }
+    if (BookScraperMaster.advancedSearch != null) {
+      $scope.advancedSearch = BookScraperMaster.advancedSearch;
     }
 
     var resetSession = function() {
@@ -47,6 +52,7 @@
 
       resetSession();
       BookScraperMaster.goodreadsUserId = parseInt(userId, 10);
+      BookScraperMaster.advancedSearch = $scope.advancedSearch;
 
       $window.ga('send', 'event', 'submit', 'user', userId);
       $location.path('/shelves');
@@ -60,6 +66,7 @@
       }
       resetSession();
       BookScraperMaster.buildIsbnBooks(isbnList);
+      BookScraperMaster.advancedSearch = $scope.advancedSearch;
 
       $window.ga('send', 'event', 'submit', 'isbns', ''+isbnList.length);
       $location.path('/editions');
@@ -84,7 +91,7 @@
     }
 
     var init = function() {
-      $scope.showAdvanced = true;
+      $scope.showAdvanced = BookScraperMaster.advancedSearch;
       $scope.defaultBookOptions = BookScraperMaster.bookOptionsDefaults;
 
       if (BookScraperMaster.shelves &&
@@ -158,7 +165,7 @@
 
     var init = function() {
       $scope.failure = false;
-      $scope.showAdvanced = true;
+      $scope.showAdvanced = BookScraperMaster.advancedSearch;
       $scope.ignoreTooMany = false;
 
       if (BookScraperMaster.books && BookScraperMaster.selectedBooks) {
@@ -319,6 +326,9 @@
       $scope.editions = BookScraperMaster.editions;
       $scope.setAllSelections(true, 20);
       $scope.loading = false;
+      if (!BookScraperMaster.advancedSearch) {
+        $scope.submitSelectedEditions($scope.selection);
+      }
     };
 
     var buildSelectionsForBook = function(book, value, max) {

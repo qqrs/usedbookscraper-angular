@@ -15,6 +15,7 @@
       sellers: null,    // array of seller objects
 
       goodreadsUserId: null,            // Goodreads user ID as string
+      advancedSearch: null,             // flag to show advanced options
       goodreadsSelectedShelves: null,   // Goodreads shelves selected for search
       isbnList: null,                   // ISBNs entered directly by user
       selectedBooks: null,
