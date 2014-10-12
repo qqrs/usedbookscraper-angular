@@ -24,7 +24,6 @@ angular.module('ubsApp', [
   */
   .config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/', {templateUrl: 'partials/home.html'});
-    $routeProvider.when('/about', {templateUrl: 'partials/about.html'});
     $routeProvider.when('/example', {templateUrl: 'partials/example.html'});
 
     $routeProvider.when('/start', {templateUrl: 'bookscrapersession/partials/user.html', controller: 'GoodreadsUserCtrl'});
