@@ -40,6 +40,8 @@ angular.module('ubsApp', [
   .factory('baseApiUrl', ['$location', function($location) {
     if ($location.host() === 'usedbookscraper.herokuapp.com') {
       return 'http://usedbookscraper.herokuapp.com/api/';
+    } else if ($location.host() === 'www.bookscraper.com') {
+      return 'http://www.bookscraper.com/api/';
     } else {
       return 'http://cryptic-ridge-1093.herokuapp.com/api/';
     }
